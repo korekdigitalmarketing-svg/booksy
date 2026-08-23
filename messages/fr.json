@@ -11,7 +11,44 @@
   "home": {
     "title": "Booksy",
     "tagline": "Réservez en toute confiance.",
-    "description": "Choisissez un hôte pour consulter ses disponibilités."
+    "description": "Prise de rendez-vous payante et trilingue — définissez vos horaires, partagez un lien, soyez réservé et payé automatiquement.",
+    "hero": {
+      "heading": "Une prise de rendez-vous qui fonctionne, tout simplement.",
+      "subheading": "Partagez un lien, laissez vos clients choisir un créneau, soyez payé automatiquement. Booksy gère les fuseaux horaires, les rappels et les paiements Stripe à votre place.",
+      "ctaPrimary": "Voir la démonstration",
+      "ctaSecondary": "Comment ça marche"
+    },
+    "features": {
+      "heading": "Tout ce qu'il faut pour prendre des rendez-vous",
+      "items": {
+        "payments": {
+          "title": "Soyez payé instantanément",
+          "description": "Paiement sécurisé via Stripe. Les fonds arrivent sur votre compte dès qu'un client réserve une prestation payante."
+        },
+        "timezones": {
+          "title": "Fuseaux horaires gérés pour vous",
+          "description": "Chaque client voit les horaires dans son propre fuseau, correctement convertis — y compris lors des changements d'heure."
+        },
+        "languages": {
+          "title": "Trilingue dès le départ",
+          "description": "Votre page de réservation et chaque e-mail s'affichent en anglais, français ou espagnol, selon chaque client."
+        },
+        "reminders": {
+          "title": "Rappels automatiques",
+          "description": "Les e-mails de confirmation et de rappel partent tout seuls, avec un fichier calendrier joint — aucun suivi manuel."
+        }
+      }
+    },
+    "showcase": {
+      "heading": "Voir en action",
+      "bookingCaption": "Les clients choisissent un créneau et paient en quelques clics.",
+      "dashboardCaption": "Vous voyez chaque réservation et pouvez annuler en un clic."
+    },
+    "cta": {
+      "heading": "Prêt à commencer à prendre des rendez-vous ?",
+      "body": "Définissez vos disponibilités, partagez votre lien, et laissez Booksy faire le reste.",
+      "button": "Voir une page de réservation en direct"
+    }
   },
   "host": {
     "notFoundTitle": "Hôte introuvable",

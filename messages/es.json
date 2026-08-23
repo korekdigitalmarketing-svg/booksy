@@ -11,7 +11,44 @@
   "home": {
     "title": "Booksy",
     "tagline": "Reserve con confianza.",
-    "description": "Elija un anfitrión para ver su disponibilidad."
+    "description": "Reserva de citas trilingüe y de pago — define tu horario, comparte un enlace, y recibe reservas y pagos automáticamente.",
+    "hero": {
+      "heading": "Agendar citas que simplemente funciona.",
+      "subheading": "Comparte un enlace, deja que tus clientes elijan un horario, y recibe el pago automáticamente. Booksy gestiona zonas horarias, recordatorios y pagos con Stripe por ti.",
+      "ctaPrimary": "Ver cómo funciona",
+      "ctaSecondary": "Cómo funciona"
+    },
+    "features": {
+      "heading": "Todo lo que necesitas para recibir reservas",
+      "items": {
+        "payments": {
+          "title": "Cobra al instante",
+          "description": "Pago seguro con Stripe. Los fondos llegan a tu cuenta en cuanto un cliente reserva un servicio de pago."
+        },
+        "timezones": {
+          "title": "Zonas horarias resueltas por ti",
+          "description": "Cada cliente ve los horarios en su propia zona horaria, correctamente convertidos, incluso durante los cambios de horario."
+        },
+        "languages": {
+          "title": "Trilingüe desde el principio",
+          "description": "Tu página de reservas y cada correo se muestran en inglés, francés o español, según cada cliente."
+        },
+        "reminders": {
+          "title": "Recordatorios automáticos",
+          "description": "Los correos de confirmación y recordatorio se envían solos, con un archivo de calendario adjunto — sin seguimiento manual."
+        }
+      }
+    },
+    "showcase": {
+      "heading": "Míralo en acción",
+      "bookingCaption": "Los clientes eligen un horario y pagan en unos pocos clics.",
+      "dashboardCaption": "Ves cada reserva y puedes cancelar con un clic."
+    },
+    "cta": {
+      "heading": "¿Listo para empezar a recibir reservas?",
+      "body": "Define tu disponibilidad, comparte tu enlace, y deja que Booksy haga el resto.",
+      "button": "Ver una página de reservas en vivo"
+    }
   },
   "host": {
     "notFoundTitle": "Anfitrión no encontrado",

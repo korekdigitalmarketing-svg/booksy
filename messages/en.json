@@ -11,7 +11,44 @@
   "home": {
     "title": "Booksy",
     "tagline": "Book time with confidence.",
-    "description": "Pick a host to see their available times."
+    "description": "Trilingual, paid appointment booking — set your hours, share a link, get booked and paid automatically.",
+    "hero": {
+      "heading": "Scheduling that just works.",
+      "subheading": "Share a link, let clients pick a time, get paid automatically. Booksy handles time zones, reminders, and Stripe payments so you don't have to.",
+      "ctaPrimary": "See it in action",
+      "ctaSecondary": "How it works"
+    },
+    "features": {
+      "heading": "Everything you need to take bookings",
+      "items": {
+        "payments": {
+          "title": "Get paid instantly",
+          "description": "Secure checkout via Stripe. Funds land in your account the moment a client books a paid service."
+        },
+        "timezones": {
+          "title": "Time zones handled for you",
+          "description": "Every client sees times in their own time zone, correctly converted — including across daylight saving changes."
+        },
+        "languages": {
+          "title": "Trilingual out of the box",
+          "description": "Your booking page and every email reads in English, French, or Spanish, matching each client automatically."
+        },
+        "reminders": {
+          "title": "Automatic reminders",
+          "description": "Confirmation and reminder emails go out on their own, with a calendar file attached — no manual follow-up."
+        }
+      }
+    },
+    "showcase": {
+      "heading": "See it in action",
+      "bookingCaption": "Clients pick a time and pay in a few clicks.",
+      "dashboardCaption": "You see every booking, and can cancel with one click."
+    },
+    "cta": {
+      "heading": "Ready to start taking bookings?",
+      "body": "Set your availability, share your link, and let Booksy handle the rest.",
+      "button": "View a live booking page"
+    }
   },
   "host": {
     "notFoundTitle": "Host not found",
