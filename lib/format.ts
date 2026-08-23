@@ -66,6 +66,14 @@ export function formatFullDateTime(
   return `${date} ${locale === "en" ? "at" : locale === "fr" ? "à" : "a las"} ${time} (${timezone})`;
 }
 
+/** Short, human-readable reference derived from the booking's UUID — e.g.
+ *  "4098-F357". Not a lookup key (access_token remains that); just something
+ *  a client can read over the phone or quote in a support email. */
+export function confirmationNumber(bookingId: string): string {
+  const hex = bookingId.replace(/-/g, "").slice(0, 8).toUpperCase();
+  return `${hex.slice(0, 4)}-${hex.slice(4)}`;
+}
+
 /** The visitor's guessed IANA timezone, resolved client-side only. */
 export function guessTimezone(): string {
   try {

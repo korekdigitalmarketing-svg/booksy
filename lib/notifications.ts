@@ -4,7 +4,7 @@ import { render } from "@react-email/components";
 import { createServiceClient } from "@/lib/supabase/service";
 import { getResend } from "@/lib/resend";
 import { getLocalized } from "@/lib/i18n-content";
-import { formatFullDateTime, formatCurrency } from "@/lib/format";
+import { formatFullDateTime, formatCurrency, confirmationNumber } from "@/lib/format";
 import { generateIcs } from "@/lib/ics";
 import { ConfirmationEmail } from "@/lib/emails/confirmation";
 import { HostNotificationEmail } from "@/lib/emails/host-notification";
@@ -168,7 +168,9 @@ export async function sendClientConfirmation(bookingId: string): Promise<"sent" 
           locationLabel: tc("locationLabel"),
           priceLabel: tc("priceLabel"),
           notesLabel: tc("notesLabel"),
+          confirmationNumberLabel: tc("confirmationNumberLabel"),
         },
+        confirmationNumber: confirmationNumber(ctx.id),
         dateTimeText: formatFullDateTime(ctx.startsAt, ctx.inviteeTimezone, locale),
         locationText: locationText(ctx.locationKind, ctx.locationValue),
         priceText: ctx.amountCents > 0 ? formatCurrency(ctx.amountCents, ctx.currency, locale) : null,
@@ -324,7 +326,9 @@ export async function sendCancellationEmails(
           cancelledByText: cancelledBy === "host" ? t("cancelledByHost") : t("cancelledByClient"),
           reasonLabel: t("reasonLabel"),
           refundNote: t("refundNote"),
+          confirmationNumberLabel: tc("confirmationNumberLabel"),
         },
+        confirmationNumber: confirmationNumber(ctx.id),
         dateTimeText: formatFullDateTime(ctx.startsAt, ctx.inviteeTimezone, locale),
         reason: ctx.cancelReason,
         wasPaid: ctx.amountCents > 0,

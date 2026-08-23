@@ -11,7 +11,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { requireHostProfile, getBookingsList, type BookingFilter } from "@/lib/dashboard-data";
-import { formatSlotTime, formatSlotWeekdayDate, formatCurrency } from "@/lib/format";
+import { formatSlotTime, formatSlotWeekdayDate, formatCurrency, confirmationNumber } from "@/lib/format";
 import { CancelBookingDialog } from "../cancel-booking-dialog";
 import { NoShowButton } from "./no-show-button";
 
@@ -83,6 +83,9 @@ export default async function DashboardBookingsPage({ searchParams }: Props) {
                   <div className="flex flex-col">
                     <span>{b.inviteeName}</span>
                     <span className="text-xs text-muted-foreground">{b.inviteeEmail}</span>
+                    <span className="font-mono text-xs text-muted-foreground">
+                      {confirmationNumber(b.id)}
+                    </span>
                   </div>
                 </TableCell>
                 <TableCell>

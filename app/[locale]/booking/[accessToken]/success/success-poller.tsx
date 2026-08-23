@@ -5,9 +5,10 @@ import { useTranslations } from "next-intl";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { buttonVariants } from "@/components/ui/button";
-import { formatSlotTime, formatSlotWeekdayDate } from "@/lib/format";
+import { formatSlotTime, formatSlotWeekdayDate, confirmationNumber } from "@/lib/format";
 
 interface BookingStatus {
+  bookingId: string;
   status: string;
   startsAt: string;
   endsAt: string;
@@ -82,6 +83,12 @@ export function SuccessPoller({ locale, accessToken }: { locale: string; accessT
           {formatSlotWeekdayDate(data.startsAt, data.timezone, locale)}
         </p>
         {data.eventTitle ? <p className="text-muted-foreground">{data.eventTitle}</p> : null}
+        <p className="text-sm text-muted-foreground">
+          {t("confirmationNumberLabel")}:{" "}
+          <span className="font-mono font-medium text-foreground">
+            {confirmationNumber(data.bookingId)}
+          </span>
+        </p>
       </>
     );
   } else if (failed || isTerminalFailure) {

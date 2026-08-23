@@ -11,7 +11,9 @@ export interface CancellationClientEmailProps {
     cancelledByText: string; // pre-resolved: cancelledByHost or cancelledByClient
     reasonLabel: string;
     refundNote: string;
+    confirmationNumberLabel: string;
   };
+  confirmationNumber: string;
   dateTimeText: string;
   reason: string | null;
   wasPaid: boolean;
@@ -19,6 +21,7 @@ export interface CancellationClientEmailProps {
 
 export function CancellationClientEmail({
   t,
+  confirmationNumber,
   dateTimeText,
   reason,
   wasPaid,
@@ -27,6 +30,7 @@ export function CancellationClientEmail({
     <EmailLayout previewText={t.body} heading={t.heading} footerText={t.footer}>
       <Text style={emailStyles.text}>{t.greeting}</Text>
       <Text style={emailStyles.text}>{t.body}</Text>
+      <DetailRow label={t.confirmationNumberLabel} value={confirmationNumber} />
       <DetailRow label={t.dateTimeLabel} value={dateTimeText} />
       <Text style={emailStyles.text}>{t.cancelledByText}</Text>
       {reason ? <DetailRow label={t.reasonLabel} value={reason} /> : null}

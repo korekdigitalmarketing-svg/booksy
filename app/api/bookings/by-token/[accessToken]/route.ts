@@ -20,7 +20,7 @@ export async function GET(
   const { data: booking, error } = await supabase
     .from("bookings")
     .select(
-      "status, starts_at, ends_at, invitee_timezone, invitee_locale, event_type_id, owner_id",
+      "id, status, starts_at, ends_at, invitee_timezone, invitee_locale, event_type_id, owner_id",
     )
     .eq("access_token", accessToken)
     .maybeSingle();
@@ -43,6 +43,7 @@ export async function GET(
     : "";
 
   return NextResponse.json({
+    bookingId: booking.id,
     status: booking.status,
     startsAt: booking.starts_at,
     endsAt: booking.ends_at,

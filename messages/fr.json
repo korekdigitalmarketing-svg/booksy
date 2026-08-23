@@ -105,6 +105,7 @@
       "confirmingTitle": "Confirmation du paiement…",
       "confirmingDescription": "Cela ne devrait prendre que quelques secondes. Ne fermez pas cette page.",
       "confirmedTitle": "Réservation confirmée",
+      "confirmationNumberLabel": "Numéro de confirmation",
       "expiredTitle": "Cette réservation a expiré",
       "expiredDescription": "La fenêtre de paiement s'est fermée avant la fin de la transaction. Veuillez réserver à nouveau.",
       "problemTitle": "Impossible de confirmer cette réservation",
@@ -132,6 +133,7 @@
       "locationLabel": "Où",
       "priceLabel": "Montant",
       "notesLabel": "Notes",
+      "confirmationNumberLabel": "Numéro de confirmation",
       "footer": "Ceci est un message automatique de Booksy."
     },
     "confirmation": {
