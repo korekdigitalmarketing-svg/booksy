@@ -1,6 +1,8 @@
 import "server-only";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import type { Database } from "@/lib/supabase/types";
 
 // Dashboard reads go through the session-scoped (anon-key + cookie)
 // client, never the service client — RLS's `owner_id = auth.uid()` policy
@@ -19,9 +21,60 @@ export interface DashboardProfile {
   brandColor: string | null;
 }
 
-/** Fetches the signed-in host's own profile, or redirects to /login. The
- * proxy already gates unauthenticated requests, but a session can expire
- * between the gate and this read, so this is a real check, not a formality. */
+function slugify(input: string): string {
+  const slug = input
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 40);
+  return slug || "host";
+}
+
+type ProfileRow = {
+  id: string;
+  full_name: string;
+  email: string;
+  slug: string;
+  timezone: string;
+  locale: string;
+  avatar_url: string | null;
+  brand_color: string | null;
+};
+
+/** Every new auth user lands here with no `profiles` row yet — there's no
+ * separate sign-up form, so the first successful login IS the sign-up.
+ * Runs under the user's own session: RLS's `profiles_owner_all` policy
+ * (`id = auth.uid()`) is what actually authorizes the insert, not a
+ * service-role bypass. Retries the slug on a uniqueness collision rather
+ * than failing the user's very first login over a taken email-derived slug. */
+async function createDefaultProfile(
+  supabase: SupabaseClient<Database>,
+  user: User,
+): Promise<ProfileRow> {
+  const email = user.email ?? "";
+  const localPart = email.split("@")[0] || "host";
+  const baseSlug = slugify(localPart);
+  const fullName = localPart.charAt(0).toUpperCase() + localPart.slice(1);
+
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const slug = attempt === 0 ? baseSlug : `${baseSlug}-${Math.random().toString(36).slice(2, 6)}`;
+    const { data, error } = await supabase
+      .from("profiles")
+      .insert({ id: user.id, full_name: fullName, email, slug })
+      .select("id, full_name, email, slug, timezone, locale, avatar_url, brand_color")
+      .single();
+
+    if (!error) return data;
+    if (error.code !== "23505") throw new Error(`Failed to create profile: ${error.message}`);
+    // 23505 = unique_violation on the slug — another host already has it, retry with a suffix.
+  }
+  throw new Error("Failed to create profile: slug collisions exhausted retries");
+}
+
+/** Fetches the signed-in host's own profile — creating one on first login
+ * — or redirects to /login. The proxy already gates unauthenticated
+ * requests, but a session can expire between the gate and this read, so
+ * the user check here is a real check, not a formality. */
 export async function requireHostProfile(): Promise<DashboardProfile> {
   const supabase = await createClient();
   const {
@@ -30,13 +83,15 @@ export async function requireHostProfile(): Promise<DashboardProfile> {
 
   if (!user) redirect("/login");
 
-  const { data: profile, error } = await supabase
+  const { data: existing, error } = await supabase
     .from("profiles")
     .select("id, full_name, email, slug, timezone, locale, avatar_url, brand_color")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (error || !profile) redirect("/login");
+  if (error) redirect("/login");
+
+  const profile = existing ?? (await createDefaultProfile(supabase, user));
 
   return {
     id: profile.id,
