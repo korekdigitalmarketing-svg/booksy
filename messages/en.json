@@ -242,7 +242,15 @@
       "cancelReasonLabel": "Reason (optional, shared with the client)",
       "cancelConfirmButton": "Cancel booking",
       "cancelledToast": "Booking cancelled",
-      "rescheduleButton": "Reschedule"
+      "rescheduleButton": "Reschedule",
+      "stats": {
+        "todayLabel": "Today",
+        "upcomingLabel": "Upcoming",
+        "totalLabel": "Total booked"
+      },
+      "copyLinkButton": "Copy my booking link",
+      "copyLinkToast": "Booking link copied",
+      "copyLinkError": "Couldn't copy the link. Please copy it manually."
     },
     "reschedule": {
       "dialogTitle": "Reschedule this booking",

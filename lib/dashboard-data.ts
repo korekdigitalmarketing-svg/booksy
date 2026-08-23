@@ -191,6 +191,25 @@ export async function getUpcomingBookings(locale: string): Promise<DashboardBook
   return attachEventTitles(data, locale);
 }
 
+export interface DashboardStats {
+  totalConfirmed: number;
+}
+
+/** All-time count of confirmed bookings (past + future), for the dashboard
+ * home's stats row. A separate `count`-only query rather than reusing
+ * getUpcomingBookings/getBookingsList — those fetch full rows and are
+ * scoped to a time window, neither of which this needs. */
+export async function getBookingsStats(): Promise<DashboardStats> {
+  const supabase = await createClient();
+  const { count, error } = await supabase
+    .from("bookings")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "confirmed");
+
+  if (error) return { totalConfirmed: 0 };
+  return { totalConfirmed: count ?? 0 };
+}
+
 export type BookingFilter = "upcoming" | "past" | "all";
 
 /** The full bookings list, for /dashboard/bookings. */

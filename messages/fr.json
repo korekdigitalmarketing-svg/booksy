@@ -242,7 +242,15 @@
       "cancelReasonLabel": "Motif (facultatif, partagé avec le client)",
       "cancelConfirmButton": "Annuler la réservation",
       "cancelledToast": "Réservation annulée",
-      "rescheduleButton": "Reporter"
+      "rescheduleButton": "Reporter",
+      "stats": {
+        "todayLabel": "Aujourd'hui",
+        "upcomingLabel": "À venir",
+        "totalLabel": "Total réservé"
+      },
+      "copyLinkButton": "Copier mon lien de réservation",
+      "copyLinkToast": "Lien de réservation copié",
+      "copyLinkError": "Impossible de copier le lien. Veuillez le copier manuellement."
     },
     "reschedule": {
       "dialogTitle": "Reporter cette réservation",

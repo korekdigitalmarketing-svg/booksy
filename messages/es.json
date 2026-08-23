@@ -242,7 +242,15 @@
       "cancelReasonLabel": "Motivo (opcional, se compartirá con el cliente)",
       "cancelConfirmButton": "Cancelar reserva",
       "cancelledToast": "Reserva cancelada",
-      "rescheduleButton": "Reprogramar"
+      "rescheduleButton": "Reprogramar",
+      "stats": {
+        "todayLabel": "Hoy",
+        "upcomingLabel": "Próximas",
+        "totalLabel": "Total reservado"
+      },
+      "copyLinkButton": "Copiar mi enlace de reserva",
+      "copyLinkToast": "Enlace de reserva copiado",
+      "copyLinkError": "No se pudo copiar el enlace. Cópialo manualmente."
     },
     "reschedule": {
       "dialogTitle": "Reprogramar esta reserva",
