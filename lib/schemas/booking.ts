@@ -11,6 +11,10 @@ export const CreateBookingSchema = z.object({
   email: z.string().trim().email().max(320),
   phone: z.string().trim().max(50).optional(),
   notes: z.string().trim().max(2000).optional(),
+  // Keyed by event_type_questions.id. Which keys are actually required is
+  // data (the event type's live questions), not something this schema can
+  // know — the route validates required-ness server-side after loading them.
+  customAnswers: z.record(z.string().uuid(), z.string().trim().max(2000)).default({}),
 });
 
 export type CreateBookingInput = z.infer<typeof CreateBookingSchema>;

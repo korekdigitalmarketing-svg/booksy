@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { requireHostProfile, getEventTypeById } from "@/lib/dashboard-data";
+import { requireHostProfile, getEventTypeById, getEventTypeQuestions } from "@/lib/dashboard-data";
 import { EventTypeForm } from "../event-type-form";
+import { QuestionsEditor } from "../questions-editor";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -14,6 +15,7 @@ export default async function EditEventTypePage({ params }: Props) {
 
   const eventType = await getEventTypeById(id);
   if (!eventType) notFound();
+  const questions = await getEventTypeQuestions(eventType.id);
 
   return (
     <div className="flex max-w-2xl flex-col gap-6">
@@ -23,6 +25,11 @@ export default async function EditEventTypePage({ params }: Props) {
         hostDefaultLocale={profile.locale}
         eventTypeId={eventType.id}
         initial={eventType}
+      />
+      <QuestionsEditor
+        eventTypeId={eventType.id}
+        hostDefaultLocale={profile.locale}
+        initial={questions}
       />
     </div>
   );

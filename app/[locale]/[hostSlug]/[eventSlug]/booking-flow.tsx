@@ -37,7 +37,7 @@ import {
   formatSlotWeekdayDate,
   guessTimezone,
 } from "@/lib/format";
-import type { PublicEventType } from "@/lib/public-data";
+import type { PublicEventType, PublicQuestion } from "@/lib/public-data";
 import { ApiErrorCode } from "@/lib/api-errors";
 
 interface BookingFlowProps {
@@ -45,6 +45,7 @@ interface BookingFlowProps {
   hostSlug: string;
   host: { fullName: string; timezone: string; locale: string };
   eventType: PublicEventType;
+  questions: PublicQuestion[];
 }
 
 function toDateKey(date: Date): string {
@@ -65,7 +66,7 @@ interface ConfirmedBooking {
   endsAt: string;
 }
 
-export function BookingFlow({ locale, hostSlug, host, eventType }: BookingFlowProps) {
+export function BookingFlow({ locale, hostSlug, host, eventType, questions }: BookingFlowProps) {
   const t = useTranslations("booking");
   const tCommon = useTranslations("common");
 
@@ -82,6 +83,7 @@ export function BookingFlow({ locale, hostSlug, host, eventType }: BookingFlowPr
   const [redirecting, setRedirecting] = useState(false);
   const [confirmed, setConfirmed] = useState<ConfirmedBooking | null>(null);
   const [form, setForm] = useState({ name: "", email: "", phone: "", notes: "" });
+  const [customAnswers, setCustomAnswers] = useState<Record<string, string>>({});
 
   // Client-only values (real timezone, "today") are set post-mount so the
   // server-rendered HTML and the first client render match exactly —
@@ -147,6 +149,14 @@ export function BookingFlow({ locale, hostSlug, host, eventType }: BookingFlowPr
     e.preventDefault();
     if (!selectedSlot || !timezone) return;
 
+    const missingRequired = questions.some(
+      (q) => q.isRequired && !(customAnswers[q.id] ?? "").trim(),
+    );
+    if (missingRequired) {
+      toast.error(t("form.requiredQuestion"));
+      return;
+    }
+
     setSubmitting(true);
     try {
       const res = await fetch("/api/bookings", {
@@ -161,6 +171,7 @@ export function BookingFlow({ locale, hostSlug, host, eventType }: BookingFlowPr
           email: form.email,
           phone: form.phone || undefined,
           notes: form.notes || undefined,
+          customAnswers,
         }),
       });
       const data = await res.json();
@@ -375,6 +386,51 @@ export function BookingFlow({ locale, hostSlug, host, eventType }: BookingFlowPr
                       onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
                     />
                   </div>
+                  {questions.map((q) => {
+                    const questionLabel = getLocalized(q.label, locale, host.locale);
+                    return (
+                      <div key={q.id} className="flex flex-col gap-1.5">
+                        <Label htmlFor={`question-${q.id}`}>
+                          {questionLabel}
+                          {q.isRequired ? null : ` (${t("form.optional")})`}
+                        </Label>
+                        {q.questionType === "select" ? (
+                          // value is deliberately left `undefined` (never
+                          // "") when unanswered: Base UI/Radix Select
+                          // reserves the empty string as its own internal
+                          // "nothing selected" sentinel, so a controlled ""
+                          // value silently breaks committing a real
+                          // selection afterwards.
+                          <Select
+                            value={customAnswers[q.id]}
+                            onValueChange={(v) =>
+                              setCustomAnswers((prev) => ({ ...prev, [q.id]: v ?? "" }))
+                            }
+                          >
+                            <SelectTrigger id={`question-${q.id}`}>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {q.options.map((option) => (
+                                <SelectItem key={option} value={option}>
+                                  {option}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        ) : (
+                          <Input
+                            id={`question-${q.id}`}
+                            required={q.isRequired}
+                            value={customAnswers[q.id] ?? ""}
+                            onChange={(e) =>
+                              setCustomAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))
+                            }
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
                   <Button type="submit" disabled={submitting || redirecting}>
                     {redirecting
                       ? t("form.redirecting")

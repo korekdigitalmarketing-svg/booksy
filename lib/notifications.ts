@@ -47,6 +47,8 @@ interface BookingContext {
   inviteeNotes: string | null;
   inviteeTimezone: string;
   inviteeLocale: string;
+  customAnswers: Record<string, string>;
+  questions: { id: string; label: Record<string, string> }[];
   amountCents: number;
   currency: string;
   accessToken: string;
@@ -67,13 +69,13 @@ async function getBookingContext(bookingId: string): Promise<BookingContext | nu
   const { data: booking } = await supabase
     .from("bookings")
     .select(
-      "id, status, event_type_id, owner_id, starts_at, ends_at, invitee_name, invitee_email, invitee_phone, invitee_notes, invitee_timezone, invitee_locale, amount_cents, currency, access_token, cancel_reason, sequence",
+      "id, status, event_type_id, owner_id, starts_at, ends_at, invitee_name, invitee_email, invitee_phone, invitee_notes, invitee_timezone, invitee_locale, custom_answers, amount_cents, currency, access_token, cancel_reason, sequence",
     )
     .eq("id", bookingId)
     .maybeSingle();
   if (!booking) return null;
 
-  const [{ data: eventType }, { data: host }] = await Promise.all([
+  const [{ data: eventType }, { data: host }, { data: questions }] = await Promise.all([
     supabase
       .from("event_types")
       .select("title, location_kind, location_value")
@@ -84,6 +86,11 @@ async function getBookingContext(bookingId: string): Promise<BookingContext | nu
       .select("id, full_name, email, locale, timezone")
       .eq("id", booking.owner_id)
       .maybeSingle(),
+    supabase
+      .from("event_type_questions")
+      .select("id, label, sort_order")
+      .eq("event_type_id", booking.event_type_id)
+      .order("sort_order", { ascending: true }),
   ]);
   if (!eventType || !host) return null;
 
@@ -98,6 +105,8 @@ async function getBookingContext(bookingId: string): Promise<BookingContext | nu
     inviteeNotes: booking.invitee_notes,
     inviteeTimezone: booking.invitee_timezone,
     inviteeLocale: booking.invitee_locale,
+    customAnswers: (booking.custom_answers ?? {}) as Record<string, string>,
+    questions: (questions ?? []).map((q) => ({ id: q.id, label: (q.label ?? {}) as Record<string, string> })),
     amountCents: booking.amount_cents,
     currency: booking.currency,
     accessToken: booking.access_token,
@@ -246,6 +255,9 @@ export async function sendHostNotification(bookingId: string): Promise<"sent" | 
         inviteeEmail: ctx.inviteeEmail,
         inviteePhone: ctx.inviteePhone,
         notes: ctx.inviteeNotes,
+        answers: ctx.questions
+          .map((q) => ({ label: getLocalized(q.label, locale, ctx.hostLocale), value: ctx.customAnswers[q.id] }))
+          .filter((a): a is { label: string; value: string } => Boolean(a.value)),
       }),
     );
 

@@ -85,7 +85,9 @@
       "submit": "Confirmar reserva",
       "submitting": "Confirmando…",
       "continueToPayment": "Continuar al pago",
-      "redirecting": "Redirigiendo al pago…"
+      "redirecting": "Redirigiendo al pago…",
+      "optional": "opcional",
+      "requiredQuestion": "Responda las preguntas obligatorias a continuación."
     },
     "toast": {
       "confirmed": "Reserva confirmada"
@@ -311,6 +313,37 @@
           "in_person": "En persona",
           "custom": "Personalizado"
         }
+      },
+      "questions": {
+        "heading": "Preguntas personalizadas",
+        "hint": "Pide a los invitados cualquier cosa además del nombre, correo, teléfono y notas.",
+        "addButton": "Añadir pregunta",
+        "noQuestions": "Todavía no hay preguntas personalizadas.",
+        "requiredBadge": "Obligatoria",
+        "typeOptions": {
+          "text": "Respuesta corta",
+          "select": "Opción múltiple"
+        },
+        "moveUp": "Subir",
+        "moveDown": "Bajar",
+        "editButton": "Editar",
+        "deleteButton": "Eliminar",
+        "deleteDialogTitle": "¿Eliminar esta pregunta?",
+        "deleteDialogBody": "Los invitados ya no verán esta pregunta en el formulario de reserva. Las respuestas ya recogidas en reservas anteriores se conservan.",
+        "cancelButton": "Cancelar",
+        "addDialogTitle": "Añadir pregunta",
+        "editDialogTitle": "Editar pregunta",
+        "labelLabel": "Pregunta",
+        "typeLabel": "Tipo de respuesta",
+        "optionsLabel": "Opciones (una por línea)",
+        "optionsPlaceholder": "Opción A\nOpción B",
+        "optionsRequiredError": "Añade al menos dos opciones.",
+        "requiredLabel": "Obligatoria",
+        "saveButton": "Guardar",
+        "savingButton": "Guardando…",
+        "savedToast": "Pregunta guardada",
+        "deletedToast": "Pregunta eliminada",
+        "errorToast": "Algo salió mal. Inténtalo de nuevo."
       }
     },
     "availability": {

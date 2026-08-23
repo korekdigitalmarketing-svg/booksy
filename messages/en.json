@@ -85,7 +85,9 @@
       "submit": "Confirm booking",
       "submitting": "Confirming…",
       "continueToPayment": "Continue to payment",
-      "redirecting": "Redirecting to payment…"
+      "redirecting": "Redirecting to payment…",
+      "optional": "optional",
+      "requiredQuestion": "Please answer the required question(s) below."
     },
     "toast": {
       "confirmed": "Booking confirmed"
@@ -311,6 +313,37 @@
           "in_person": "In person",
           "custom": "Custom"
         }
+      },
+      "questions": {
+        "heading": "Custom questions",
+        "hint": "Ask invitees for anything beyond name, email, phone, and notes.",
+        "addButton": "Add question",
+        "noQuestions": "No custom questions yet.",
+        "requiredBadge": "Required",
+        "typeOptions": {
+          "text": "Short answer",
+          "select": "Multiple choice"
+        },
+        "moveUp": "Move up",
+        "moveDown": "Move down",
+        "editButton": "Edit",
+        "deleteButton": "Delete",
+        "deleteDialogTitle": "Delete this question?",
+        "deleteDialogBody": "Invitees will no longer be asked this on the booking form. Answers already collected on past bookings are kept.",
+        "cancelButton": "Cancel",
+        "addDialogTitle": "Add question",
+        "editDialogTitle": "Edit question",
+        "labelLabel": "Question",
+        "typeLabel": "Answer type",
+        "optionsLabel": "Choices (one per line)",
+        "optionsPlaceholder": "Option A\nOption B",
+        "optionsRequiredError": "Add at least two choices.",
+        "requiredLabel": "Required",
+        "saveButton": "Save",
+        "savingButton": "Saving…",
+        "savedToast": "Question saved",
+        "deletedToast": "Question deleted",
+        "errorToast": "Something went wrong. Please try again."
       }
     },
     "availability": {

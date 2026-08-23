@@ -17,6 +17,7 @@ export interface HostNotificationEmailProps {
   inviteeEmail: string;
   inviteePhone: string | null;
   notes: string | null;
+  answers: { label: string; value: string }[];
 }
 
 export function HostNotificationEmail({
@@ -26,6 +27,7 @@ export function HostNotificationEmail({
   inviteeEmail,
   inviteePhone,
   notes,
+  answers,
 }: HostNotificationEmailProps) {
   const contact = inviteePhone ? `${inviteeEmail} · ${inviteePhone}` : inviteeEmail;
 
@@ -37,6 +39,9 @@ export function HostNotificationEmail({
       <DetailRow label={t.locationLabel} value={locationText} />
       <DetailRow label={t.contactLabel} value={contact} />
       {notes ? <DetailRow label={t.notesLabel} value={notes} /> : null}
+      {answers.map((a) => (
+        <DetailRow key={a.label} label={a.label} value={a.value} />
+      ))}
     </EmailLayout>
   );
 }

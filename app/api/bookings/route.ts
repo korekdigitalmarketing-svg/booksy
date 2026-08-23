@@ -67,28 +67,47 @@ export async function POST(request: NextRequest) {
     return apiError("EVENT_TYPE_NOT_FOUND");
   }
 
-  const [{ data: rules, error: rulesError }, { data: overrides, error: overridesError }, { data: bookings, error: bookingsError }] =
-    await Promise.all([
-      supabase
-        .from("availability_rules")
-        .select("weekday, start_time, end_time")
-        .eq("owner_id", eventType.owner_id),
-      supabase
-        .from("date_overrides")
-        .select("the_date, is_closed, start_time, end_time")
-        .eq("owner_id", eventType.owner_id),
-      supabase
-        .from("bookings")
-        .select("blocked_from, blocked_to, starts_at, status, hold_expires_at")
-        .eq("owner_id", eventType.owner_id)
-        .in("status", ["pending_payment", "confirmed"])
-        .gte("blocked_to", new Date().toISOString()),
-    ]);
+  const [
+    { data: rules, error: rulesError },
+    { data: overrides, error: overridesError },
+    { data: bookings, error: bookingsError },
+    { data: questions, error: questionsError },
+  ] = await Promise.all([
+    supabase
+      .from("availability_rules")
+      .select("weekday, start_time, end_time")
+      .eq("owner_id", eventType.owner_id),
+    supabase
+      .from("date_overrides")
+      .select("the_date, is_closed, start_time, end_time")
+      .eq("owner_id", eventType.owner_id),
+    supabase
+      .from("bookings")
+      .select("blocked_from, blocked_to, starts_at, status, hold_expires_at")
+      .eq("owner_id", eventType.owner_id)
+      .in("status", ["pending_payment", "confirmed"])
+      .gte("blocked_to", new Date().toISOString()),
+    supabase
+      .from("event_type_questions")
+      .select("id, label, is_required")
+      .eq("event_type_id", eventType.id),
+  ]);
 
-  if (rulesError || overridesError || bookingsError) {
+  if (rulesError || overridesError || bookingsError || questionsError) {
     return apiError("INTERNAL_ERROR", {
-      message: rulesError?.message ?? overridesError?.message ?? bookingsError?.message,
+      message:
+        rulesError?.message ?? overridesError?.message ?? bookingsError?.message ?? questionsError?.message,
     });
+  }
+
+  // The Zod schema only knows customAnswers is a map of uuid -> string; it
+  // can't know which question ids are actually required, since that's
+  // event-type data, not shape. Enforce it here against the live rows.
+  const missingRequired = (questions ?? []).some(
+    (q) => q.is_required && !(input.customAnswers[q.id] ?? "").trim(),
+  );
+  if (missingRequired) {
+    return apiError("VALIDATION_ERROR", { message: "A required question is missing an answer" });
   }
 
   const existingBookings: ExistingBookingInput[] = (bookings ?? []).map((b) => ({
@@ -152,6 +171,14 @@ export async function POST(request: NextRequest) {
   const requiresPayment = eventType.requires_payment ?? eventType.price_cents > 0;
   const now = DateTime.utc();
 
+  // Drop any answer keyed to a question id that isn't actually on this
+  // event type (stale form state, or a crafted request) rather than
+  // storing orphaned entries nothing will ever render.
+  const knownQuestionIds = new Set((questions ?? []).map((q) => q.id));
+  const customAnswers = Object.fromEntries(
+    Object.entries(input.customAnswers).filter(([id, value]) => knownQuestionIds.has(id) && value),
+  );
+
   const { data: booking, error: insertError } = await supabase
     .from("bookings")
     .insert({
@@ -168,6 +195,7 @@ export async function POST(request: NextRequest) {
       invitee_notes: input.notes || null,
       invitee_timezone: input.timezone,
       invitee_locale: input.locale,
+      custom_answers: customAnswers,
       amount_cents: eventType.price_cents,
       currency: eventType.currency,
       hold_expires_at: requiresPayment ? now.plus({ minutes: HOLD_MINUTES }).toISO() : null,

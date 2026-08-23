@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
-import { getHostBySlug, getActiveEventTypeBySlug } from "@/lib/public-data";
+import { getHostBySlug, getActiveEventTypeBySlug, getEventTypeQuestions } from "@/lib/public-data";
 import { getLocalized } from "@/lib/i18n-content";
 import { BookingFlow } from "./booking-flow";
 
@@ -27,6 +27,7 @@ export default async function EventBookingPage({ params }: Props) {
 
   const eventType = await getActiveEventTypeBySlug(host.id, eventSlug);
   if (!eventType) notFound();
+  const questions = await getEventTypeQuestions(eventType.id);
 
   return (
     <BookingFlow
@@ -34,6 +35,7 @@ export default async function EventBookingPage({ params }: Props) {
       hostSlug={hostSlug}
       host={{ fullName: host.fullName, timezone: host.timezone, locale: host.locale }}
       eventType={eventType}
+      questions={questions}
     />
   );
 }

@@ -63,6 +63,7 @@ export type Database = {
           cancelled_at: string | null
           created_at: string
           currency: string
+          custom_answers: Json
           ends_at: string
           event_type_id: string
           hold_expires_at: string | null
@@ -90,6 +91,7 @@ export type Database = {
           cancelled_at?: string | null
           created_at?: string
           currency?: string
+          custom_answers?: Json
           ends_at: string
           event_type_id: string
           hold_expires_at?: string | null
@@ -117,6 +119,7 @@ export type Database = {
           cancelled_at?: string | null
           created_at?: string
           currency?: string
+          custom_answers?: Json
           ends_at?: string
           event_type_id?: string
           hold_expires_at?: string | null
@@ -179,6 +182,57 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "date_overrides_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_type_questions: {
+        Row: {
+          created_at: string
+          event_type_id: string
+          id: string
+          is_required: boolean
+          label: Json
+          options: Json
+          owner_id: string
+          question_type: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          event_type_id: string
+          id?: string
+          is_required?: boolean
+          label: Json
+          options?: Json
+          owner_id: string
+          question_type?: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          event_type_id?: string
+          id?: string
+          is_required?: boolean
+          label?: Json
+          options?: Json
+          owner_id?: string
+          question_type?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_type_questions_event_type_id_fkey"
+            columns: ["event_type_id"]
+            isOneToOne: false
+            referencedRelation: "event_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_type_questions_owner_id_fkey"
             columns: ["owner_id"]
             isOneToOne: false
             referencedRelation: "profiles"

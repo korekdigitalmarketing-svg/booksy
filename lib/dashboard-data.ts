@@ -303,6 +303,34 @@ function mapEventType(et: {
   };
 }
 
+export interface DashboardQuestion {
+  id: string;
+  label: Record<string, string>;
+  questionType: "text" | "select";
+  options: string[];
+  isRequired: boolean;
+  sortOrder: number;
+}
+
+export async function getEventTypeQuestions(eventTypeId: string): Promise<DashboardQuestion[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("event_type_questions")
+    .select("id, label, question_type, options, is_required, sort_order")
+    .eq("event_type_id", eventTypeId)
+    .order("sort_order", { ascending: true });
+
+  if (error || !data) return [];
+  return data.map((q) => ({
+    id: q.id,
+    label: (q.label ?? {}) as Record<string, string>,
+    questionType: q.question_type as "text" | "select",
+    options: (q.options ?? []) as string[],
+    isRequired: q.is_required,
+    sortOrder: q.sort_order,
+  }));
+}
+
 export interface DashboardAvailabilityRule {
   id: string;
   weekday: number;

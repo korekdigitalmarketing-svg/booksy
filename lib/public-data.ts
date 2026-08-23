@@ -30,6 +30,14 @@ export interface PublicEventType {
   maxDaysAhead: number;
 }
 
+export interface PublicQuestion {
+  id: string;
+  label: Record<string, string>;
+  questionType: "text" | "select";
+  options: string[];
+  isRequired: boolean;
+}
+
 export async function getHostBySlug(hostSlug: string): Promise<PublicHost | null> {
   const supabase = createServiceClient();
   const { data, error } = await supabase
@@ -107,4 +115,25 @@ export async function getActiveEventTypeBySlug(
     locationKind: data.location_kind,
     maxDaysAhead: data.max_days_ahead,
   };
+}
+
+// event_type_questions carries no anon RLS policy either (owner-only, same
+// as event_types) — same service-client pattern as everything else here.
+export async function getEventTypeQuestions(eventTypeId: string): Promise<PublicQuestion[]> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase
+    .from("event_type_questions")
+    .select("id, label, question_type, options, is_required")
+    .eq("event_type_id", eventTypeId)
+    .order("sort_order", { ascending: true });
+
+  if (error || !data) return [];
+
+  return data.map((q) => ({
+    id: q.id,
+    label: (q.label ?? {}) as Record<string, string>,
+    questionType: q.question_type as "text" | "select",
+    options: (q.options ?? []) as string[],
+    isRequired: q.is_required,
+  }));
 }

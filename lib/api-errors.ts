@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 export const ApiErrorCode = {
   VALIDATION_ERROR: "VALIDATION_ERROR",
   EVENT_TYPE_NOT_FOUND: "EVENT_TYPE_NOT_FOUND",
+  QUESTION_NOT_FOUND: "QUESTION_NOT_FOUND",
   INVALID_TIMEZONE: "INVALID_TIMEZONE",
   SLOT_TAKEN: "SLOT_TAKEN",
   SLOT_UNAVAILABLE: "SLOT_UNAVAILABLE",
@@ -20,6 +21,7 @@ export type ApiErrorCode = (typeof ApiErrorCode)[keyof typeof ApiErrorCode];
 const STATUS_BY_CODE: Record<ApiErrorCode, number> = {
   VALIDATION_ERROR: 400,
   EVENT_TYPE_NOT_FOUND: 404,
+  QUESTION_NOT_FOUND: 404,
   INVALID_TIMEZONE: 400,
   SLOT_TAKEN: 409,
   SLOT_UNAVAILABLE: 409,

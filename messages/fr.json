@@ -85,7 +85,9 @@
       "submit": "Confirmer la réservation",
       "submitting": "Confirmation en cours…",
       "continueToPayment": "Continuer vers le paiement",
-      "redirecting": "Redirection vers le paiement…"
+      "redirecting": "Redirection vers le paiement…",
+      "optional": "facultatif",
+      "requiredQuestion": "Veuillez répondre aux questions obligatoires ci-dessous."
     },
     "toast": {
       "confirmed": "Réservation confirmée"
@@ -311,6 +313,37 @@
           "in_person": "En personne",
           "custom": "Personnalisé"
         }
+      },
+      "questions": {
+        "heading": "Questions personnalisées",
+        "hint": "Demandez aux invités autre chose que le nom, l'e-mail, le téléphone et les notes.",
+        "addButton": "Ajouter une question",
+        "noQuestions": "Aucune question personnalisée pour l'instant.",
+        "requiredBadge": "Obligatoire",
+        "typeOptions": {
+          "text": "Réponse courte",
+          "select": "Choix multiple"
+        },
+        "moveUp": "Monter",
+        "moveDown": "Descendre",
+        "editButton": "Modifier",
+        "deleteButton": "Supprimer",
+        "deleteDialogTitle": "Supprimer cette question ?",
+        "deleteDialogBody": "Les invités ne verront plus cette question sur le formulaire de réservation. Les réponses déjà collectées sur les réservations passées sont conservées.",
+        "cancelButton": "Annuler",
+        "addDialogTitle": "Ajouter une question",
+        "editDialogTitle": "Modifier la question",
+        "labelLabel": "Question",
+        "typeLabel": "Type de réponse",
+        "optionsLabel": "Choix (un par ligne)",
+        "optionsPlaceholder": "Option A\nOption B",
+        "optionsRequiredError": "Ajoutez au moins deux choix.",
+        "requiredLabel": "Obligatoire",
+        "saveButton": "Enregistrer",
+        "savingButton": "Enregistrement…",
+        "savedToast": "Question enregistrée",
+        "deletedToast": "Question supprimée",
+        "errorToast": "Une erreur est survenue. Veuillez réessayer."
       }
     },
     "availability": {
