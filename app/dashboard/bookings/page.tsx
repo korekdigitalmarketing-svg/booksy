@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { requireHostProfile, getBookingsList, type BookingFilter } from "@/lib/dashboard-data";
 import { formatSlotTime, formatSlotWeekdayDate, formatCurrency, confirmationNumber } from "@/lib/format";
 import { CancelBookingDialog } from "../cancel-booking-dialog";
+import { RescheduleBookingDialog } from "../reschedule-booking-dialog";
 import { NoShowButton } from "./no-show-button";
 
 const FILTERS: BookingFilter[] = ["upcoming", "past", "all"];
@@ -107,6 +108,16 @@ export default async function DashboardBookingsPage({ searchParams }: Props) {
                   <div className="flex justify-end gap-2">
                     {b.status === "confirmed" && new Date(b.startsAt) < new Date() ? (
                       <NoShowButton bookingId={b.id} />
+                    ) : null}
+                    {b.status === "confirmed" && new Date(b.startsAt) >= new Date() ? (
+                      <RescheduleBookingDialog
+                        bookingId={b.id}
+                        eventTypeId={b.eventTypeId}
+                        inviteeName={b.inviteeName}
+                        locale={profile.locale}
+                        maxDaysAhead={b.maxDaysAhead}
+                        triggerLabel={t("rescheduleButton")}
+                      />
                     ) : null}
                     {b.status === "confirmed" || b.status === "pending_payment" ? (
                       <CancelBookingDialog bookingId={b.id} inviteeName={b.inviteeName} />

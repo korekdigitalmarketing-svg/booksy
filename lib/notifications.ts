@@ -11,6 +11,8 @@ import { HostNotificationEmail } from "@/lib/emails/host-notification";
 import { ReminderEmail } from "@/lib/emails/reminder";
 import { CancellationClientEmail } from "@/lib/emails/cancellation-client";
 import { CancellationHostEmail } from "@/lib/emails/cancellation-host";
+import { RescheduleClientEmail } from "@/lib/emails/reschedule-client";
+import { RescheduleHostEmail } from "@/lib/emails/reschedule-host";
 
 import enMessages from "@/messages/en.json";
 import frMessages from "@/messages/fr.json";
@@ -49,6 +51,7 @@ interface BookingContext {
   currency: string;
   accessToken: string;
   cancelReason: string | null;
+  sequence: number;
   eventTitle: Record<string, string>;
   locationKind: string;
   locationValue: string | null;
@@ -64,7 +67,7 @@ async function getBookingContext(bookingId: string): Promise<BookingContext | nu
   const { data: booking } = await supabase
     .from("bookings")
     .select(
-      "id, status, event_type_id, owner_id, starts_at, ends_at, invitee_name, invitee_email, invitee_phone, invitee_notes, invitee_timezone, invitee_locale, amount_cents, currency, access_token, cancel_reason",
+      "id, status, event_type_id, owner_id, starts_at, ends_at, invitee_name, invitee_email, invitee_phone, invitee_notes, invitee_timezone, invitee_locale, amount_cents, currency, access_token, cancel_reason, sequence",
     )
     .eq("id", bookingId)
     .maybeSingle();
@@ -99,6 +102,7 @@ async function getBookingContext(bookingId: string): Promise<BookingContext | nu
     currency: booking.currency,
     accessToken: booking.access_token,
     cancelReason: booking.cancel_reason,
+    sequence: booking.sequence,
     eventTitle: (eventType.title ?? {}) as Record<string, string>,
     locationKind: eventType.location_kind,
     locationValue: eventType.location_value,
@@ -112,6 +116,11 @@ async function getBookingContext(bookingId: string): Promise<BookingContext | nu
 
 function locationText(kind: string, value: string | null): string {
   return value ?? kind;
+}
+
+function manageUrl(accessToken: string, locale: string): string {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  return `${appUrl}/${locale}/booking/${accessToken}/manage`;
 }
 
 /**
@@ -169,18 +178,20 @@ export async function sendClientConfirmation(bookingId: string): Promise<"sent" 
           priceLabel: tc("priceLabel"),
           notesLabel: tc("notesLabel"),
           confirmationNumberLabel: tc("confirmationNumberLabel"),
+          manageLinkText: tc("manageLinkText"),
         },
         confirmationNumber: confirmationNumber(ctx.id),
         dateTimeText: formatFullDateTime(ctx.startsAt, ctx.inviteeTimezone, locale),
         locationText: locationText(ctx.locationKind, ctx.locationValue),
         priceText: ctx.amountCents > 0 ? formatCurrency(ctx.amountCents, ctx.currency, locale) : null,
         notes: ctx.inviteeNotes,
+        manageUrl: manageUrl(ctx.accessToken, locale),
       }),
     );
 
     const ics = generateIcs({
       bookingId: ctx.id,
-      sequence: 0,
+      sequence: ctx.sequence,
       startsAt: ctx.startsAt,
       endsAt: ctx.endsAt,
       summary: t("icsSummary", { eventTitle, hostName: ctx.hostName }),
@@ -240,7 +251,7 @@ export async function sendHostNotification(bookingId: string): Promise<"sent" | 
 
     const ics = generateIcs({
       bookingId: ctx.id,
-      sequence: 0,
+      sequence: ctx.sequence,
       startsAt: ctx.startsAt,
       endsAt: ctx.endsAt,
       summary: t("icsSummary", { eventTitle, inviteeName: ctx.inviteeName }),
@@ -337,7 +348,7 @@ export async function sendCancellationEmails(
 
     const ics = generateIcs({
       bookingId: ctx.id,
-      sequence: 1,
+      sequence: ctx.sequence,
       startsAt: ctx.startsAt,
       endsAt: ctx.endsAt,
       summary: eventTitle,
@@ -386,6 +397,111 @@ export async function sendCancellationEmails(
         },
         dateTimeText: formatFullDateTime(ctx.startsAt, ctx.hostTimezone, locale),
         reason: ctx.cancelReason,
+      }),
+    );
+
+    const result = await getResend().emails.send({
+      from: emailFrom(),
+      to: ctx.hostEmail,
+      subject: t("subject", { eventTitle, inviteeName: ctx.inviteeName }),
+      html,
+    });
+    return result.data ? { id: result.data.id } : null;
+  });
+
+  return { client, host };
+}
+
+export async function sendRescheduleEmails(
+  bookingId: string,
+  previousStartsAt: string,
+): Promise<{ client: "sent" | "skipped"; host: "sent" | "skipped" }> {
+  // Unlike the other notification kinds, a booking can be rescheduled more
+  // than once — the (booking_id, kind) unique constraint that dedupes
+  // webhook-retry sends would otherwise silently swallow every reschedule
+  // after the first. Folding the post-update sequence number into the kind
+  // keeps logThenSend's insert-before-send dedupe (guards a genuine
+  // double-submit of this one request) without blocking the *next*
+  // reschedule.
+  const ctx0 = await getBookingContext(bookingId);
+  const kindSuffix = ctx0 ? `_v${ctx0.sequence}` : "";
+
+  const client = await logThenSend(bookingId, `reschedule_client${kindSuffix}`, async () => {
+    const ctx = await getBookingContext(bookingId);
+    if (!ctx) return null;
+    const locale = ctx.inviteeLocale;
+    const t = translatorFor(locale, "emails.rescheduleClient");
+    const tc = translatorFor(locale, "emails.common");
+    const eventTitle = getLocalized(ctx.eventTitle, locale, ctx.hostLocale);
+
+    const html = await render(
+      RescheduleClientEmail({
+        t: {
+          heading: t("heading"),
+          greeting: t("greeting", { inviteeName: ctx.inviteeName }),
+          body: t("body", { eventTitle, hostName: ctx.hostName }),
+          footer: tc("footer"),
+          previousTimeLabel: t("previousTimeLabel"),
+          newTimeLabel: t("newTimeLabel"),
+          confirmationNumberLabel: tc("confirmationNumberLabel"),
+          manageLinkText: tc("manageLinkText"),
+        },
+        confirmationNumber: confirmationNumber(ctx.id),
+        previousDateTimeText: formatFullDateTime(previousStartsAt, ctx.inviteeTimezone, locale),
+        newDateTimeText: formatFullDateTime(ctx.startsAt, ctx.inviteeTimezone, locale),
+        manageUrl: manageUrl(ctx.accessToken, locale),
+      }),
+    );
+
+    const ics = generateIcs({
+      bookingId: ctx.id,
+      sequence: ctx.sequence,
+      startsAt: ctx.startsAt,
+      endsAt: ctx.endsAt,
+      summary: t("icsSummary", { eventTitle, hostName: ctx.hostName }),
+      description: t("icsDescription", { eventTitle, inviteeName: ctx.inviteeName }),
+      location: locationText(ctx.locationKind, ctx.locationValue),
+      organizerName: ctx.hostName,
+      organizerEmail: ctx.hostEmail,
+      attendeeName: ctx.inviteeName,
+      attendeeEmail: ctx.inviteeEmail,
+      language: normalizeLocale(locale),
+      status: "CONFIRMED",
+      method: "REQUEST",
+    });
+
+    const result = await getResend().emails.send({
+      from: emailFrom(),
+      to: ctx.inviteeEmail,
+      subject: t("subject", { eventTitle, hostName: ctx.hostName }),
+      html,
+      attachments: [
+        { filename: "booking.ics", content: Buffer.from(ics).toString("base64") },
+      ],
+    });
+    return result.data ? { id: result.data.id } : null;
+  });
+
+  const host = await logThenSend(bookingId, `reschedule_host${kindSuffix}`, async () => {
+    const ctx = await getBookingContext(bookingId);
+    if (!ctx) return null;
+    const locale = ctx.hostLocale;
+    const t = translatorFor(locale, "emails.rescheduleHost");
+    const tc = translatorFor(locale, "emails.common");
+    const eventTitle = getLocalized(ctx.eventTitle, locale, ctx.hostLocale);
+
+    const html = await render(
+      RescheduleHostEmail({
+        t: {
+          heading: t("heading"),
+          greeting: t("greeting", { hostName: ctx.hostName }),
+          body: t("body", { eventTitle, inviteeName: ctx.inviteeName }),
+          footer: tc("footer"),
+          previousTimeLabel: t("previousTimeLabel"),
+          newTimeLabel: t("newTimeLabel"),
+        },
+        previousDateTimeText: formatFullDateTime(previousStartsAt, ctx.hostTimezone, locale),
+        newDateTimeText: formatFullDateTime(ctx.startsAt, ctx.hostTimezone, locale),
       }),
     );
 

@@ -74,6 +74,7 @@ export type Database = {
           invitee_phone: string | null
           invitee_timezone: string
           owner_id: string
+          sequence: number
           starts_at: string
           status: Database["public"]["Enums"]["booking_status"]
           stripe_checkout_session_id: string | null
@@ -100,6 +101,7 @@ export type Database = {
           invitee_phone?: string | null
           invitee_timezone: string
           owner_id: string
+          sequence?: number
           starts_at: string
           status?: Database["public"]["Enums"]["booking_status"]
           stripe_checkout_session_id?: string | null
@@ -126,6 +128,7 @@ export type Database = {
           invitee_phone?: string | null
           invitee_timezone?: string
           owner_id?: string
+          sequence?: number
           starts_at?: string
           status?: Database["public"]["Enums"]["booking_status"]
           stripe_checkout_session_id?: string | null

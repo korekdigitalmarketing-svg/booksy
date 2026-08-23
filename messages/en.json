@@ -110,6 +110,26 @@
       "expiredDescription": "The payment window closed before it completed. Please book again.",
       "problemTitle": "We couldn't confirm this booking",
       "problemDescription": "If you were charged, contact the host — otherwise, please try booking again."
+    },
+    "manage": {
+      "loading": "Loading your booking…",
+      "notFoundTitle": "Booking not found",
+      "notFoundDescription": "This link is invalid, or the booking no longer exists.",
+      "heading": "Your booking",
+      "withHost": "with {hostName}",
+      "cancelledNotice": "This booking has been cancelled.",
+      "rescheduleButton": "Reschedule",
+      "rescheduleDialogTitle": "Pick a new time",
+      "rescheduleConfirmButton": "Confirm new time",
+      "rescheduleCancelButton": "Never mind",
+      "rescheduledToast": "Booking rescheduled",
+      "cancelButton": "Cancel booking",
+      "cancelDialogTitle": "Cancel this booking?",
+      "cancelDialogBody": "The host will be notified by email. This can't be undone.",
+      "cancelReasonLabel": "Reason (optional)",
+      "cancelConfirmButton": "Cancel booking",
+      "keepButton": "Keep booking",
+      "cancelledToast": "Booking cancelled"
     }
   },
   "footer": {
@@ -134,6 +154,7 @@
       "priceLabel": "Amount",
       "notesLabel": "Notes",
       "confirmationNumberLabel": "Confirmation number",
+      "manageLinkText": "Manage or reschedule this booking",
       "footer": "This is an automated message from Booksy."
     },
     "confirmation": {
@@ -177,6 +198,24 @@
       "cancelledByHost": "You cancelled this booking.",
       "cancelledByClient": "{inviteeName} cancelled this booking.",
       "reasonLabel": "Reason"
+    },
+    "rescheduleClient": {
+      "subject": "Rescheduled: {eventTitle} with {hostName}",
+      "heading": "Booking rescheduled",
+      "greeting": "Hi {inviteeName},",
+      "body": "Your {eventTitle} with {hostName} has been moved to a new time.",
+      "previousTimeLabel": "Previous time",
+      "newTimeLabel": "New time",
+      "icsSummary": "{eventTitle} with {hostName}",
+      "icsDescription": "Booking rescheduled via Booksy. Invitee: {inviteeName}."
+    },
+    "rescheduleHost": {
+      "subject": "Rescheduled: {eventTitle} with {inviteeName}",
+      "heading": "Booking rescheduled",
+      "greeting": "Hi {hostName},",
+      "body": "The following booking with {inviteeName} has been moved to a new time.",
+      "previousTimeLabel": "Previous time",
+      "newTimeLabel": "New time"
     }
   },
   "dashboard": {
@@ -200,7 +239,15 @@
       "cancelDialogBody": "{inviteeName} will be notified by email. This can't be undone.",
       "cancelReasonLabel": "Reason (optional, shared with the client)",
       "cancelConfirmButton": "Cancel booking",
-      "cancelledToast": "Booking cancelled"
+      "cancelledToast": "Booking cancelled",
+      "rescheduleButton": "Reschedule"
+    },
+    "reschedule": {
+      "dialogTitle": "Reschedule this booking",
+      "dialogDescription": "{inviteeName} will be notified by email.",
+      "confirmButton": "Confirm new time",
+      "cancelButton": "Never mind",
+      "toast": "Booking rescheduled"
     },
     "bookings": {
       "heading": "Bookings",
@@ -210,6 +257,7 @@
       "noBookings": "No bookings here yet.",
       "markNoShow": "Mark as no-show",
       "noShowToast": "Marked as no-show",
+      "rescheduleButton": "Reschedule",
       "columnWhen": "When",
       "columnClient": "Client",
       "columnService": "Service",

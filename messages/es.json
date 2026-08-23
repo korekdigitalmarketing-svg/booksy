@@ -110,6 +110,26 @@
       "expiredDescription": "La ventana de pago se cerró antes de completarse. Vuelva a reservar.",
       "problemTitle": "No pudimos confirmar esta reserva",
       "problemDescription": "Si se le realizó un cargo, contacte al anfitrión — de lo contrario, intente reservar de nuevo."
+    },
+    "manage": {
+      "loading": "Cargando su reserva…",
+      "notFoundTitle": "Reserva no encontrada",
+      "notFoundDescription": "Este enlace no es válido, o la reserva ya no existe.",
+      "heading": "Su reserva",
+      "withHost": "con {hostName}",
+      "cancelledNotice": "Esta reserva ha sido cancelada.",
+      "rescheduleButton": "Reprogramar",
+      "rescheduleDialogTitle": "Elegir un nuevo horario",
+      "rescheduleConfirmButton": "Confirmar nuevo horario",
+      "rescheduleCancelButton": "Cancelar",
+      "rescheduledToast": "Reserva reprogramada",
+      "cancelButton": "Cancelar reserva",
+      "cancelDialogTitle": "¿Cancelar esta reserva?",
+      "cancelDialogBody": "El anfitrión será notificado por correo electrónico. Esto no se puede deshacer.",
+      "cancelReasonLabel": "Motivo (opcional)",
+      "cancelConfirmButton": "Cancelar reserva",
+      "keepButton": "Mantener reserva",
+      "cancelledToast": "Reserva cancelada"
     }
   },
   "footer": {
@@ -134,6 +154,7 @@
       "priceLabel": "Importe",
       "notesLabel": "Notas",
       "confirmationNumberLabel": "Número de confirmación",
+      "manageLinkText": "Gestionar o reprogramar esta reserva",
       "footer": "Este es un mensaje automático de Booksy."
     },
     "confirmation": {
@@ -177,6 +198,24 @@
       "cancelledByHost": "Usted canceló esta reserva.",
       "cancelledByClient": "{inviteeName} canceló esta reserva.",
       "reasonLabel": "Motivo"
+    },
+    "rescheduleClient": {
+      "subject": "Reprogramado: {eventTitle} con {hostName}",
+      "heading": "Reserva reprogramada",
+      "greeting": "Hola {inviteeName},",
+      "body": "Su {eventTitle} con {hostName} se ha movido a un nuevo horario.",
+      "previousTimeLabel": "Horario anterior",
+      "newTimeLabel": "Nuevo horario",
+      "icsSummary": "{eventTitle} con {hostName}",
+      "icsDescription": "Reserva reprogramada mediante Booksy. Invitado: {inviteeName}."
+    },
+    "rescheduleHost": {
+      "subject": "Reprogramado: {eventTitle} con {inviteeName}",
+      "heading": "Reserva reprogramada",
+      "greeting": "Hola {hostName},",
+      "body": "La siguiente reserva con {inviteeName} se ha movido a un nuevo horario.",
+      "previousTimeLabel": "Horario anterior",
+      "newTimeLabel": "Nuevo horario"
     }
   },
   "dashboard": {
@@ -200,7 +239,15 @@
       "cancelDialogBody": "Se notificará a {inviteeName} por correo electrónico. Esta acción no se puede deshacer.",
       "cancelReasonLabel": "Motivo (opcional, se compartirá con el cliente)",
       "cancelConfirmButton": "Cancelar reserva",
-      "cancelledToast": "Reserva cancelada"
+      "cancelledToast": "Reserva cancelada",
+      "rescheduleButton": "Reprogramar"
+    },
+    "reschedule": {
+      "dialogTitle": "Reprogramar esta reserva",
+      "dialogDescription": "Se notificará a {inviteeName} por correo electrónico.",
+      "confirmButton": "Confirmar nuevo horario",
+      "cancelButton": "Cancelar",
+      "toast": "Reserva reprogramada"
     },
     "bookings": {
       "heading": "Reservas",
@@ -210,6 +257,7 @@
       "noBookings": "Aún no hay reservas aquí.",
       "markNoShow": "Marcar como no asistió",
       "noShowToast": "Marcado como no asistió",
+      "rescheduleButton": "Reprogramar",
       "columnWhen": "Cuándo",
       "columnClient": "Cliente",
       "columnService": "Servicio",

@@ -113,6 +113,8 @@ export interface DashboardBooking {
   inviteeName: string;
   inviteeEmail: string;
   eventTitle: string;
+  eventTypeId: string;
+  maxDaysAhead: number;
   amountCents: number;
   currency: string;
 }
@@ -143,12 +145,14 @@ async function attachEventTitles(
   const eventTypeIds = [...new Set(bookings.map((b) => b.event_type_id))];
   const { data: eventTypes } = await supabase
     .from("event_types")
-    .select("id, title")
+    .select("id, title, max_days_ahead")
     .in("id", eventTypeIds);
 
   const titleById = new Map<string, Record<string, string>>();
+  const maxDaysAheadById = new Map<string, number>();
   for (const et of eventTypes ?? []) {
     titleById.set(et.id, (et.title ?? {}) as Record<string, string>);
+    maxDaysAheadById.set(et.id, et.max_days_ahead);
   }
 
   return bookings.map((b) => {
@@ -162,6 +166,8 @@ async function attachEventTitles(
       inviteeName: b.invitee_name,
       inviteeEmail: b.invitee_email,
       eventTitle,
+      eventTypeId: b.event_type_id,
+      maxDaysAhead: maxDaysAheadById.get(b.event_type_id) ?? 60,
       amountCents: b.amount_cents,
       currency: b.currency,
     };

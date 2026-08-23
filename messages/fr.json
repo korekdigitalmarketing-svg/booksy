@@ -110,6 +110,26 @@
       "expiredDescription": "La fenêtre de paiement s'est fermée avant la fin de la transaction. Veuillez réserver à nouveau.",
       "problemTitle": "Impossible de confirmer cette réservation",
       "problemDescription": "Si vous avez été débité, contactez l'hôte — sinon, veuillez réessayer de réserver."
+    },
+    "manage": {
+      "loading": "Chargement de votre réservation…",
+      "notFoundTitle": "Réservation introuvable",
+      "notFoundDescription": "Ce lien n'est pas valide, ou la réservation n'existe plus.",
+      "heading": "Votre réservation",
+      "withHost": "avec {hostName}",
+      "cancelledNotice": "Cette réservation a été annulée.",
+      "rescheduleButton": "Reporter",
+      "rescheduleDialogTitle": "Choisir un nouvel horaire",
+      "rescheduleConfirmButton": "Confirmer le nouvel horaire",
+      "rescheduleCancelButton": "Annuler",
+      "rescheduledToast": "Réservation reportée",
+      "cancelButton": "Annuler la réservation",
+      "cancelDialogTitle": "Annuler cette réservation ?",
+      "cancelDialogBody": "L'hôte sera notifié par e-mail. Cette action est irréversible.",
+      "cancelReasonLabel": "Motif (facultatif)",
+      "cancelConfirmButton": "Annuler la réservation",
+      "keepButton": "Conserver la réservation",
+      "cancelledToast": "Réservation annulée"
     }
   },
   "footer": {
@@ -134,6 +154,7 @@
       "priceLabel": "Montant",
       "notesLabel": "Notes",
       "confirmationNumberLabel": "Numéro de confirmation",
+      "manageLinkText": "Gérer ou reporter cette réservation",
       "footer": "Ceci est un message automatique de Booksy."
     },
     "confirmation": {
@@ -177,6 +198,24 @@
       "cancelledByHost": "Vous avez annulé cette réservation.",
       "cancelledByClient": "{inviteeName} a annulé cette réservation.",
       "reasonLabel": "Motif"
+    },
+    "rescheduleClient": {
+      "subject": "Reporté : {eventTitle} avec {hostName}",
+      "heading": "Réservation reportée",
+      "greeting": "Bonjour {inviteeName},",
+      "body": "Votre {eventTitle} avec {hostName} a été déplacé à un nouvel horaire.",
+      "previousTimeLabel": "Horaire précédent",
+      "newTimeLabel": "Nouvel horaire",
+      "icsSummary": "{eventTitle} avec {hostName}",
+      "icsDescription": "Réservation reportée via Booksy. Invité : {inviteeName}."
+    },
+    "rescheduleHost": {
+      "subject": "Reporté : {eventTitle} avec {inviteeName}",
+      "heading": "Réservation reportée",
+      "greeting": "Bonjour {hostName},",
+      "body": "La réservation suivante avec {inviteeName} a été déplacée à un nouvel horaire.",
+      "previousTimeLabel": "Horaire précédent",
+      "newTimeLabel": "Nouvel horaire"
     }
   },
   "dashboard": {
@@ -200,7 +239,15 @@
       "cancelDialogBody": "{inviteeName} sera averti(e) par e-mail. Cette action est irréversible.",
       "cancelReasonLabel": "Motif (facultatif, partagé avec le client)",
       "cancelConfirmButton": "Annuler la réservation",
-      "cancelledToast": "Réservation annulée"
+      "cancelledToast": "Réservation annulée",
+      "rescheduleButton": "Reporter"
+    },
+    "reschedule": {
+      "dialogTitle": "Reporter cette réservation",
+      "dialogDescription": "{inviteeName} sera averti(e) par e-mail.",
+      "confirmButton": "Confirmer le nouvel horaire",
+      "cancelButton": "Annuler",
+      "toast": "Réservation reportée"
     },
     "bookings": {
       "heading": "Réservations",
@@ -210,6 +257,7 @@
       "noBookings": "Aucune réservation ici pour le moment.",
       "markNoShow": "Marquer comme absence",
       "noShowToast": "Marqué comme absence",
+      "rescheduleButton": "Reporter",
       "columnWhen": "Quand",
       "columnClient": "Client",
       "columnService": "Prestation",

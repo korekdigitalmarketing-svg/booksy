@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { requireHostProfile, getUpcomingBookings, type DashboardBooking } from "@/lib/dashboard-data";
 import { formatSlotTime, formatSlotWeekdayDate, formatCurrency } from "@/lib/format";
 import { CancelBookingDialog } from "./cancel-booking-dialog";
+import { RescheduleBookingDialog } from "./reschedule-booking-dialog";
 
 export default async function DashboardHomePage() {
   const profile = await requireHostProfile();
@@ -24,7 +25,12 @@ export default async function DashboardHomePage() {
         {today.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t("noBookingsToday")}</p>
         ) : (
-          <BookingList bookings={today} timezone={profile.timezone} locale={profile.locale} />
+          <BookingList
+            bookings={today}
+            timezone={profile.timezone}
+            locale={profile.locale}
+            rescheduleLabel={t("rescheduleButton")}
+          />
         )}
       </section>
 
@@ -33,7 +39,12 @@ export default async function DashboardHomePage() {
         {upcoming.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t("noUpcoming")}</p>
         ) : (
-          <BookingList bookings={upcoming} timezone={profile.timezone} locale={profile.locale} />
+          <BookingList
+            bookings={upcoming}
+            timezone={profile.timezone}
+            locale={profile.locale}
+            rescheduleLabel={t("rescheduleButton")}
+          />
         )}
       </section>
     </div>
@@ -44,10 +55,12 @@ function BookingList({
   bookings,
   timezone,
   locale,
+  rescheduleLabel,
 }: {
   bookings: DashboardBooking[];
   timezone: string;
   locale: string;
+  rescheduleLabel: string;
 }) {
   return (
     <ul className="flex flex-col gap-2">
@@ -73,7 +86,19 @@ function BookingList({
                   </Badge>
                 ) : null}
               </div>
-              <CancelBookingDialog bookingId={b.id} inviteeName={b.inviteeName} />
+              <div className="flex items-center gap-2">
+                {b.status === "confirmed" ? (
+                  <RescheduleBookingDialog
+                    bookingId={b.id}
+                    eventTypeId={b.eventTypeId}
+                    inviteeName={b.inviteeName}
+                    locale={locale}
+                    maxDaysAhead={b.maxDaysAhead}
+                    triggerLabel={rescheduleLabel}
+                  />
+                ) : null}
+                <CancelBookingDialog bookingId={b.id} inviteeName={b.inviteeName} />
+              </div>
             </CardContent>
           </Card>
         </li>
