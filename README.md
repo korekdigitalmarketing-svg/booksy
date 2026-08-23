@@ -93,14 +93,18 @@ automatically before every `npm run build`.
 4. Apply `supabase/migrations/` and `supabase/seed.sql` against the
    production Supabase project if it's separate from the one used in dev
    (see [Database](#database) above).
-5. Deploy. `vercel.json` registers the two cron routes
-   (`sweep-holds` every 5 minutes, `reminders` hourly) automatically —
-   **verify your current Vercel plan supports that cron frequency** before
-   relying on it; Vercel has at times restricted free-tier cron jobs to
-   once a day, which would leave expired holds unswept and reminders
-   unsent for hours. Set `CRON_SECRET` to a strong random value; Vercel
-   sends it automatically as `Authorization: Bearer $CRON_SECRET` for its
-   own cron invocations, so no other setup is needed there.
+5. Deploy. `vercel.json` registers two cron routes, currently scheduled
+   once daily (`sweep-holds` at 03:00 UTC, `reminders` at 04:00 UTC) —
+   Vercel's Hobby plan rejects the whole deployment outright if a cron
+   would fire more than once a day, which is what happened the first time
+   this project deployed (the original config ran `sweep-holds` every 5
+   minutes and `reminders` hourly). **On a Pro plan or higher**, tighten
+   these back up — hourly reminders is fine, and `sweep-holds` should run
+   every 5–15 minutes so expired payment holds get released promptly
+   instead of sitting for up to a day. Set `CRON_SECRET` to a strong
+   random value; Vercel sends it automatically as
+   `Authorization: Bearer $CRON_SECRET` for its own cron invocations, so
+   no other setup is needed there.
 6. In the Stripe dashboard → Developers → Webhooks, add an endpoint at
    `https://<your-domain>/api/webhooks/stripe` subscribed to
    `checkout.session.completed`, `checkout.session.expired`, and
