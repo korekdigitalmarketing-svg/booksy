@@ -59,6 +59,20 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   }
   const input = parsed.data;
 
+  // RLS's `owner_id = auth.uid()` WITH CHECK only constrains the row being
+  // inserted — it says nothing about which event_type_id that row points
+  // at. Without this check a host could POST their own owner_id alongside
+  // someone else's event_type_id in the URL and inject a question (and
+  // therefore an answer field) onto another host's public booking page.
+  const { data: eventType, error: eventTypeError } = await supabase
+    .from("event_types")
+    .select("id")
+    .eq("id", id)
+    .eq("owner_id", user.id)
+    .maybeSingle();
+  if (eventTypeError) return apiError("INTERNAL_ERROR", { message: eventTypeError.message });
+  if (!eventType) return apiError("EVENT_TYPE_NOT_FOUND");
+
   const { data, error } = await supabase
     .from("event_type_questions")
     .insert({
