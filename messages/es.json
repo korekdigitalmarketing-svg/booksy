@@ -1,0 +1,269 @@
+{
+  "common": {
+    "brandName": "Booksy",
+    "loading": "Cargando…",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "back": "Atrás",
+    "errorGeneric": "Se produjo un error. Vuelva a intentarlo."
+  },
+  "home": {
+    "title": "Booksy",
+    "tagline": "Reserve con confianza.",
+    "description": "Elija un anfitrión para ver su disponibilidad."
+  },
+  "host": {
+    "notFoundTitle": "Anfitrión no encontrado",
+    "notFoundDescription": "Esta página de reservas no existe.",
+    "eventsHeading": "Elija un servicio",
+    "noEvents": "Aún no hay servicios disponibles para reservar.",
+    "bookButton": "Reservar",
+    "free": "Gratis"
+  },
+  "booking": {
+    "backToHost": "Volver a {hostName}",
+    "notFoundTitle": "Servicio no encontrado",
+    "notFoundDescription": "Este servicio no está disponible para reservar.",
+    "selectDate": "Elija una fecha",
+    "availableTimes": "Franjas horarias disponibles",
+    "noSlotsForDay": "No hay franjas horarias disponibles ese día.",
+    "noSlotsAtAll": "No hay franjas horarias disponibles en los próximos {days, plural, one {# día} other {# días}}.",
+    "loadingSlots": "Cargando franjas horarias disponibles…",
+    "timezoneLabel": "Zona horaria",
+    "youSelected": "Ha seleccionado",
+    "chooseATime": "Elija una fecha y una franja horaria para continuar.",
+    "duration": "{minutes} min",
+    "free": "Gratis",
+    "priceLabel": "Precio",
+    "whatHappensNext": "¿Qué sucede después?",
+    "whatHappensNextFree": "Recibirá un correo de confirmación de inmediato.",
+    "whatHappensNextPaid": "Pagará de forma segura y luego recibirá un correo de confirmación.",
+    "changeTime": "Cambiar franja horaria",
+    "form": {
+      "name": "Nombre completo",
+      "email": "Correo electrónico",
+      "phone": "Teléfono (opcional)",
+      "notes": "¿Desea añadir algún comentario? (opcional)",
+      "submit": "Confirmar reserva",
+      "submitting": "Confirmando…",
+      "continueToPayment": "Continuar al pago",
+      "redirecting": "Redirigiendo al pago…"
+    },
+    "toast": {
+      "confirmed": "Reserva confirmada"
+    },
+    "errors": {
+      "VALIDATION_ERROR": "Revise el formulario y vuelva a intentarlo.",
+      "EVENT_TYPE_NOT_FOUND": "Este servicio ya no está disponible.",
+      "INVALID_TIMEZONE": "No pudimos reconocer su zona horaria.",
+      "SLOT_TAKEN": "Esa franja horaria acaba de ocuparse — aquí tiene las próximas disponibles.",
+      "SLOT_UNAVAILABLE": "Esa franja horaria ya no está disponible. Elija otra.",
+      "OUTSIDE_NOTICE_WINDOW": "Esa franja horaria está demasiado próxima para reservarla.",
+      "PAYMENT_FAILED": "El pago no se pudo procesar. Vuelva a intentarlo.",
+      "UNAUTHORIZED": "No está autorizado para realizar esta acción.",
+      "INTERNAL_ERROR": "Se produjo un error. Vuelva a intentarlo."
+    },
+    "success": {
+      "confirmingTitle": "Confirmando su pago…",
+      "confirmingDescription": "Esto solo debería tardar unos segundos. No cierre esta página.",
+      "confirmedTitle": "Reserva confirmada",
+      "expiredTitle": "Esta reserva ha caducado",
+      "expiredDescription": "La ventana de pago se cerró antes de completarse. Vuelva a reservar.",
+      "problemTitle": "No pudimos confirmar esta reserva",
+      "problemDescription": "Si se le realizó un cargo, contacte al anfitrión — de lo contrario, intente reservar de nuevo."
+    }
+  },
+  "footer": {
+    "termsLink": "Política de uso aceptable"
+  },
+  "terms": {
+    "title": "Política de uso aceptable",
+    "intro": "Booksy es una plataforma para reservar servicios legítimos y lícitos. Al publicar o reservar un servicio, usted acepta las condiciones siguientes.",
+    "prohibitedHeading": "Artículos y servicios prohibidos",
+    "prohibitedIntro": "Los anfitriones no pueden utilizar Booksy para vender, promocionar o facilitar el acceso a nada ilegal, incluyendo, entre otros:",
+    "prohibitedItem1": "Estupefacientes, sustancias controladas o parafernalia relacionada con drogas",
+    "prohibitedItem2": "Armas de fuego, municiones, explosivos u otras armas",
+    "prohibitedItem3": "Cualquier otro bien o servicio ilegal según la legislación aplicable",
+    "enforcementHeading": "Aplicación de la política",
+    "enforcementBody": "Toda cuenta que ofrezca, promocione o facilite la venta de artículos o servicios ilegales será suspendida y eliminada de forma permanente, sin previo aviso ni reembolso. Booksy también podrá informar de dicha actividad a las autoridades competentes cuando sea necesario o pertinente.",
+    "scopeNote": "Booksy está diseñado para reservar citas y servicios por tiempo, no para publicar o enviar bienes físicos. Cada servicio debe corresponder a una prestación legítima y reservable."
+  },
+  "emails": {
+    "common": {
+      "dateTimeLabel": "Cuándo",
+      "locationLabel": "Dónde",
+      "priceLabel": "Importe",
+      "notesLabel": "Notas",
+      "footer": "Este es un mensaje automático de Booksy."
+    },
+    "confirmation": {
+      "subject": "Confirmado: {eventTitle} con {hostName}",
+      "heading": "Reserva confirmada",
+      "greeting": "Hola {inviteeName},",
+      "body": "Su {eventTitle} con {hostName} está confirmado.",
+      "icsSummary": "{eventTitle} con {hostName}",
+      "icsDescription": "Reserva confirmada mediante Booksy. Invitado/a: {inviteeName}."
+    },
+    "hostNotification": {
+      "subject": "Nueva reserva: {eventTitle} con {inviteeName}",
+      "heading": "Nueva reserva",
+      "greeting": "Hola {hostName},",
+      "body": "{inviteeName} acaba de reservar {eventTitle} con usted.",
+      "contactLabel": "Contacto",
+      "icsSummary": "{eventTitle} con {inviteeName}",
+      "icsDescription": "Reservado mediante Booksy. Contacto: {inviteeEmail}."
+    },
+    "reminder": {
+      "subject": "Recordatorio: {eventTitle} mañana",
+      "heading": "Recordatorio de cita próxima",
+      "greeting": "Hola {inviteeName},",
+      "body": "Le recordamos que tiene {eventTitle} con {hostName} dentro de aproximadamente 24 horas."
+    },
+    "cancellationClient": {
+      "subject": "Cancelado: {eventTitle} con {hostName}",
+      "heading": "Reserva cancelada",
+      "greeting": "Hola {inviteeName},",
+      "body": "Su {eventTitle} con {hostName}, previamente programado para el horario indicado abajo, ha sido cancelado.",
+      "cancelledByHost": "Esta reserva fue cancelada por el anfitrión.",
+      "cancelledByClient": "Esta reserva ha sido cancelada.",
+      "reasonLabel": "Motivo",
+      "refundNote": "Si pagó por esta reserva, se procesará un reembolso automáticamente."
+    },
+    "cancellationHost": {
+      "subject": "Cancelado: {eventTitle} con {inviteeName}",
+      "heading": "Reserva cancelada",
+      "greeting": "Hola {hostName},",
+      "body": "La siguiente reserva con {inviteeName} ha sido cancelada.",
+      "cancelledByHost": "Usted canceló esta reserva.",
+      "cancelledByClient": "{inviteeName} canceló esta reserva.",
+      "reasonLabel": "Motivo"
+    }
+  },
+  "dashboard": {
+    "nav": {
+      "today": "Hoy",
+      "bookings": "Reservas",
+      "eventTypes": "Servicios",
+      "availability": "Disponibilidad",
+      "settings": "Configuración",
+      "signOut": "Cerrar sesión"
+    },
+    "home": {
+      "heading": "Hoy y próximas",
+      "todayHeading": "Hoy",
+      "upcomingHeading": "Próximas",
+      "noBookingsToday": "No hay reservas hoy.",
+      "noUpcoming": "No hay próximas reservas.",
+      "cancelButton": "Cancelar",
+      "keepButton": "Conservar reserva",
+      "cancelDialogTitle": "¿Cancelar esta reserva?",
+      "cancelDialogBody": "Se notificará a {inviteeName} por correo electrónico. Esta acción no se puede deshacer.",
+      "cancelReasonLabel": "Motivo (opcional, se compartirá con el cliente)",
+      "cancelConfirmButton": "Cancelar reserva",
+      "cancelledToast": "Reserva cancelada"
+    },
+    "bookings": {
+      "heading": "Reservas",
+      "filterUpcoming": "Próximas",
+      "filterPast": "Pasadas",
+      "filterAll": "Todas",
+      "noBookings": "Aún no hay reservas aquí.",
+      "markNoShow": "Marcar como no asistió",
+      "noShowToast": "Marcado como no asistió",
+      "columnWhen": "Cuándo",
+      "columnClient": "Cliente",
+      "columnService": "Servicio",
+      "columnStatus": "Estado",
+      "columnActions": "Acciones",
+      "status": {
+        "pending_payment": "Pendiente de pago",
+        "confirmed": "Confirmada",
+        "cancelled_by_host": "Cancelada por el anfitrión",
+        "cancelled_by_client": "Cancelada por el cliente",
+        "expired": "Caducada",
+        "no_show": "No asistió"
+      }
+    },
+    "eventTypes": {
+      "heading": "Servicios",
+      "newButton": "Nuevo servicio",
+      "noEventTypes": "Aún no hay servicios.",
+      "editButton": "Editar",
+      "activeLabel": "Activo",
+      "inactiveLabel": "Inactivo",
+      "backToList": "Volver a los servicios",
+      "newHeading": "Nuevo servicio",
+      "editHeading": "Editar servicio",
+      "form": {
+        "titleLabel": "Título",
+        "descriptionLabel": "Descripción",
+        "slugLabel": "Identificador de URL",
+        "slugHint": "Aparece en el enlace de reserva: /{hostSlug}/{slug}",
+        "durationLabel": "Duración (minutos)",
+        "priceLabel": "Precio",
+        "priceHint": "Indique 0 para un servicio gratuito",
+        "currencyLabel": "Moneda",
+        "locationKindLabel": "Tipo de ubicación",
+        "locationValueLabel": "Detalles de la ubicación",
+        "bufferBeforeLabel": "Margen antes (minutos)",
+        "bufferAfterLabel": "Margen después (minutos)",
+        "minNoticeLabel": "Aviso mínimo (minutos)",
+        "maxDaysAheadLabel": "Reservable hasta (días de antelación)",
+        "maxPerDayLabel": "Máximo de reservas por día (opcional)",
+        "activeLabel": "Activo — visible en su página de reservas",
+        "policyLabel": "Confirmo que este servicio es legal y no implica estupefacientes, armas de fuego ni otros artículos o servicios prohibidos.",
+        "policyLinkText": "Leer la política de uso aceptable",
+        "policyRequiredError": "Confirme que este servicio cumple con la política de uso aceptable.",
+        "saveButton": "Guardar",
+        "savingButton": "Guardando…",
+        "savedToast": "Servicio guardado",
+        "locationKindOptions": {
+          "video": "Videollamada",
+          "phone": "Llamada telefónica",
+          "in_person": "En persona",
+          "custom": "Personalizado"
+        }
+      }
+    },
+    "availability": {
+      "heading": "Disponibilidad",
+      "weeklyHeading": "Horario semanal",
+      "addWindow": "Añadir franja horaria",
+      "removeWindow": "Eliminar",
+      "closedLabel": "Cerrado",
+      "overridesHeading": "Excepciones por fecha",
+      "overridesDescription": "Bloquee una fecha específica o defina un horario distinto solo para ese día.",
+      "addOverride": "Añadir excepción",
+      "overrideClosedLabel": "Cerrado todo el día",
+      "removeOverride": "Eliminar",
+      "saveButton": "Guardar disponibilidad",
+      "savingButton": "Guardando…",
+      "savedToast": "Disponibilidad guardada",
+      "weekdays": {
+        "0": "Domingo",
+        "1": "Lunes",
+        "2": "Martes",
+        "3": "Miércoles",
+        "4": "Jueves",
+        "5": "Viernes",
+        "6": "Sábado"
+      }
+    },
+    "settings": {
+      "heading": "Configuración",
+      "profileHeading": "Perfil",
+      "fullNameLabel": "Nombre completo",
+      "slugLabel": "Identificador de URL pública",
+      "slugHint": "Su página de reservas: {appUrl}/{locale}/{slug}",
+      "timezoneLabel": "Zona horaria",
+      "localeLabel": "Idioma del panel",
+      "saveButton": "Guardar",
+      "savingButton": "Guardando…",
+      "savedToast": "Configuración guardada",
+      "stripeHeading": "Pagos",
+      "stripeConfigured": "Stripe está configurado — los servicios de pago pueden aceptar pagos.",
+      "stripeNotConfigured": "Stripe aún no está configurado. Los servicios de pago no podrán reservarse hasta que se configure STRIPE_SECRET_KEY."
+    }
+  }
+}

@@ -1,0 +1,269 @@
+{
+  "common": {
+    "brandName": "Booksy",
+    "loading": "Chargement…",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "errorGeneric": "Une erreur est survenue. Veuillez réessayer."
+  },
+  "home": {
+    "title": "Booksy",
+    "tagline": "Réservez en toute confiance.",
+    "description": "Choisissez un hôte pour consulter ses disponibilités."
+  },
+  "host": {
+    "notFoundTitle": "Hôte introuvable",
+    "notFoundDescription": "Cette page de réservation n'existe pas.",
+    "eventsHeading": "Choisissez une prestation",
+    "noEvents": "Aucune prestation réservable pour le moment.",
+    "bookButton": "Réserver",
+    "free": "Gratuit"
+  },
+  "booking": {
+    "backToHost": "Retour à {hostName}",
+    "notFoundTitle": "Prestation introuvable",
+    "notFoundDescription": "Cette prestation n'est pas disponible à la réservation.",
+    "selectDate": "Choisissez une date",
+    "availableTimes": "Créneaux disponibles",
+    "noSlotsForDay": "Aucun créneau disponible ce jour-là.",
+    "noSlotsAtAll": "Aucun créneau disponible dans les {days, plural, one {# prochain jour} other {# prochains jours}}.",
+    "loadingSlots": "Chargement des créneaux disponibles…",
+    "timezoneLabel": "Fuseau horaire",
+    "youSelected": "Vous avez sélectionné",
+    "chooseATime": "Choisissez une date et un créneau pour continuer.",
+    "duration": "{minutes} min",
+    "free": "Gratuit",
+    "priceLabel": "Prix",
+    "whatHappensNext": "Et ensuite ?",
+    "whatHappensNextFree": "Vous recevrez immédiatement un e-mail de confirmation.",
+    "whatHappensNextPaid": "Vous paierez en toute sécurité, puis recevrez un e-mail de confirmation.",
+    "changeTime": "Changer de créneau",
+    "form": {
+      "name": "Nom complet",
+      "email": "E-mail",
+      "phone": "Téléphone (facultatif)",
+      "notes": "Souhaitez-vous préciser quelque chose ? (facultatif)",
+      "submit": "Confirmer la réservation",
+      "submitting": "Confirmation en cours…",
+      "continueToPayment": "Continuer vers le paiement",
+      "redirecting": "Redirection vers le paiement…"
+    },
+    "toast": {
+      "confirmed": "Réservation confirmée"
+    },
+    "errors": {
+      "VALIDATION_ERROR": "Veuillez vérifier le formulaire et réessayer.",
+      "EVENT_TYPE_NOT_FOUND": "Cette prestation n'est plus disponible.",
+      "INVALID_TIMEZONE": "Nous n'avons pas reconnu votre fuseau horaire.",
+      "SLOT_TAKEN": "Ce créneau vient d'être pris — voici les prochains créneaux disponibles.",
+      "SLOT_UNAVAILABLE": "Ce créneau n'est plus disponible. Veuillez en choisir un autre.",
+      "OUTSIDE_NOTICE_WINDOW": "Ce créneau est trop proche pour être réservé.",
+      "PAYMENT_FAILED": "Le paiement a échoué. Veuillez réessayer.",
+      "UNAUTHORIZED": "Vous n'êtes pas autorisé à effectuer cette action.",
+      "INTERNAL_ERROR": "Une erreur est survenue. Veuillez réessayer."
+    },
+    "success": {
+      "confirmingTitle": "Confirmation du paiement…",
+      "confirmingDescription": "Cela ne devrait prendre que quelques secondes. Ne fermez pas cette page.",
+      "confirmedTitle": "Réservation confirmée",
+      "expiredTitle": "Cette réservation a expiré",
+      "expiredDescription": "La fenêtre de paiement s'est fermée avant la fin de la transaction. Veuillez réserver à nouveau.",
+      "problemTitle": "Impossible de confirmer cette réservation",
+      "problemDescription": "Si vous avez été débité, contactez l'hôte — sinon, veuillez réessayer de réserver."
+    }
+  },
+  "footer": {
+    "termsLink": "Politique d'utilisation acceptable"
+  },
+  "terms": {
+    "title": "Politique d'utilisation acceptable",
+    "intro": "Booksy est une plateforme de réservation de prestations légales. En publiant ou en réservant une prestation, vous acceptez les conditions ci-dessous.",
+    "prohibitedHeading": "Articles et prestations interdits",
+    "prohibitedIntro": "Les hôtes ne peuvent pas utiliser Booksy pour vendre, promouvoir ou permettre l'accès à quoi que ce soit d'illégal, y compris, sans s'y limiter :",
+    "prohibitedItem1": "Les stupéfiants, substances réglementées ou matériel lié à la drogue",
+    "prohibitedItem2": "Les armes à feu, munitions, explosifs ou autres armes",
+    "prohibitedItem3": "Tout autre bien ou service illégal au regard du droit applicable",
+    "enforcementHeading": "Application de la politique",
+    "enforcementBody": "Tout compte proposant, promouvant ou facilitant la vente d'articles ou de prestations illégaux sera suspendu et définitivement supprimé, sans préavis ni remboursement. Booksy pourra également signaler ces activités aux autorités compétentes lorsque cela est requis ou approprié.",
+    "scopeNote": "Booksy est conçu pour la réservation de rendez-vous et de prestations, et non pour la vente ou l'expédition de biens physiques. Chaque prestation doit correspondre à un service légitime et réservable."
+  },
+  "emails": {
+    "common": {
+      "dateTimeLabel": "Quand",
+      "locationLabel": "Où",
+      "priceLabel": "Montant",
+      "notesLabel": "Notes",
+      "footer": "Ceci est un message automatique de Booksy."
+    },
+    "confirmation": {
+      "subject": "Confirmé : {eventTitle} avec {hostName}",
+      "heading": "Réservation confirmée",
+      "greeting": "Bonjour {inviteeName},",
+      "body": "Votre {eventTitle} avec {hostName} est confirmé.",
+      "icsSummary": "{eventTitle} avec {hostName}",
+      "icsDescription": "Réservation confirmée via Booksy. Invité(e) : {inviteeName}."
+    },
+    "hostNotification": {
+      "subject": "Nouvelle réservation : {eventTitle} avec {inviteeName}",
+      "heading": "Nouvelle réservation",
+      "greeting": "Bonjour {hostName},",
+      "body": "{inviteeName} vient de réserver {eventTitle} avec vous.",
+      "contactLabel": "Contact",
+      "icsSummary": "{eventTitle} avec {inviteeName}",
+      "icsDescription": "Réservé via Booksy. Contact : {inviteeEmail}."
+    },
+    "reminder": {
+      "subject": "Rappel : {eventTitle} demain",
+      "heading": "Rappel de rendez-vous à venir",
+      "greeting": "Bonjour {inviteeName},",
+      "body": "Nous vous rappelons que vous avez {eventTitle} avec {hostName} dans environ 24 heures."
+    },
+    "cancellationClient": {
+      "subject": "Annulé : {eventTitle} avec {hostName}",
+      "heading": "Réservation annulée",
+      "greeting": "Bonjour {inviteeName},",
+      "body": "Votre {eventTitle} avec {hostName}, initialement prévu à l'horaire ci-dessous, a été annulé.",
+      "cancelledByHost": "Cette réservation a été annulée par l'hôte.",
+      "cancelledByClient": "Cette réservation a été annulée.",
+      "reasonLabel": "Motif",
+      "refundNote": "Si vous avez payé pour cette réservation, un remboursement sera effectué automatiquement."
+    },
+    "cancellationHost": {
+      "subject": "Annulé : {eventTitle} avec {inviteeName}",
+      "heading": "Réservation annulée",
+      "greeting": "Bonjour {hostName},",
+      "body": "La réservation suivante avec {inviteeName} a été annulée.",
+      "cancelledByHost": "Vous avez annulé cette réservation.",
+      "cancelledByClient": "{inviteeName} a annulé cette réservation.",
+      "reasonLabel": "Motif"
+    }
+  },
+  "dashboard": {
+    "nav": {
+      "today": "Aujourd'hui",
+      "bookings": "Réservations",
+      "eventTypes": "Prestations",
+      "availability": "Disponibilités",
+      "settings": "Paramètres",
+      "signOut": "Se déconnecter"
+    },
+    "home": {
+      "heading": "Aujourd'hui et à venir",
+      "todayHeading": "Aujourd'hui",
+      "upcomingHeading": "À venir",
+      "noBookingsToday": "Aucune réservation aujourd'hui.",
+      "noUpcoming": "Aucune réservation à venir.",
+      "cancelButton": "Annuler",
+      "keepButton": "Conserver la réservation",
+      "cancelDialogTitle": "Annuler cette réservation ?",
+      "cancelDialogBody": "{inviteeName} sera averti(e) par e-mail. Cette action est irréversible.",
+      "cancelReasonLabel": "Motif (facultatif, partagé avec le client)",
+      "cancelConfirmButton": "Annuler la réservation",
+      "cancelledToast": "Réservation annulée"
+    },
+    "bookings": {
+      "heading": "Réservations",
+      "filterUpcoming": "À venir",
+      "filterPast": "Passées",
+      "filterAll": "Toutes",
+      "noBookings": "Aucune réservation ici pour le moment.",
+      "markNoShow": "Marquer comme absence",
+      "noShowToast": "Marqué comme absence",
+      "columnWhen": "Quand",
+      "columnClient": "Client",
+      "columnService": "Prestation",
+      "columnStatus": "Statut",
+      "columnActions": "Actions",
+      "status": {
+        "pending_payment": "En attente de paiement",
+        "confirmed": "Confirmée",
+        "cancelled_by_host": "Annulée par l'hôte",
+        "cancelled_by_client": "Annulée par le client",
+        "expired": "Expirée",
+        "no_show": "Absence"
+      }
+    },
+    "eventTypes": {
+      "heading": "Prestations",
+      "newButton": "Nouvelle prestation",
+      "noEventTypes": "Aucune prestation pour le moment.",
+      "editButton": "Modifier",
+      "activeLabel": "Active",
+      "inactiveLabel": "Inactive",
+      "backToList": "Retour aux prestations",
+      "newHeading": "Nouvelle prestation",
+      "editHeading": "Modifier la prestation",
+      "form": {
+        "titleLabel": "Titre",
+        "descriptionLabel": "Description",
+        "slugLabel": "Identifiant d'URL",
+        "slugHint": "Apparaît dans le lien de réservation : /{hostSlug}/{slug}",
+        "durationLabel": "Durée (minutes)",
+        "priceLabel": "Prix",
+        "priceHint": "Indiquez 0 pour une prestation gratuite",
+        "currencyLabel": "Devise",
+        "locationKindLabel": "Type de lieu",
+        "locationValueLabel": "Détails du lieu",
+        "bufferBeforeLabel": "Marge avant (minutes)",
+        "bufferAfterLabel": "Marge après (minutes)",
+        "minNoticeLabel": "Délai minimum (minutes)",
+        "maxDaysAheadLabel": "Réservable jusqu'à (jours à l'avance)",
+        "maxPerDayLabel": "Nombre maximum de réservations par jour (facultatif)",
+        "activeLabel": "Active — visible sur votre page de réservation",
+        "policyLabel": "Je confirme que cette prestation est légale et n'implique ni stupéfiants, ni armes à feu, ni autres articles ou services interdits.",
+        "policyLinkText": "Consulter la politique d'utilisation acceptable",
+        "policyRequiredError": "Veuillez confirmer que cette prestation respecte la politique d'utilisation acceptable.",
+        "saveButton": "Enregistrer",
+        "savingButton": "Enregistrement…",
+        "savedToast": "Prestation enregistrée",
+        "locationKindOptions": {
+          "video": "Appel vidéo",
+          "phone": "Appel téléphonique",
+          "in_person": "En personne",
+          "custom": "Personnalisé"
+        }
+      }
+    },
+    "availability": {
+      "heading": "Disponibilités",
+      "weeklyHeading": "Horaires hebdomadaires",
+      "addWindow": "Ajouter un créneau horaire",
+      "removeWindow": "Supprimer",
+      "closedLabel": "Fermé",
+      "overridesHeading": "Exceptions par date",
+      "overridesDescription": "Bloquez une date précise ou définissez des horaires différents pour ce jour-là.",
+      "addOverride": "Ajouter une exception",
+      "overrideClosedLabel": "Fermé toute la journée",
+      "removeOverride": "Supprimer",
+      "saveButton": "Enregistrer les disponibilités",
+      "savingButton": "Enregistrement…",
+      "savedToast": "Disponibilités enregistrées",
+      "weekdays": {
+        "0": "Dimanche",
+        "1": "Lundi",
+        "2": "Mardi",
+        "3": "Mercredi",
+        "4": "Jeudi",
+        "5": "Vendredi",
+        "6": "Samedi"
+      }
+    },
+    "settings": {
+      "heading": "Paramètres",
+      "profileHeading": "Profil",
+      "fullNameLabel": "Nom complet",
+      "slugLabel": "Identifiant d'URL public",
+      "slugHint": "Votre page de réservation : {appUrl}/{locale}/{slug}",
+      "timezoneLabel": "Fuseau horaire",
+      "localeLabel": "Langue du tableau de bord",
+      "saveButton": "Enregistrer",
+      "savingButton": "Enregistrement…",
+      "savedToast": "Paramètres enregistrés",
+      "stripeHeading": "Paiements",
+      "stripeConfigured": "Stripe est configuré — les prestations payantes peuvent accepter le paiement.",
+      "stripeNotConfigured": "Stripe n'est pas encore configuré. Les prestations payantes ne seront pas réservables tant que STRIPE_SECRET_KEY n'est pas défini."
+    }
+  }
+}
