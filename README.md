@@ -1,5 +1,7 @@
 # Booksy
 
+[![GitHub repo](https://img.shields.io/badge/GitHub-korekdigitalmarketing--svg%2Fbooksy-blue?logo=github)](https://github.com/korekdigitalmarketing-svg/booksy)
+
 A paid appointment booking platform (Calendly / Cal.com style) — Next.js App
 Router, Supabase, Stripe Checkout, Resend, trilingual (en/fr/es) from day
 one.
