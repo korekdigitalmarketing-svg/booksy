@@ -1,6 +1,12 @@
 # Booksy
 
 [![GitHub repo](https://img.shields.io/badge/GitHub-korekdigitalmarketing--svg%2Fbooksy-blue?logo=github)](https://github.com/korekdigitalmarketing-svg/booksy)
+[![Live demo](https://img.shields.io/badge/demo-booksy--lime.vercel.app-black?logo=vercel)](https://booksy-lime.vercel.app)
+
+**Live demo:** [booksy-lime.vercel.app](https://booksy-lime.vercel.app) — try the
+free "Intro Call" booking end to end (real emails, real confirmation). The
+paid "Consulting Session" won't complete checkout: `STRIPE_SECRET_KEY` on
+this deployment is still a placeholder, not a real Stripe key.
 
 A paid appointment booking platform (Calendly / Cal.com style) — Next.js App
 Router, Supabase, Stripe Checkout, Resend, trilingual (en/fr/es) from day
