@@ -119,6 +119,7 @@ export interface DashboardBooking {
   eventTypeId: string;
   maxDaysAhead: number;
   amountCents: number;
+  totalPriceCents: number;
   currency: string;
 }
 
@@ -138,6 +139,7 @@ async function attachEventTitles(
     invitee_name: string;
     invitee_email: string;
     amount_cents: number;
+    total_price_cents: number;
     currency: string;
     event_type_id: string;
   }>,
@@ -172,6 +174,7 @@ async function attachEventTitles(
       eventTypeId: b.event_type_id,
       maxDaysAhead: maxDaysAheadById.get(b.event_type_id) ?? 60,
       amountCents: b.amount_cents,
+      totalPriceCents: b.total_price_cents,
       currency: b.currency,
     };
   });
@@ -184,7 +187,7 @@ export async function getUpcomingBookings(locale: string): Promise<DashboardBook
   const { data, error } = await supabase
     .from("bookings")
     .select(
-      "id, status, starts_at, ends_at, invitee_name, invitee_email, amount_cents, currency, event_type_id",
+      "id, status, starts_at, ends_at, invitee_name, invitee_email, amount_cents, total_price_cents, currency, event_type_id",
     )
     .in("status", ["confirmed", "pending_payment"])
     .gte("starts_at", new Date().toISOString())
@@ -224,7 +227,7 @@ export async function getBookingsList(
   let query = supabase
     .from("bookings")
     .select(
-      "id, status, starts_at, ends_at, invitee_name, invitee_email, amount_cents, currency, event_type_id",
+      "id, status, starts_at, ends_at, invitee_name, invitee_email, amount_cents, total_price_cents, currency, event_type_id",
     );
 
   const now = new Date().toISOString();
@@ -249,6 +252,7 @@ export interface DashboardEventType {
   durationMin: number;
   slotIncrementMin: number;
   priceCents: number;
+  depositCents: number | null;
   currency: string;
   locationKind: "video" | "phone" | "in_person" | "custom";
   locationValue: string | null;
@@ -265,7 +269,7 @@ export async function getEventTypesList(): Promise<DashboardEventType[]> {
   const { data, error } = await supabase
     .from("event_types")
     .select(
-      "id, slug, title, description, duration_min, slot_increment_min, price_cents, currency, location_kind, location_value, buffer_before_min, buffer_after_min, min_notice_min, max_days_ahead, max_per_day, is_active",
+      "id, slug, title, description, duration_min, slot_increment_min, price_cents, deposit_cents, currency, location_kind, location_value, buffer_before_min, buffer_after_min, min_notice_min, max_days_ahead, max_per_day, is_active",
     )
     .order("created_at", { ascending: true });
 
@@ -278,7 +282,7 @@ export async function getEventTypeById(id: string): Promise<DashboardEventType |
   const { data, error } = await supabase
     .from("event_types")
     .select(
-      "id, slug, title, description, duration_min, slot_increment_min, price_cents, currency, location_kind, location_value, buffer_before_min, buffer_after_min, min_notice_min, max_days_ahead, max_per_day, is_active",
+      "id, slug, title, description, duration_min, slot_increment_min, price_cents, deposit_cents, currency, location_kind, location_value, buffer_before_min, buffer_after_min, min_notice_min, max_days_ahead, max_per_day, is_active",
     )
     .eq("id", id)
     .maybeSingle();
@@ -295,6 +299,7 @@ function mapEventType(et: {
   duration_min: number;
   slot_increment_min: number;
   price_cents: number;
+  deposit_cents: number | null;
   currency: string;
   location_kind: string;
   location_value: string | null;
@@ -313,6 +318,7 @@ function mapEventType(et: {
     durationMin: et.duration_min,
     slotIncrementMin: et.slot_increment_min,
     priceCents: et.price_cents,
+    depositCents: et.deposit_cents,
     currency: et.currency,
     locationKind: et.location_kind as DashboardEventType["locationKind"],
     locationValue: et.location_value,

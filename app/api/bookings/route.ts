@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { DateTime, Info } from "luxon";
 import { createServiceClient } from "@/lib/supabase/service";
 import { generateSlots, type ExistingBookingInput } from "@/lib/availability";
-import { getExternalBusyBlocks } from "@/lib/calendar-sync";
+import { getExternalBusyBlocks } from "@/lib/calendar-busy-blocks";
 import { apiError } from "@/lib/api-errors";
 import { CreateBookingSchema } from "@/lib/schemas/booking";
 import { getStripe } from "@/lib/stripe";
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
   const { data: eventType, error: eventTypeError } = await supabase
     .from("event_types")
     .select(
-      "id, owner_id, slug, title, duration_min, slot_increment_min, buffer_before_min, buffer_after_min, min_notice_min, max_days_ahead, max_per_day, price_cents, currency, requires_payment, is_active",
+      "id, owner_id, slug, title, duration_min, slot_increment_min, buffer_before_min, buffer_after_min, min_notice_min, max_days_ahead, max_per_day, price_cents, deposit_cents, currency, requires_payment, is_active",
     )
     .eq("id", input.eventTypeId)
     .eq("is_active", true)
@@ -175,6 +175,14 @@ export async function POST(request: NextRequest) {
   const requiresPayment = eventType.requires_payment ?? eventType.price_cents > 0;
   const now = DateTime.utc();
 
+  // A deposit is a partial charge standing in for the full price — never
+  // the other way around. amount_cents is "what's actually charged now"
+  // everywhere it's already used (Stripe line item, email price display,
+  // dashboard badge); total_price_cents is the new field carrying the
+  // full price so the host/client can see what balance remains.
+  const chargeCents = requiresPayment ? (eventType.deposit_cents ?? eventType.price_cents) : 0;
+  const isDeposit = requiresPayment && eventType.deposit_cents != null;
+
   // Drop any answer keyed to a question id that isn't actually on this
   // event type (stale form state, or a crafted request) rather than
   // storing orphaned entries nothing will ever render.
@@ -200,7 +208,8 @@ export async function POST(request: NextRequest) {
       invitee_timezone: input.timezone,
       invitee_locale: input.locale,
       custom_answers: customAnswers,
-      amount_cents: eventType.price_cents,
+      amount_cents: chargeCents,
+      total_price_cents: eventType.price_cents,
       currency: eventType.currency,
       hold_expires_at: requiresPayment ? now.plus({ minutes: HOLD_MINUTES }).toISO() : null,
     })
@@ -248,6 +257,16 @@ export async function POST(request: NextRequest) {
     input.locale,
     host.locale,
   );
+  // Stripe's product name is what the client actually sees on the
+  // Checkout page and their receipt — it must say "deposit", or a client
+  // charged $20 toward a $150 service has no way to tell that's not the
+  // full price until the host follows up for the balance.
+  const DEPOSIT_SUFFIX: Record<string, string> = {
+    en: " (deposit)",
+    fr: " (acompte)",
+    es: " (depósito)",
+  };
+  const checkoutProductName = isDeposit ? `${eventTitle}${DEPOSIT_SUFFIX[input.locale]}` : eventTitle;
 
   let checkoutUrl: string;
   try {
@@ -265,8 +284,8 @@ export async function POST(request: NextRequest) {
           quantity: 1,
           price_data: {
             currency: eventType.currency,
-            unit_amount: eventType.price_cents,
-            product_data: { name: eventTitle },
+            unit_amount: chargeCents,
+            product_data: { name: checkoutProductName },
           },
         },
       ],

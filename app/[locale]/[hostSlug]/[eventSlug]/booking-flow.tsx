@@ -73,6 +73,8 @@ export function BookingFlow({ locale, hostSlug, host, eventType, questions }: Bo
   const title = getLocalized(eventType.title, locale, host.locale);
   const description = getLocalized(eventType.description, locale, host.locale);
   const dateFnsLocale = DATE_FNS_LOCALES[locale] ?? enUS;
+  const isDeposit = eventType.requiresPayment && eventType.depositCents != null;
+  const dueNowCents = isDeposit ? (eventType.depositCents as number) : eventType.priceCents;
 
   const [timezone, setTimezone] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
@@ -240,7 +242,12 @@ export function BookingFlow({ locale, hostSlug, host, eventType, questions }: Bo
           <Badge variant="outline">{t("duration", { minutes: eventType.durationMin })}</Badge>
           <Badge variant={eventType.requiresPayment ? "default" : "secondary"}>
             {eventType.requiresPayment
-              ? formatCurrency(eventType.priceCents, eventType.currency, locale)
+              ? isDeposit
+                ? t("depositBadge", {
+                    deposit: formatCurrency(dueNowCents, eventType.currency, locale),
+                    total: formatCurrency(eventType.priceCents, eventType.currency, locale),
+                  })
+                : formatCurrency(eventType.priceCents, eventType.currency, locale)
               : t("free")}
           </Badge>
         </div>
@@ -331,21 +338,36 @@ export function BookingFlow({ locale, hostSlug, host, eventType, questions }: Bo
                 </div>
                 <div className="sm:text-right">
                   <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                    {t("priceLabel")}
+                    {isDeposit ? t("depositDueNowLabel") : t("priceLabel")}
                   </p>
                   <p className="font-mono text-xl font-semibold">
                     {eventType.requiresPayment
-                      ? formatCurrency(eventType.priceCents, eventType.currency, locale)
+                      ? formatCurrency(dueNowCents, eventType.currency, locale)
                       : t("free")}
                   </p>
+                  {isDeposit ? (
+                    <p className="text-xs text-muted-foreground">
+                      {t("depositTotalLabel", {
+                        total: formatCurrency(eventType.priceCents, eventType.currency, locale),
+                      })}
+                    </p>
+                  ) : null}
                 </div>
               </CardContent>
 
               <CardContent className="flex flex-col gap-4 pt-4">
                 <p className="text-sm text-muted-foreground">
-                  {eventType.requiresPayment
-                    ? t("whatHappensNextPaid")
-                    : t("whatHappensNextFree")}
+                  {isDeposit
+                    ? t("whatHappensNextDeposit", {
+                        balance: formatCurrency(
+                          eventType.priceCents - dueNowCents,
+                          eventType.currency,
+                          locale,
+                        ),
+                      })
+                    : eventType.requiresPayment
+                      ? t("whatHappensNextPaid")
+                      : t("whatHappensNextFree")}
                 </p>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">

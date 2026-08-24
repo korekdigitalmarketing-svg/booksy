@@ -48,6 +48,10 @@ export function EventTypeForm({
   );
   const [durationMin, setDurationMin] = useState(initial?.durationMin ?? 30);
   const [priceCents, setPriceCents] = useState(initial ? initial.priceCents / 100 : 0);
+  const [requireDeposit, setRequireDeposit] = useState(initial?.depositCents != null);
+  const [depositAmount, setDepositAmount] = useState(
+    initial?.depositCents != null ? initial.depositCents / 100 : 0,
+  );
   const [currency, setCurrency] = useState(initial?.currency ?? "USD");
   const [locationKind, setLocationKind] = useState<(typeof LOCATION_KINDS)[number]>(
     initial?.locationKind ?? "video",
@@ -74,6 +78,13 @@ export function EventTypeForm({
       return;
     }
 
+    const priceCentsInt = Math.round(priceCents * 100);
+    const depositCentsInt = requireDeposit && priceCentsInt > 0 ? Math.round(depositAmount * 100) : null;
+    if (depositCentsInt != null && (depositCentsInt <= 0 || depositCentsInt >= priceCentsInt)) {
+      setError(t("depositTooHighError"));
+      return;
+    }
+
     setSubmitting(true);
     try {
       const payload = {
@@ -81,7 +92,8 @@ export function EventTypeForm({
         title,
         description,
         durationMin,
-        priceCents: Math.round(priceCents * 100),
+        priceCents: priceCentsInt,
+        depositCents: depositCentsInt,
         currency,
         locationKind,
         locationValue: locationValue || undefined,
@@ -194,6 +206,33 @@ export function EventTypeForm({
             />
             <p className="text-xs text-muted-foreground">{t("priceHint")}</p>
           </div>
+          {priceCents > 0 ? (
+            <div className="flex flex-col gap-1.5 sm:col-span-2">
+              <div className="flex items-center gap-2">
+                <Switch
+                  id="requireDeposit"
+                  checked={requireDeposit}
+                  onCheckedChange={setRequireDeposit}
+                />
+                <Label htmlFor="requireDeposit">{t("requireDepositLabel")}</Label>
+              </div>
+              {requireDeposit ? (
+                <>
+                  <Label htmlFor="depositAmount">{t("depositAmountLabel")}</Label>
+                  <Input
+                    id="depositAmount"
+                    type="number"
+                    min={0}
+                    step="0.01"
+                    value={depositAmount}
+                    onChange={(e) => setDepositAmount(Number(e.target.value))}
+                    className="max-w-40"
+                  />
+                  <p className="text-xs text-muted-foreground">{t("depositHint")}</p>
+                </>
+              ) : null}
+            </div>
+          ) : null}
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="currency">{t("currencyLabel")}</Label>
             <Input

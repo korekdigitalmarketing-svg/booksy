@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
       duration_min: input.durationMin,
       slot_increment_min: input.slotIncrementMin,
       price_cents: input.priceCents,
+      deposit_cents: input.depositCents ?? null,
       currency: input.currency,
       location_kind: input.locationKind,
       location_value: input.locationValue || null,

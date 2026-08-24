@@ -9,33 +9,44 @@ const LocalizedTextSchema = z.record(z.string(), z.string().trim()).refine(
   { message: "At least one locale must have content" },
 );
 
-export const EventTypeSchema = z.object({
-  slug: z
-    .string()
-    .trim()
-    .min(1)
-    .max(100)
-    .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and hyphens only"),
-  title: LocalizedTextSchema,
-  description: z.record(z.string(), z.string().trim()).default({}),
-  durationMin: z.number().int().min(5).max(480),
-  slotIncrementMin: z.number().int().min(5).max(120).default(15),
-  priceCents: z.number().int().min(0),
-  currency: z.string().trim().length(3),
-  locationKind: z.enum(["video", "phone", "in_person", "custom"]),
-  locationValue: z.string().trim().max(500).optional(),
-  bufferBeforeMin: z.number().int().min(0).max(240),
-  bufferAfterMin: z.number().int().min(0).max(240),
-  minNoticeMin: z.number().int().min(0).max(10080),
-  maxDaysAhead: z.number().int().min(1).max(365),
-  maxPerDay: z.number().int().min(1).max(100).nullable().optional(),
-  isActive: z.boolean(),
-  // Enforced server-side too, not just a disabled submit button — the
-  // acceptable-use commitment from section 11's terms page ("a required
-  // checkbox + inline warning on the add-a-service form").
-  policyAccepted: z.literal(true, {
-    message: "You must confirm this service complies with the acceptable use policy",
-  }),
-});
+export const EventTypeSchema = z
+  .object({
+    slug: z
+      .string()
+      .trim()
+      .min(1)
+      .max(100)
+      .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and hyphens only"),
+    title: LocalizedTextSchema,
+    description: z.record(z.string(), z.string().trim()).default({}),
+    durationMin: z.number().int().min(5).max(480),
+    slotIncrementMin: z.number().int().min(5).max(120).default(15),
+    priceCents: z.number().int().min(0),
+    // A partial "deposit" charge instead of the full price — optional,
+    // per event type. null/omitted means "pay in full", the existing
+    // behavior. Validated against priceCents below: a deposit must be a
+    // real partial amount, never >= the full price (at that point it's
+    // just... the full price).
+    depositCents: z.number().int().min(1).nullable().optional(),
+    currency: z.string().trim().length(3),
+    locationKind: z.enum(["video", "phone", "in_person", "custom"]),
+    locationValue: z.string().trim().max(500).optional(),
+    bufferBeforeMin: z.number().int().min(0).max(240),
+    bufferAfterMin: z.number().int().min(0).max(240),
+    minNoticeMin: z.number().int().min(0).max(10080),
+    maxDaysAhead: z.number().int().min(1).max(365),
+    maxPerDay: z.number().int().min(1).max(100).nullable().optional(),
+    isActive: z.boolean(),
+    // Enforced server-side too, not just a disabled submit button — the
+    // acceptable-use commitment from section 11's terms page ("a required
+    // checkbox + inline warning on the add-a-service form").
+    policyAccepted: z.literal(true, {
+      message: "You must confirm this service complies with the acceptable use policy",
+    }),
+  })
+  .refine((val) => !val.depositCents || val.depositCents < val.priceCents, {
+    message: "The deposit must be less than the full price",
+    path: ["depositCents"],
+  });
 
 export type EventTypeInput = z.infer<typeof EventTypeSchema>;

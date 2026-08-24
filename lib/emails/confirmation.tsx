@@ -10,6 +10,7 @@ export interface ConfirmationEmailProps {
     dateTimeLabel: string;
     locationLabel: string;
     priceLabel: string;
+    balanceDueLabel: string;
     notesLabel: string;
     confirmationNumberLabel: string;
     manageLinkText: string;
@@ -18,6 +19,7 @@ export interface ConfirmationEmailProps {
   dateTimeText: string;
   locationText: string;
   priceText: string | null;
+  balanceDueText: string | null;
   notes: string | null;
   manageUrl: string;
 }
@@ -28,6 +30,7 @@ export function ConfirmationEmail({
   dateTimeText,
   locationText,
   priceText,
+  balanceDueText,
   notes,
   manageUrl,
 }: ConfirmationEmailProps) {
@@ -39,6 +42,7 @@ export function ConfirmationEmail({
       <DetailRow label={t.dateTimeLabel} value={dateTimeText} />
       <DetailRow label={t.locationLabel} value={locationText} />
       {priceText ? <DetailRow label={t.priceLabel} value={priceText} /> : null}
+      {balanceDueText ? <DetailRow label={t.balanceDueLabel} value={balanceDueText} /> : null}
       {notes ? <DetailRow label={t.notesLabel} value={notes} /> : null}
       <Text style={emailStyles.text}>
         <Link href={manageUrl}>{t.manageLinkText}</Link>

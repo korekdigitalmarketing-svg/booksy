@@ -24,6 +24,7 @@ export interface PublicEventType {
   description: Record<string, string>;
   durationMin: number;
   priceCents: number;
+  depositCents: number | null;
   currency: string;
   requiresPayment: boolean;
   locationKind: "video" | "phone" | "in_person" | "custom";
@@ -64,7 +65,7 @@ export async function getActiveEventTypes(ownerId: string): Promise<PublicEventT
   const { data, error } = await supabase
     .from("event_types")
     .select(
-      "id, slug, title, description, duration_min, price_cents, currency, requires_payment, location_kind, max_days_ahead",
+      "id, slug, title, description, duration_min, price_cents, deposit_cents, currency, requires_payment, location_kind, max_days_ahead",
     )
     .eq("owner_id", ownerId)
     .eq("is_active", true)
@@ -79,6 +80,7 @@ export async function getActiveEventTypes(ownerId: string): Promise<PublicEventT
     description: (et.description ?? {}) as Record<string, string>,
     durationMin: et.duration_min,
     priceCents: et.price_cents,
+    depositCents: et.deposit_cents,
     currency: et.currency,
     requiresPayment: et.requires_payment ?? et.price_cents > 0,
     locationKind: et.location_kind,
@@ -94,7 +96,7 @@ export async function getActiveEventTypeBySlug(
   const { data, error } = await supabase
     .from("event_types")
     .select(
-      "id, slug, title, description, duration_min, price_cents, currency, requires_payment, location_kind, max_days_ahead",
+      "id, slug, title, description, duration_min, price_cents, deposit_cents, currency, requires_payment, location_kind, max_days_ahead",
     )
     .eq("owner_id", ownerId)
     .eq("slug", eventSlug)
@@ -110,6 +112,7 @@ export async function getActiveEventTypeBySlug(
     description: (data.description ?? {}) as Record<string, string>,
     durationMin: data.duration_min,
     priceCents: data.price_cents,
+    depositCents: data.deposit_cents,
     currency: data.currency,
     requiresPayment: data.requires_payment ?? data.price_cents > 0,
     locationKind: data.location_kind,

@@ -10,12 +10,16 @@ export interface HostNotificationEmailProps {
     dateTimeLabel: string;
     locationLabel: string;
     contactLabel: string;
+    priceLabel: string;
+    balanceDueLabel: string;
     notesLabel: string;
   };
   dateTimeText: string;
   locationText: string;
   inviteeEmail: string;
   inviteePhone: string | null;
+  priceText: string | null;
+  balanceDueText: string | null;
   notes: string | null;
   answers: { label: string; value: string }[];
 }
@@ -26,6 +30,8 @@ export function HostNotificationEmail({
   locationText,
   inviteeEmail,
   inviteePhone,
+  priceText,
+  balanceDueText,
   notes,
   answers,
 }: HostNotificationEmailProps) {
@@ -38,6 +44,8 @@ export function HostNotificationEmail({
       <DetailRow label={t.dateTimeLabel} value={dateTimeText} />
       <DetailRow label={t.locationLabel} value={locationText} />
       <DetailRow label={t.contactLabel} value={contact} />
+      {priceText ? <DetailRow label={t.priceLabel} value={priceText} /> : null}
+      {balanceDueText ? <DetailRow label={t.balanceDueLabel} value={balanceDueText} /> : null}
       {notes ? <DetailRow label={t.notesLabel} value={notes} /> : null}
       {answers.map((a) => (
         <DetailRow key={a.label} label={a.label} value={a.value} />

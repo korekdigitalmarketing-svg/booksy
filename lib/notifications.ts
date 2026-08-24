@@ -50,6 +50,7 @@ interface BookingContext {
   customAnswers: Record<string, string>;
   questions: { id: string; label: Record<string, string> }[];
   amountCents: number;
+  totalPriceCents: number;
   currency: string;
   accessToken: string;
   cancelReason: string | null;
@@ -69,7 +70,7 @@ async function getBookingContext(bookingId: string): Promise<BookingContext | nu
   const { data: booking } = await supabase
     .from("bookings")
     .select(
-      "id, status, event_type_id, owner_id, starts_at, ends_at, invitee_name, invitee_email, invitee_phone, invitee_notes, invitee_timezone, invitee_locale, custom_answers, amount_cents, currency, access_token, cancel_reason, sequence",
+      "id, status, event_type_id, owner_id, starts_at, ends_at, invitee_name, invitee_email, invitee_phone, invitee_notes, invitee_timezone, invitee_locale, custom_answers, amount_cents, total_price_cents, currency, access_token, cancel_reason, sequence",
     )
     .eq("id", bookingId)
     .maybeSingle();
@@ -108,6 +109,7 @@ async function getBookingContext(bookingId: string): Promise<BookingContext | nu
     customAnswers: (booking.custom_answers ?? {}) as Record<string, string>,
     questions: (questions ?? []).map((q) => ({ id: q.id, label: (q.label ?? {}) as Record<string, string> })),
     amountCents: booking.amount_cents,
+    totalPriceCents: booking.total_price_cents,
     currency: booking.currency,
     accessToken: booking.access_token,
     cancelReason: booking.cancel_reason,
@@ -185,6 +187,7 @@ export async function sendClientConfirmation(bookingId: string): Promise<"sent" 
           dateTimeLabel: tc("dateTimeLabel"),
           locationLabel: tc("locationLabel"),
           priceLabel: tc("priceLabel"),
+          balanceDueLabel: tc("balanceDueLabel"),
           notesLabel: tc("notesLabel"),
           confirmationNumberLabel: tc("confirmationNumberLabel"),
           manageLinkText: tc("manageLinkText"),
@@ -193,6 +196,10 @@ export async function sendClientConfirmation(bookingId: string): Promise<"sent" 
         dateTimeText: formatFullDateTime(ctx.startsAt, ctx.inviteeTimezone, locale),
         locationText: locationText(ctx.locationKind, ctx.locationValue),
         priceText: ctx.amountCents > 0 ? formatCurrency(ctx.amountCents, ctx.currency, locale) : null,
+        balanceDueText:
+          ctx.totalPriceCents > ctx.amountCents
+            ? formatCurrency(ctx.totalPriceCents - ctx.amountCents, ctx.currency, locale)
+            : null,
         notes: ctx.inviteeNotes,
         manageUrl: manageUrl(ctx.accessToken, locale),
       }),
@@ -248,12 +255,19 @@ export async function sendHostNotification(bookingId: string): Promise<"sent" | 
           dateTimeLabel: tc("dateTimeLabel"),
           locationLabel: tc("locationLabel"),
           contactLabel: t("contactLabel"),
+          priceLabel: tc("priceLabel"),
+          balanceDueLabel: tc("balanceDueLabel"),
           notesLabel: tc("notesLabel"),
         },
         dateTimeText: formatFullDateTime(ctx.startsAt, ctx.hostTimezone, locale),
         locationText: locationText(ctx.locationKind, ctx.locationValue),
         inviteeEmail: ctx.inviteeEmail,
         inviteePhone: ctx.inviteePhone,
+        priceText: ctx.amountCents > 0 ? formatCurrency(ctx.amountCents, ctx.currency, locale) : null,
+        balanceDueText:
+          ctx.totalPriceCents > ctx.amountCents
+            ? formatCurrency(ctx.totalPriceCents - ctx.amountCents, ctx.currency, locale)
+            : null,
         notes: ctx.inviteeNotes,
         answers: ctx.questions
           .map((q) => ({ label: getLocalized(q.label, locale, ctx.hostLocale), value: ctx.customAnswers[q.id] }))

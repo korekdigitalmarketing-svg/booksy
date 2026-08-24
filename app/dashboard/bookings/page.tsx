@@ -97,6 +97,17 @@ export default async function DashboardBookingsPage({ searchParams }: Props) {
                         {formatCurrency(b.amountCents, b.currency, profile.locale)}
                       </Badge>
                     ) : null}
+                    {b.totalPriceCents > b.amountCents ? (
+                      <Badge variant="secondary" className="w-fit">
+                        {t("balanceDueBadge", {
+                          amount: formatCurrency(
+                            b.totalPriceCents - b.amountCents,
+                            b.currency,
+                            profile.locale,
+                          ),
+                        })}
+                      </Badge>
+                    ) : null}
                   </div>
                 </TableCell>
                 <TableCell>

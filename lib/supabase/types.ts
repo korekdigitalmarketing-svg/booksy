@@ -80,6 +80,7 @@ export type Database = {
           status: Database["public"]["Enums"]["booking_status"]
           stripe_checkout_session_id: string | null
           stripe_payment_intent_id: string | null
+          total_price_cents: number
         }
         Insert: {
           access_token?: string
@@ -108,6 +109,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["booking_status"]
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
+          total_price_cents?: number
         }
         Update: {
           access_token?: string
@@ -136,6 +138,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["booking_status"]
           stripe_checkout_session_id?: string | null
           stripe_payment_intent_id?: string | null
+          total_price_cents?: number
         }
         Relationships: [
           {
@@ -347,6 +350,7 @@ export type Database = {
           buffer_before_min: number
           created_at: string
           currency: string
+          deposit_cents: number | null
           description: Json
           duration_min: number
           id: string
@@ -368,6 +372,7 @@ export type Database = {
           buffer_before_min?: number
           created_at?: string
           currency?: string
+          deposit_cents?: number | null
           description?: Json
           duration_min: number
           id?: string
@@ -389,6 +394,7 @@ export type Database = {
           buffer_before_min?: number
           created_at?: string
           currency?: string
+          deposit_cents?: number | null
           description?: Json
           duration_min?: number
           id?: string
