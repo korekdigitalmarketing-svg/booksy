@@ -1,7 +1,7 @@
 import "server-only";
 import { DateTime } from "luxon";
 import { createServiceClient } from "@/lib/supabase/service";
-import type { ExternalBusyBlockInput } from "@/lib/availability";
+import type { CalendarConnectionRow } from "@/lib/calendar-busy-blocks";
 
 // Google Calendar sync, Phase 1: import-only (calendar.readonly), one
 // connection per host. Talks to Google's plain REST endpoints directly
@@ -95,16 +95,6 @@ async function refreshAccessToken(
     throw new Error(`Google token refresh failed: ${res.status} ${await res.text()}`);
   }
   return res.json();
-}
-
-interface CalendarConnectionRow {
-  id: string;
-  owner_id: string;
-  access_token: string;
-  refresh_token: string;
-  token_expires_at: string;
-  external_calendar_id: string;
-  sync_token: string | null;
 }
 
 /** Returns a valid access token for this connection, refreshing and
@@ -359,26 +349,5 @@ export async function performSync(connection: CalendarConnectionRow): Promise<vo
     .eq("id", connection.id);
 }
 
-/** The only function of this module the public booking flow ever calls —
- * a plain local-DB read, no Google API round-trip. /api/slots and
- * /api/bookings both call this the exact same way, with the exact same
- * bound, they already query `bookings` for existingBookings
- * (`.gte("blocked_to", now)`) — no upper bound needed since a connected
- * calendar's future event count is naturally small. */
-export async function getExternalBusyBlocks(
-  ownerId: string,
-  nowISO: string,
-): Promise<ExternalBusyBlockInput[]> {
-  const supabase = createServiceClient();
-  const { data, error } = await supabase
-    .from("calendar_busy_blocks")
-    .select("starts_at, ends_at")
-    .eq("owner_id", ownerId)
-    .gte("ends_at", nowISO);
-
-  if (error || !data) return [];
-  return data.map((b) => ({ start: b.starts_at, end: b.ends_at }));
-}
-
 export { ensureFreshAccessToken };
-export type { CalendarConnectionRow, GoogleCalendarEvent };
+export type { GoogleCalendarEvent };

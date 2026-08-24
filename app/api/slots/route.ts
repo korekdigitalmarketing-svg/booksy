@@ -3,7 +3,7 @@ import { z } from "zod";
 import { Info } from "luxon";
 import { createServiceClient } from "@/lib/supabase/service";
 import { generateSlots, type ExistingBookingInput } from "@/lib/availability";
-import { getExternalBusyBlocks } from "@/lib/calendar-sync";
+import { getExternalBusyBlocks } from "@/lib/calendar-busy-blocks";
 import { apiError } from "@/lib/api-errors";
 
 export const runtime = "nodejs";

@@ -2,12 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
-import {
-  exchangeCodeForTokens,
-  registerWatchChannel,
-  performSync,
-  type CalendarConnectionRow,
-} from "@/lib/calendar-sync";
+import { exchangeCodeForTokens, registerWatchChannel, performSync } from "@/lib/calendar-sync";
+import type { CalendarConnectionRow } from "@/lib/calendar-busy-blocks";
 
 export const runtime = "nodejs";
 

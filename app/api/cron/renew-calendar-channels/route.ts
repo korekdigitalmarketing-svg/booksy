@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/service";
-import { ensureFreshAccessToken, registerWatchChannel, type CalendarConnectionRow } from "@/lib/calendar-sync";
+import { ensureFreshAccessToken, registerWatchChannel } from "@/lib/calendar-sync";
+import type { CalendarConnectionRow } from "@/lib/calendar-busy-blocks";
 
 export const runtime = "nodejs";
 

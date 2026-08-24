@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/service";
-import { performSync, type CalendarConnectionRow } from "@/lib/calendar-sync";
+import { performSync } from "@/lib/calendar-sync";
+import type { CalendarConnectionRow } from "@/lib/calendar-busy-blocks";
 
 export const runtime = "nodejs";
 
