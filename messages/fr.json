@@ -392,6 +392,36 @@
       "stripeHeading": "Paiements",
       "stripeConfigured": "Stripe est configuré — les prestations payantes peuvent accepter le paiement.",
       "stripeNotConfigured": "Stripe n'est pas encore configuré. Les prestations payantes ne seront pas réservables tant que STRIPE_SECRET_KEY n'est pas défini."
+    },
+    "onboarding": {
+      "heading": "Configurons votre compte",
+      "subheading": "Trois étapes rapides et votre page de réservation sera prête à partager.",
+      "skipSetupButton": "Passer la configuration",
+      "continueButton": "Continuer",
+      "skipStepButton": "Passer cette étape",
+      "finishButton": "Terminer la configuration",
+      "savingButton": "Enregistrement…",
+      "errorToast": "Une erreur est survenue. Veuillez réessayer.",
+      "step1": {
+        "navLabel": "Profil",
+        "heading": "Votre fuseau horaire et votre langue",
+        "description": "C'est ainsi que votre page de réservation et vos e-mails seront présentés aux clients."
+      },
+      "step2": {
+        "navLabel": "Première prestation",
+        "heading": "Ajoutez votre première prestation",
+        "description": "Les clients réserveront cette prestation depuis votre page publique. Vous pourrez en ajouter d'autres, ou l'ajuster, plus tard.",
+        "titleLabel": "Nom de la prestation",
+        "titlePlaceholder": "ex. Consultation de 30 minutes",
+        "titleRequiredError": "Donnez un nom à votre prestation.",
+        "durationOption": "{minutes} min",
+        "freeLabel": "Cette prestation est gratuite"
+      },
+      "step3": {
+        "navLabel": "Horaires hebdomadaires",
+        "heading": "Quand êtes-vous disponible ?",
+        "description": "Définissez vos horaires hebdomadaires habituels — vous pourrez ajouter des exceptions pour des dates précises plus tard."
+      }
     }
   }
 }

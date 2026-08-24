@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import type { Database } from "@/lib/supabase/types";
 
 // Edge middleware can't use next/headers' cookies() the way Server
 // Components can — it reads/writes cookies straight off the
@@ -9,7 +10,7 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function getSessionUser(request: NextRequest) {
   let response = NextResponse.next({ request });
 
-  const supabase = createServerClient(
+  const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -34,5 +35,5 @@ export async function getSessionUser(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  return { user, response };
+  return { user, supabase, response };
 }

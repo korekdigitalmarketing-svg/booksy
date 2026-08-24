@@ -392,6 +392,36 @@
       "stripeHeading": "Payments",
       "stripeConfigured": "Stripe is configured — paid event types can accept payment.",
       "stripeNotConfigured": "Stripe isn't configured yet. Paid event types won't be bookable until STRIPE_SECRET_KEY is set."
+    },
+    "onboarding": {
+      "heading": "Let's get you set up",
+      "subheading": "Three quick steps and your booking page is ready to share.",
+      "skipSetupButton": "Skip setup",
+      "continueButton": "Continue",
+      "skipStepButton": "Skip this step",
+      "finishButton": "Finish setup",
+      "savingButton": "Saving…",
+      "errorToast": "Something went wrong. Please try again.",
+      "step1": {
+        "navLabel": "Profile",
+        "heading": "Your time zone and language",
+        "description": "This is how your booking page and emails will be shown to clients."
+      },
+      "step2": {
+        "navLabel": "First service",
+        "heading": "Add your first service",
+        "description": "Clients will book this from your public booking page. You can add more, or fine-tune this one, later.",
+        "titleLabel": "Service name",
+        "titlePlaceholder": "e.g. 30-minute consultation",
+        "titleRequiredError": "Give your service a name.",
+        "durationOption": "{minutes} min",
+        "freeLabel": "This is a free service"
+      },
+      "step3": {
+        "navLabel": "Weekly hours",
+        "heading": "When are you available?",
+        "description": "Set your regular weekly hours — you can add exceptions for specific dates later."
+      }
     }
   }
 }

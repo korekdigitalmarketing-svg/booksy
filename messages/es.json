@@ -392,6 +392,36 @@
       "stripeHeading": "Pagos",
       "stripeConfigured": "Stripe está configurado — los servicios de pago pueden aceptar pagos.",
       "stripeNotConfigured": "Stripe aún no está configurado. Los servicios de pago no podrán reservarse hasta que se configure STRIPE_SECRET_KEY."
+    },
+    "onboarding": {
+      "heading": "Configuremos tu cuenta",
+      "subheading": "Tres pasos rápidos y tu página de reservas estará lista para compartir.",
+      "skipSetupButton": "Omitir configuración",
+      "continueButton": "Continuar",
+      "skipStepButton": "Omitir este paso",
+      "finishButton": "Finalizar configuración",
+      "savingButton": "Guardando…",
+      "errorToast": "Algo salió mal. Inténtalo de nuevo.",
+      "step1": {
+        "navLabel": "Perfil",
+        "heading": "Tu zona horaria e idioma",
+        "description": "Así se mostrarán tu página de reservas y tus correos a los clientes."
+      },
+      "step2": {
+        "navLabel": "Primer servicio",
+        "heading": "Añade tu primer servicio",
+        "description": "Los clientes reservarán este servicio desde tu página pública. Puedes añadir más, o ajustarlo, más adelante.",
+        "titleLabel": "Nombre del servicio",
+        "titlePlaceholder": "ej. Consulta de 30 minutos",
+        "titleRequiredError": "Ponle un nombre a tu servicio.",
+        "durationOption": "{minutes} min",
+        "freeLabel": "Este servicio es gratuito"
+      },
+      "step3": {
+        "navLabel": "Horario semanal",
+        "heading": "¿Cuándo estás disponible?",
+        "description": "Define tu horario semanal habitual — más adelante podrás añadir excepciones para fechas concretas."
+      }
     }
   }
 }

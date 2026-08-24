@@ -9,12 +9,29 @@ export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/dashboard")) {
-    const { user, response } = await getSessionUser(request);
+    const { user, supabase, response } = await getSessionUser(request);
     if (!user) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("next", pathname);
       return NextResponse.redirect(loginUrl);
     }
+
+    // Guided first-run wizard gate. /dashboard/onboarding itself is
+    // exempt (it IS the destination — checking here too would loop), and
+    // a profile that doesn't exist yet reads as "needs onboarding" rather
+    // than erroring: requireHostProfile() auto-creates it (defaulting
+    // onboarding_completed to false) the moment the wizard page renders.
+    if (pathname !== "/dashboard/onboarding") {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("onboarding_completed")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (!profile || !profile.onboarding_completed) {
+        return NextResponse.redirect(new URL("/dashboard/onboarding", request.url));
+      }
+    }
+
     return response;
   }
 

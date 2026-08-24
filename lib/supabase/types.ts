@@ -370,6 +370,7 @@ export type Database = {
           full_name: string
           id: string
           locale: string
+          onboarding_completed: boolean
           slug: string
           timezone: string
         }
@@ -381,6 +382,7 @@ export type Database = {
           full_name: string
           id: string
           locale?: string
+          onboarding_completed?: boolean
           slug: string
           timezone?: string
         }
@@ -392,6 +394,7 @@ export type Database = {
           full_name?: string
           id?: string
           locale?: string
+          onboarding_completed?: boolean
           slug?: string
           timezone?: string
         }

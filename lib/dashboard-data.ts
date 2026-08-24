@@ -19,6 +19,7 @@ export interface DashboardProfile {
   locale: string;
   avatarUrl: string | null;
   brandColor: string | null;
+  onboardingCompleted: boolean;
 }
 
 function slugify(input: string): string {
@@ -39,6 +40,7 @@ type ProfileRow = {
   locale: string;
   avatar_url: string | null;
   brand_color: string | null;
+  onboarding_completed: boolean;
 };
 
 /** Every new auth user lands here with no `profiles` row yet — there's no
@@ -61,7 +63,7 @@ async function createDefaultProfile(
     const { data, error } = await supabase
       .from("profiles")
       .insert({ id: user.id, full_name: fullName, email, slug })
-      .select("id, full_name, email, slug, timezone, locale, avatar_url, brand_color")
+      .select("id, full_name, email, slug, timezone, locale, avatar_url, brand_color, onboarding_completed")
       .single();
 
     if (!error) return data;
@@ -85,7 +87,7 @@ export async function requireHostProfile(): Promise<DashboardProfile> {
 
   const { data: existing, error } = await supabase
     .from("profiles")
-    .select("id, full_name, email, slug, timezone, locale, avatar_url, brand_color")
+    .select("id, full_name, email, slug, timezone, locale, avatar_url, brand_color, onboarding_completed")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -102,6 +104,7 @@ export async function requireHostProfile(): Promise<DashboardProfile> {
     locale: profile.locale,
     avatarUrl: profile.avatar_url,
     brandColor: profile.brand_color,
+    onboardingCompleted: profile.onboarding_completed,
   };
 }
 
