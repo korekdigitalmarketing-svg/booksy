@@ -10,7 +10,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { DashboardCalendarConnection } from "@/lib/dashboard-data";
 
+type Provider = "google" | "microsoft";
+
 export function CalendarSyncCard(props: {
+  provider: Provider;
   connection: DashboardCalendarConnection | null;
   locale: string;
 }) {
@@ -37,22 +40,28 @@ export function CalendarSyncCard(props: {
 }
 
 function CalendarSyncCardInner({
+  provider,
   connection,
   locale,
 }: {
+  provider: Provider;
   connection: DashboardCalendarConnection | null;
   locale: string;
 }) {
-  const t = useTranslations("dashboard.settings.calendarSync");
+  const t = useTranslations(`dashboard.settings.calendarSync.${provider}`);
   const router = useRouter();
   const searchParams = useSearchParams();
   const [disconnecting, setDisconnecting] = useState(false);
 
-  // The Google OAuth callback redirects here with ?calendar=connected|error
+  // The OAuth callback redirects here with ?calendar=connected|error&provider=google|microsoft
   // — this is the one place that result surfaces to the host, since the
   // callback route itself only ever redirects, it can't render a toast.
+  // Each card only reacts to its own provider's redirect so connecting
+  // one doesn't pop a stray toast on the other's card.
   useEffect(() => {
     const status = searchParams.get("calendar");
+    const statusProvider = searchParams.get("provider");
+    if (statusProvider !== provider) return;
     if (status === "connected") {
       toast.success(t("connectedToast"));
       router.replace("/dashboard/settings");
@@ -66,7 +75,7 @@ function CalendarSyncCardInner({
   async function handleDisconnect() {
     setDisconnecting(true);
     try {
-      const res = await fetch("/api/calendar/google/disconnect", { method: "POST" });
+      const res = await fetch(`/api/calendar/${provider}/disconnect`, { method: "POST" });
       if (!res.ok) {
         toast.error(t("errorToast"));
         return;
@@ -104,7 +113,7 @@ function CalendarSyncCardInner({
             </Button>
           </>
         ) : (
-          <Link href="/api/calendar/google/connect" className={buttonVariants({ className: "w-fit" })}>
+          <Link href={`/api/calendar/${provider}/connect`} className={buttonVariants({ className: "w-fit" })}>
             {t("connectButton")}
           </Link>
         )}

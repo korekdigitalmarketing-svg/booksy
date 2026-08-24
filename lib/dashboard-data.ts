@@ -415,12 +415,14 @@ export interface DashboardCalendarConnection {
   updatedAt: string;
 }
 
-export async function getCalendarConnection(): Promise<DashboardCalendarConnection | null> {
+export async function getCalendarConnection(
+  provider: "google" | "microsoft",
+): Promise<DashboardCalendarConnection | null> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("calendar_connections")
     .select("provider, external_calendar_id, updated_at")
-    .eq("provider", "google")
+    .eq("provider", provider)
     .maybeSingle();
 
   if (!data) return null;

@@ -16,7 +16,10 @@ export default async function SettingsPage() {
   const t = await getTranslations("dashboard.settings");
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
   const stripeConfigured = isStripeConfigured();
-  const calendarConnection = await getCalendarConnection();
+  const [googleConnection, microsoftConnection] = await Promise.all([
+    getCalendarConnection("google"),
+    getCalendarConnection("microsoft"),
+  ]);
 
   return (
     <div className="flex max-w-2xl flex-col gap-6">
@@ -24,7 +27,8 @@ export default async function SettingsPage() {
 
       <SettingsForm profile={profile} appUrl={appUrl} />
 
-      <CalendarSyncCard connection={calendarConnection} locale={profile.locale} />
+      <CalendarSyncCard provider="google" connection={googleConnection} locale={profile.locale} />
+      <CalendarSyncCard provider="microsoft" connection={microsoftConnection} locale={profile.locale} />
 
       <Card>
         <CardContent className="flex flex-col gap-2 pt-6">

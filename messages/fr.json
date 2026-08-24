@@ -403,15 +403,28 @@
       "stripeConfigured": "Stripe est configuré — les prestations payantes peuvent accepter le paiement.",
       "stripeNotConfigured": "Stripe n'est pas encore configuré. Les prestations payantes ne seront pas réservables tant que STRIPE_SECRET_KEY n'est pas défini.",
       "calendarSync": {
-        "heading": "Synchronisation du calendrier",
-        "description": "Connectez votre Google Agenda pour que les événements déjà présents y bloquent aussi votre page de réservation.",
-        "connectedAs": "Connecté — dernière synchronisation {date}",
-        "connectButton": "Connecter Google Agenda",
-        "disconnectButton": "Déconnecter",
-        "disconnectingButton": "Déconnexion…",
-        "connectedToast": "Google Agenda connecté",
-        "disconnectedToast": "Google Agenda déconnecté",
-        "errorToast": "Une erreur est survenue lors de la connexion de votre calendrier. Veuillez réessayer."
+        "google": {
+          "heading": "Synchronisation Google Agenda",
+          "description": "Connectez votre Google Agenda pour que les événements déjà présents y bloquent aussi votre page de réservation.",
+          "connectedAs": "Connecté — dernière synchronisation {date}",
+          "connectButton": "Connecter Google Agenda",
+          "disconnectButton": "Déconnecter",
+          "disconnectingButton": "Déconnexion…",
+          "connectedToast": "Google Agenda connecté",
+          "disconnectedToast": "Google Agenda déconnecté",
+          "errorToast": "Une erreur est survenue lors de la connexion de votre calendrier. Veuillez réessayer."
+        },
+        "microsoft": {
+          "heading": "Synchronisation Outlook",
+          "description": "Connectez votre calendrier Outlook pour que les événements déjà présents y bloquent aussi votre page de réservation.",
+          "connectedAs": "Connecté — dernière synchronisation {date}",
+          "connectButton": "Connecter Outlook",
+          "disconnectButton": "Déconnecter",
+          "disconnectingButton": "Déconnexion…",
+          "connectedToast": "Outlook connecté",
+          "disconnectedToast": "Outlook déconnecté",
+          "errorToast": "Une erreur est survenue lors de la connexion de votre calendrier. Veuillez réessayer."
+        }
       }
     },
     "onboarding": {

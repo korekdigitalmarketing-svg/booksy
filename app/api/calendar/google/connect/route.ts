@@ -35,6 +35,7 @@ export async function GET() {
     console.error("Failed to build Google OAuth URL", err);
     const url = new URL("/dashboard/settings", appUrl);
     url.searchParams.set("calendar", "error");
+    url.searchParams.set("provider", "google");
     return NextResponse.redirect(url);
   }
 

@@ -403,15 +403,28 @@
       "stripeConfigured": "Stripe is configured — paid event types can accept payment.",
       "stripeNotConfigured": "Stripe isn't configured yet. Paid event types won't be bookable until STRIPE_SECRET_KEY is set.",
       "calendarSync": {
-        "heading": "Calendar sync",
-        "description": "Connect your Google Calendar so existing events on it block your booking page too.",
-        "connectedAs": "Connected — last synced {date}",
-        "connectButton": "Connect Google Calendar",
-        "disconnectButton": "Disconnect",
-        "disconnectingButton": "Disconnecting…",
-        "connectedToast": "Google Calendar connected",
-        "disconnectedToast": "Google Calendar disconnected",
-        "errorToast": "Something went wrong connecting your calendar. Please try again."
+        "google": {
+          "heading": "Google Calendar sync",
+          "description": "Connect your Google Calendar so existing events on it block your booking page too.",
+          "connectedAs": "Connected — last synced {date}",
+          "connectButton": "Connect Google Calendar",
+          "disconnectButton": "Disconnect",
+          "disconnectingButton": "Disconnecting…",
+          "connectedToast": "Google Calendar connected",
+          "disconnectedToast": "Google Calendar disconnected",
+          "errorToast": "Something went wrong connecting your calendar. Please try again."
+        },
+        "microsoft": {
+          "heading": "Outlook Calendar sync",
+          "description": "Connect your Outlook Calendar so existing events on it block your booking page too.",
+          "connectedAs": "Connected — last synced {date}",
+          "connectButton": "Connect Outlook Calendar",
+          "disconnectButton": "Disconnect",
+          "disconnectingButton": "Disconnecting…",
+          "connectedToast": "Outlook Calendar connected",
+          "disconnectedToast": "Outlook Calendar disconnected",
+          "errorToast": "Something went wrong connecting your calendar. Please try again."
+        }
       }
     },
     "onboarding": {
