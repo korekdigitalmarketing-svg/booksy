@@ -154,6 +154,107 @@ export type Database = {
           },
         ]
       }
+      calendar_busy_blocks: {
+        Row: {
+          connection_id: string
+          created_at: string
+          ends_at: string
+          external_event_id: string
+          id: string
+          owner_id: string
+          starts_at: string
+        }
+        Insert: {
+          connection_id: string
+          created_at?: string
+          ends_at: string
+          external_event_id: string
+          id?: string
+          owner_id: string
+          starts_at: string
+        }
+        Update: {
+          connection_id?: string
+          created_at?: string
+          ends_at?: string
+          external_event_id?: string
+          id?: string
+          owner_id?: string
+          starts_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_busy_blocks_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_connections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "calendar_busy_blocks_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      calendar_connections: {
+        Row: {
+          access_token: string
+          channel_expires_at: string | null
+          channel_id: string | null
+          created_at: string
+          external_calendar_id: string
+          id: string
+          owner_id: string
+          provider: string
+          refresh_token: string
+          resource_id: string | null
+          sync_token: string | null
+          token_expires_at: string
+          updated_at: string
+        }
+        Insert: {
+          access_token: string
+          channel_expires_at?: string | null
+          channel_id?: string | null
+          created_at?: string
+          external_calendar_id?: string
+          id?: string
+          owner_id: string
+          provider?: string
+          refresh_token: string
+          resource_id?: string | null
+          sync_token?: string | null
+          token_expires_at: string
+          updated_at?: string
+        }
+        Update: {
+          access_token?: string
+          channel_expires_at?: string | null
+          channel_id?: string | null
+          created_at?: string
+          external_calendar_id?: string
+          id?: string
+          owner_id?: string
+          provider?: string
+          refresh_token?: string
+          resource_id?: string | null
+          sync_token?: string | null
+          token_expires_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_connections_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       date_overrides: {
         Row: {
           end_time: string | null

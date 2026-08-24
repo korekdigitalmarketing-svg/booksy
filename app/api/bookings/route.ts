@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { DateTime, Info } from "luxon";
 import { createServiceClient } from "@/lib/supabase/service";
 import { generateSlots, type ExistingBookingInput } from "@/lib/availability";
+import { getExternalBusyBlocks } from "@/lib/calendar-sync";
 import { apiError } from "@/lib/api-errors";
 import { CreateBookingSchema } from "@/lib/schemas/booking";
 import { getStripe } from "@/lib/stripe";
@@ -72,6 +73,7 @@ export async function POST(request: NextRequest) {
     { data: overrides, error: overridesError },
     { data: bookings, error: bookingsError },
     { data: questions, error: questionsError },
+    externalBusyBlocks,
   ] = await Promise.all([
     supabase
       .from("availability_rules")
@@ -91,6 +93,7 @@ export async function POST(request: NextRequest) {
       .from("event_type_questions")
       .select("id, label, is_required")
       .eq("event_type_id", eventType.id),
+    getExternalBusyBlocks(eventType.owner_id, new Date().toISOString()),
   ]);
 
   if (rulesError || overridesError || bookingsError || questionsError) {
@@ -142,6 +145,7 @@ export async function POST(request: NextRequest) {
       maxPerDay: eventType.max_per_day,
     },
     hostTimezone: host.timezone,
+    externalBusyBlocks,
     availabilityRules: (rules ?? []).map((r) => ({
       weekday: r.weekday as 0 | 1 | 2 | 3 | 4 | 5 | 6,
       startTime: r.start_time,

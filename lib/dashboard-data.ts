@@ -402,3 +402,25 @@ export async function getDateOverrides(): Promise<DashboardDateOverride[]> {
     endTime: o.end_time,
   }));
 }
+
+export interface DashboardCalendarConnection {
+  provider: string;
+  externalCalendarId: string;
+  updatedAt: string;
+}
+
+export async function getCalendarConnection(): Promise<DashboardCalendarConnection | null> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("calendar_connections")
+    .select("provider, external_calendar_id, updated_at")
+    .eq("provider", "google")
+    .maybeSingle();
+
+  if (!data) return null;
+  return {
+    provider: data.provider,
+    externalCalendarId: data.external_calendar_id,
+    updatedAt: data.updated_at,
+  };
+}

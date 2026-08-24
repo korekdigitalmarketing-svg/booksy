@@ -5,6 +5,7 @@ import {
   type AvailabilityRuleInput,
   type EventTypeInput,
   type ExistingBookingInput,
+  type ExternalBusyBlockInput,
   type Weekday,
 } from "./availability";
 
@@ -276,6 +277,62 @@ describe("generateSlots — max per day", () => {
     });
 
     expect(slots).toHaveLength(0);
+  });
+});
+
+describe("generateSlots — external busy blocks", () => {
+  it("excludes a candidate overlapping a synced external calendar event, same as a real booking would", () => {
+    const zone = "Europe/Paris";
+    const hostDate = "2026-06-01";
+    const rules: AvailabilityRuleInput[] = [
+      { weekday: weekdayOf(hostDate, zone), startTime: "09:00", endTime: "12:00" },
+    ];
+    const eventType = baseEventType({ durationMin: 30, slotIncrementMin: 30 });
+
+    const busyStart = DateTime.fromISO(`${hostDate}T09:00:00`, { zone });
+    const externalBusyBlocks: ExternalBusyBlockInput[] = [
+      { start: busyStart.toUTC().toISO() as string, end: busyStart.plus({ minutes: 30 }).toUTC().toISO() as string },
+    ];
+
+    const slots = generateSlots({
+      eventType,
+      hostTimezone: zone,
+      availabilityRules: rules,
+      dateOverrides: [],
+      existingBookings: [],
+      externalBusyBlocks,
+      visitorTimezone: zone,
+      fromDate: hostDate,
+      toDate: hostDate,
+      now: busyStart.minus({ days: 1 }),
+    });
+
+    expect(slots).not.toContain(busyStart.toUTC().toISO());
+    expect(slots).toContain(busyStart.plus({ minutes: 30 }).toUTC().toISO()); // right past it
+  });
+
+  it("omitting externalBusyBlocks entirely behaves exactly as before (backward compatible)", () => {
+    const zone = "Europe/Paris";
+    const hostDate = "2026-06-01";
+    const rules: AvailabilityRuleInput[] = [
+      { weekday: weekdayOf(hostDate, zone), startTime: "09:00", endTime: "10:00" },
+    ];
+    const eventType = baseEventType({ durationMin: 30, slotIncrementMin: 30 });
+    const now = DateTime.fromISO(`${hostDate}T00:00:00`, { zone });
+
+    const slots = generateSlots({
+      eventType,
+      hostTimezone: zone,
+      availabilityRules: rules,
+      dateOverrides: [],
+      existingBookings: [],
+      visitorTimezone: zone,
+      fromDate: hostDate,
+      toDate: hostDate,
+      now,
+    });
+
+    expect(slots).toHaveLength(2);
   });
 });
 

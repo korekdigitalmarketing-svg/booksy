@@ -391,7 +391,18 @@
       "savedToast": "Configuración guardada",
       "stripeHeading": "Pagos",
       "stripeConfigured": "Stripe está configurado — los servicios de pago pueden aceptar pagos.",
-      "stripeNotConfigured": "Stripe aún no está configurado. Los servicios de pago no podrán reservarse hasta que se configure STRIPE_SECRET_KEY."
+      "stripeNotConfigured": "Stripe aún no está configurado. Los servicios de pago no podrán reservarse hasta que se configure STRIPE_SECRET_KEY.",
+      "calendarSync": {
+        "heading": "Sincronización de calendario",
+        "description": "Conecta tu Google Calendar para que los eventos que ya tienes también bloqueen tu página de reservas.",
+        "connectedAs": "Conectado — última sincronización {date}",
+        "connectButton": "Conectar Google Calendar",
+        "disconnectButton": "Desconectar",
+        "disconnectingButton": "Desconectando…",
+        "connectedToast": "Google Calendar conectado",
+        "disconnectedToast": "Google Calendar desconectado",
+        "errorToast": "Algo salió mal al conectar tu calendario. Inténtalo de nuevo."
+      }
     },
     "onboarding": {
       "heading": "Configuremos tu cuenta",

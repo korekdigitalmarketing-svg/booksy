@@ -3,6 +3,7 @@ import { z } from "zod";
 import { Info } from "luxon";
 import { createServiceClient } from "@/lib/supabase/service";
 import { generateSlots, type ExistingBookingInput } from "@/lib/availability";
+import { getExternalBusyBlocks } from "@/lib/calendar-sync";
 import { apiError } from "@/lib/api-errors";
 
 export const runtime = "nodejs";
@@ -68,23 +69,28 @@ export async function GET(request: NextRequest) {
 
   const hostTimezone = host.timezone;
 
-  const [{ data: rules, error: rulesError }, { data: overrides, error: overridesError }, { data: bookings, error: bookingsError }] =
-    await Promise.all([
-      supabase
-        .from("availability_rules")
-        .select("weekday, start_time, end_time")
-        .eq("owner_id", eventType.owner_id),
-      supabase
-        .from("date_overrides")
-        .select("the_date, is_closed, start_time, end_time")
-        .eq("owner_id", eventType.owner_id),
-      supabase
-        .from("bookings")
-        .select("blocked_from, blocked_to, starts_at, status, hold_expires_at")
-        .eq("owner_id", eventType.owner_id)
-        .in("status", ["pending_payment", "confirmed"])
-        .gte("blocked_to", new Date().toISOString()),
-    ]);
+  const [
+    { data: rules, error: rulesError },
+    { data: overrides, error: overridesError },
+    { data: bookings, error: bookingsError },
+    externalBusyBlocks,
+  ] = await Promise.all([
+    supabase
+      .from("availability_rules")
+      .select("weekday, start_time, end_time")
+      .eq("owner_id", eventType.owner_id),
+    supabase
+      .from("date_overrides")
+      .select("the_date, is_closed, start_time, end_time")
+      .eq("owner_id", eventType.owner_id),
+    supabase
+      .from("bookings")
+      .select("blocked_from, blocked_to, starts_at, status, hold_expires_at")
+      .eq("owner_id", eventType.owner_id)
+      .in("status", ["pending_payment", "confirmed"])
+      .gte("blocked_to", new Date().toISOString()),
+    getExternalBusyBlocks(eventType.owner_id, new Date().toISOString()),
+  ]);
 
   if (rulesError || overridesError || bookingsError) {
     return apiError("VALIDATION_ERROR", {
@@ -116,6 +122,7 @@ export async function GET(request: NextRequest) {
       startTime: r.start_time,
       endTime: r.end_time,
     })),
+    externalBusyBlocks,
     dateOverrides: (overrides ?? []).map((o) => ({
       theDate: o.the_date,
       isClosed: o.is_closed,

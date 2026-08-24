@@ -38,6 +38,15 @@ export interface ExistingBookingInput {
   holdExpiresAt: string | null;
 }
 
+export interface ExternalBusyBlockInput {
+  // A synced event from the host's external calendar (calendar_busy_blocks).
+  // Unlike ExistingBookingInput, this carries no status/hold semantics —
+  // an external event is either present in the local cache or it isn't,
+  // so it's unconditionally "live" for the purposes of blocking a slot.
+  start: string; // ISO instant
+  end: string; // ISO instant
+}
+
 export interface EventTypeInput {
   durationMin: number;
   slotIncrementMin: number;
@@ -54,6 +63,10 @@ export interface GenerateSlotsParams {
   availabilityRules: AvailabilityRuleInput[];
   dateOverrides: DateOverrideInput[];
   existingBookings: ExistingBookingInput[];
+  /** Synced busy intervals from a connected external calendar (Google, etc).
+   * Optional and defaults to none — existing callers that don't pass it
+   * behave exactly as before. */
+  externalBusyBlocks?: ExternalBusyBlockInput[];
   visitorTimezone: string;
   fromDate: string; // "YYYY-MM-DD" in the VISITOR's local calendar
   toDate: string; // "YYYY-MM-DD" in the VISITOR's local calendar, inclusive
@@ -113,6 +126,7 @@ export function generateSlots(params: GenerateSlotsParams): string[] {
     availabilityRules,
     dateOverrides,
     existingBookings,
+    externalBusyBlocks = [],
     visitorTimezone,
     fromDate,
     toDate,
@@ -193,12 +207,18 @@ export function generateSlots(params: GenerateSlotsParams): string[] {
             const bufferedStart = candidateStart.minus({ minutes: eventType.bufferBeforeMin });
             const bufferedEnd = candidateEnd.plus({ minutes: eventType.bufferAfterMin });
 
-            const collides = liveBookings.some((b) => {
-              const blockedFrom = DateTime.fromISO(b.blockedFrom, { zone: "utc" });
-              const blockedTo = DateTime.fromISO(b.blockedTo, { zone: "utc" });
-              // Half-open interval overlap, matching Postgres tstzrange '[)'.
-              return bufferedStart < blockedTo && bufferedEnd > blockedFrom;
-            });
+            const collides =
+              liveBookings.some((b) => {
+                const blockedFrom = DateTime.fromISO(b.blockedFrom, { zone: "utc" });
+                const blockedTo = DateTime.fromISO(b.blockedTo, { zone: "utc" });
+                // Half-open interval overlap, matching Postgres tstzrange '[)'.
+                return bufferedStart < blockedTo && bufferedEnd > blockedFrom;
+              }) ||
+              externalBusyBlocks.some((block) => {
+                const blockedFrom = DateTime.fromISO(block.start, { zone: "utc" });
+                const blockedTo = DateTime.fromISO(block.end, { zone: "utc" });
+                return bufferedStart < blockedTo && bufferedEnd > blockedFrom;
+              });
 
             if (!collides) {
               results.push(candidateStart);
