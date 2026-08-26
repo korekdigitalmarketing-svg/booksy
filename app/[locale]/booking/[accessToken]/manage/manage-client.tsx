@@ -223,6 +223,7 @@ function CancelDialog({
   onDone: () => void;
 }) {
   const t = useTranslations("booking.manage");
+  const tBooking = useTranslations("booking");
   const [reason, setReason] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [open, setOpen] = useState(false);
@@ -236,7 +237,9 @@ function CancelDialog({
         body: JSON.stringify({ reason: reason || undefined, accessToken }),
       });
       if (!res.ok) {
-        toast.error("Something went wrong. Please try again.");
+        const data = await res.json().catch(() => null);
+        const code: string = data?.error?.code ?? ApiErrorCode.INTERNAL_ERROR;
+        toast.error(tBooking(`errors.${code}` as "errors.INTERNAL_ERROR"));
         return;
       }
       toast.success(t("cancelledToast"));

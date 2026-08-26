@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { generateSlots, type ExistingBookingInput } from "@/lib/availability";
 import { sendRescheduleEmails } from "@/lib/notifications";
+import { syncBookingToCalendars } from "@/lib/calendar-writeback";
+import { getExternalBusyBlocks } from "@/lib/calendar-busy-blocks";
 import { apiError } from "@/lib/api-errors";
 import { RescheduleBookingSchema } from "@/lib/schemas/booking";
 
@@ -98,7 +100,7 @@ export async function POST(
     return apiError("EVENT_TYPE_NOT_FOUND");
   }
 
-  const [{ data: rules, error: rulesError }, { data: overrides, error: overridesError }, { data: existing, error: existingError }] =
+  const [{ data: rules, error: rulesError }, { data: overrides, error: overridesError }, { data: existing, error: existingError }, externalBusyBlocks] =
     await Promise.all([
       service
         .from("availability_rules")
@@ -115,6 +117,7 @@ export async function POST(
         .neq("id", booking.id) // exclude the booking being moved from its own conflict check
         .in("status", ["pending_payment", "confirmed"])
         .gte("blocked_to", new Date().toISOString()),
+      getExternalBusyBlocks(booking.owner_id, new Date().toISOString()),
     ]);
 
   if (rulesError || overridesError || existingError) {
@@ -159,6 +162,7 @@ export async function POST(
       endTime: o.end_time,
     })),
     existingBookings,
+    externalBusyBlocks,
     visitorTimezone: timezone,
     fromDate: requestedDate,
     toDate: requestedDate,
@@ -197,7 +201,10 @@ export async function POST(
   }
 
   try {
-    await sendRescheduleEmails(booking.id, previousStartsAt);
+    await Promise.all([
+      sendRescheduleEmails(booking.id, previousStartsAt),
+      syncBookingToCalendars(booking.id),
+    ]);
   } catch (err) {
     console.error("Failed to send reschedule emails", err);
   }

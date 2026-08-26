@@ -48,6 +48,8 @@ export async function PATCH(
       min_notice_min: input.minNoticeMin,
       max_days_ahead: input.maxDaysAhead,
       max_per_day: input.maxPerDay ?? null,
+      scheduling_mode: input.schedulingMode,
+      max_invitees_per_slot: input.maxInviteesPerSlot,
       is_active: input.isActive,
     })
     .eq("id", id)

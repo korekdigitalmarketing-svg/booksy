@@ -8,6 +8,7 @@ import { CreateBookingSchema } from "@/lib/schemas/booking";
 import { getStripe } from "@/lib/stripe";
 import { getLocalized } from "@/lib/i18n-content";
 import { sendClientConfirmation, sendHostNotification } from "@/lib/notifications";
+import { syncBookingToCalendars } from "@/lib/calendar-writeback";
 
 export const runtime = "nodejs";
 
@@ -42,6 +43,15 @@ export async function POST(request: NextRequest) {
 
   const supabase = createServiceClient();
 
+  // Vercel Hobby cron jobs run at most daily. Clear expired checkout holds
+  // before validating this request so an abandoned payment never blocks a
+  // slot until the next scheduled cleanup.
+  await supabase
+    .from("bookings")
+    .update({ status: "expired", hold_expires_at: null })
+    .eq("status", "pending_payment")
+    .lt("hold_expires_at", new Date().toISOString());
+
   const { data: eventType, error: eventTypeError } = await supabase
     .from("event_types")
     .select(
@@ -60,7 +70,7 @@ export async function POST(request: NextRequest) {
 
   const { data: host, error: hostError } = await supabase
     .from("profiles")
-    .select("slug, timezone, locale")
+    .select("slug, timezone, locale, stripe_account_id, stripe_charges_enabled")
     .eq("id", eventType.owner_id)
     .maybeSingle();
 
@@ -183,6 +193,16 @@ export async function POST(request: NextRequest) {
   const chargeCents = requiresPayment ? (eventType.deposit_cents ?? eventType.price_cents) : 0;
   const isDeposit = requiresPayment && eventType.deposit_cents != null;
 
+  // Only route funds to the host's own Stripe account once it can
+  // actually accept charges — a host mid-onboarding (account id set,
+  // charges_enabled still false) falls back to the platform account
+  // exactly like a host who's never connected Stripe at all, rather than
+  // handing Stripe a destination that will reject the charge.
+  const destinationAccountId =
+    requiresPayment && host.stripe_account_id && host.stripe_charges_enabled
+      ? host.stripe_account_id
+      : null;
+
   // Drop any answer keyed to a question id that isn't actually on this
   // event type (stale form state, or a crafted request) rather than
   // storing orphaned entries nothing will ever render.
@@ -211,6 +231,7 @@ export async function POST(request: NextRequest) {
       amount_cents: chargeCents,
       total_price_cents: eventType.price_cents,
       currency: eventType.currency,
+      stripe_destination_account_id: destinationAccountId,
       hold_expires_at: requiresPayment ? now.plus({ minutes: HOLD_MINUTES }).toISO() : null,
     })
     .select("id, status, access_token, starts_at, ends_at")
@@ -232,7 +253,11 @@ export async function POST(request: NextRequest) {
     // fails the request. notifications_log's dedupe insert still protects
     // against a duplicate send if this route is ever retried.
     try {
-      await Promise.all([sendClientConfirmation(booking.id), sendHostNotification(booking.id)]);
+      await Promise.all([
+        sendClientConfirmation(booking.id),
+        sendHostNotification(booking.id),
+        syncBookingToCalendars(booking.id),
+      ]);
     } catch (err) {
       console.error("Failed to send booking confirmation emails", err);
     }
@@ -292,6 +317,14 @@ export async function POST(request: NextRequest) {
       metadata: { booking_id: booking.id },
       success_url: `${appUrl}/${input.locale}/booking/${booking.access_token}/success`,
       cancel_url: `${appUrl}/${input.locale}/${host.slug}/${eventType.slug}`,
+      // Destination charge: the PaymentIntent still belongs to the
+      // platform account (so this webhook keeps working unchanged), but
+      // the funds land in the host's own account instead of the
+      // platform's — no application_fee_amount, since there's no
+      // platform commission built here.
+      ...(destinationAccountId
+        ? { payment_intent_data: { transfer_data: { destination: destinationAccountId } } }
+        : {}),
     });
 
     if (!session.url) {

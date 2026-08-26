@@ -52,6 +52,58 @@ export type Database = {
           },
         ]
       }
+      booking_calendar_events: {
+        Row: {
+          booking_id: string
+          connection_id: string
+          created_at: string
+          external_event_id: string
+          id: string
+          owner_id: string
+          provider: string
+        }
+        Insert: {
+          booking_id: string
+          connection_id: string
+          created_at?: string
+          external_event_id: string
+          id?: string
+          owner_id: string
+          provider: string
+        }
+        Update: {
+          booking_id?: string
+          connection_id?: string
+          created_at?: string
+          external_event_id?: string
+          id?: string
+          owner_id?: string
+          provider?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_calendar_events_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_calendar_events_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_connections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_calendar_events_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bookings: {
         Row: {
           access_token: string
@@ -68,6 +120,7 @@ export type Database = {
           event_type_id: string
           hold_expires_at: string | null
           id: string
+          assigned_host_id: string | null
           invitee_email: string
           invitee_locale: string
           invitee_name: string
@@ -76,9 +129,11 @@ export type Database = {
           invitee_timezone: string
           owner_id: string
           sequence: number
+          seats_reserved: number
           starts_at: string
           status: Database["public"]["Enums"]["booking_status"]
           stripe_checkout_session_id: string | null
+          stripe_destination_account_id: string | null
           stripe_payment_intent_id: string | null
           total_price_cents: number
         }
@@ -97,6 +152,7 @@ export type Database = {
           event_type_id: string
           hold_expires_at?: string | null
           id?: string
+          assigned_host_id?: string | null
           invitee_email: string
           invitee_locale: string
           invitee_name: string
@@ -105,9 +161,11 @@ export type Database = {
           invitee_timezone: string
           owner_id: string
           sequence?: number
+          seats_reserved?: number
           starts_at: string
           status?: Database["public"]["Enums"]["booking_status"]
           stripe_checkout_session_id?: string | null
+          stripe_destination_account_id?: string | null
           stripe_payment_intent_id?: string | null
           total_price_cents?: number
         }
@@ -126,6 +184,7 @@ export type Database = {
           event_type_id?: string
           hold_expires_at?: string | null
           id?: string
+          assigned_host_id?: string | null
           invitee_email?: string
           invitee_locale?: string
           invitee_name?: string
@@ -134,13 +193,22 @@ export type Database = {
           invitee_timezone?: string
           owner_id?: string
           sequence?: number
+          seats_reserved?: number
           starts_at?: string
           status?: Database["public"]["Enums"]["booking_status"]
           stripe_checkout_session_id?: string | null
+          stripe_destination_account_id?: string | null
           stripe_payment_intent_id?: string | null
           total_price_cents?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "bookings_assigned_host_id_fkey"
+            columns: ["assigned_host_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "bookings_event_type_id_fkey"
             columns: ["event_type_id"]
@@ -358,11 +426,15 @@ export type Database = {
           location_kind: Database["public"]["Enums"]["location_type"]
           location_value: string | null
           max_days_ahead: number
+          max_invitees_per_slot: number
           max_per_day: number | null
           min_notice_min: number
+          organization_id: string | null
           owner_id: string
           price_cents: number
           requires_payment: boolean | null
+          routing_form_id: string | null
+          scheduling_mode: string
           slot_increment_min: number
           slug: string
           title: Json
@@ -380,11 +452,15 @@ export type Database = {
           location_kind?: Database["public"]["Enums"]["location_type"]
           location_value?: string | null
           max_days_ahead?: number
+          max_invitees_per_slot?: number
           max_per_day?: number | null
           min_notice_min?: number
+          organization_id?: string | null
           owner_id: string
           price_cents?: number
           requires_payment?: boolean | null
+          routing_form_id?: string | null
+          scheduling_mode?: string
           slot_increment_min?: number
           slug: string
           title: Json
@@ -402,21 +478,39 @@ export type Database = {
           location_kind?: Database["public"]["Enums"]["location_type"]
           location_value?: string | null
           max_days_ahead?: number
+          max_invitees_per_slot?: number
           max_per_day?: number | null
           min_notice_min?: number
+          organization_id?: string | null
           owner_id?: string
           price_cents?: number
           requires_payment?: boolean | null
+          routing_form_id?: string | null
+          scheduling_mode?: string
           slot_increment_min?: number
           slug?: string
           title?: Json
         }
         Relationships: [
           {
+            foreignKeyName: "event_types_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "event_types_owner_id_fkey"
             columns: ["owner_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_types_routing_form_id_fkey"
+            columns: ["routing_form_id"]
+            isOneToOne: false
+            referencedRelation: "routing_forms"
             referencedColumns: ["id"]
           },
         ]
@@ -479,6 +573,9 @@ export type Database = {
           locale: string
           onboarding_completed: boolean
           slug: string
+          stripe_account_id: string | null
+          stripe_charges_enabled: boolean
+          stripe_payouts_enabled: boolean
           timezone: string
         }
         Insert: {
@@ -491,6 +588,9 @@ export type Database = {
           locale?: string
           onboarding_completed?: boolean
           slug: string
+          stripe_account_id?: string | null
+          stripe_charges_enabled?: boolean
+          stripe_payouts_enabled?: boolean
           timezone?: string
         }
         Update: {
@@ -503,6 +603,9 @@ export type Database = {
           locale?: string
           onboarding_completed?: boolean
           slug?: string
+          stripe_account_id?: string | null
+          stripe_charges_enabled?: boolean
+          stripe_payouts_enabled?: boolean
           timezone?: string
         }
         Relationships: []
@@ -512,7 +615,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      add_date_override: {
+        Args: {
+          p_date: string
+          p_end_time?: string
+          p_is_closed: boolean
+          p_start_time?: string
+        }
+        Returns: string
+      }
+      replace_availability_rules: {
+        Args: { p_rules: Json }
+        Returns: undefined
+      }
     }
     Enums: {
       booking_status:

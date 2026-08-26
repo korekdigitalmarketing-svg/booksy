@@ -1,7 +1,7 @@
 -- Optional per-event-type deposits: a host can require just a partial
 -- payment ("acompte") to secure a booking instead of the full price, with
 -- the remaining balance collected manually (in person, invoiced, however
--- the host normally would) — Booksy only tracks and displays it, there's
+-- the host normally would) - Korek Booking only tracks and displays it, there's
 -- no second Stripe charge.
 
 alter table event_types add column deposit_cents integer;

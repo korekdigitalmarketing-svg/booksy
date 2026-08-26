@@ -3,8 +3,10 @@ import { createServiceClient } from "@/lib/supabase/service";
 
 export const runtime = "nodejs";
 
-// Runs every 5 minutes (vercel.json). Frees any pending_payment booking
-// whose hold has expired — abandoned Stripe Checkouts, or any pending row
+// Daily cleanup for stale pending_payment rows. The booking endpoint also
+// sweeps expired holds on demand so this cron's frequency never keeps a
+// client-facing slot blocked.
+// Frees abandoned Stripe Checkouts, or any pending row
 // that outlived its hold for other reasons. The exclusion constraint
 // already protects against a real double-booking in the meantime; this
 // just makes the slot visibly available again.

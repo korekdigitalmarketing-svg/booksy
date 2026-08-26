@@ -1,12 +1,15 @@
-# Booksy
+# Korek Booking
 
-[![GitHub repo](https://img.shields.io/badge/GitHub-korekdigitalmarketing--svg%2Fbooksy-blue?logo=github)](https://github.com/korekdigitalmarketing-svg/booksy)
-[![Live demo](https://img.shields.io/badge/demo-booksy--lime.vercel.app-black?logo=vercel)](https://booksy-lime.vercel.app)
+[GitHub](https://github.com/korekdigitalmarketing-svg/korek-booking) ·
+[Vercel](https://korek-booking.vercel.app)
 
-**Live demo:** [booksy-lime.vercel.app](https://booksy-lime.vercel.app) — try the
-free "Intro Call" booking end to end (real emails, real confirmation). The
-paid "Consulting Session" won't complete checkout: `STRIPE_SECRET_KEY` on
-this deployment is still a placeholder, not a real Stripe key.
+Korek Booking is a paid appointment scheduling platform in the style of
+Calendly and Cal.com. It supports public booking links, host availability,
+payments, calendar sync, reminders, and English, French, and Spanish.
+
+Run the current app locally at [localhost:3000](http://localhost:3000) with
+`npm run dev`. The renamed Vercel project is available at
+[korek-booking.vercel.app](https://korek-booking.vercel.app).
 
 A paid appointment booking platform (Calendly / Cal.com style) — Next.js App
 Router, Supabase, Stripe Checkout, Resend, trilingual (en/fr/es) from day
@@ -36,6 +39,7 @@ npm run dev
 | `SUPABASE_SERVICE_ROLE_KEY` | same page — the `service_role` secret key. **Server only** — never import `lib/supabase/service.ts` into a Client Component; the `server-only` package makes that a build error, not just a runtime footgun |
 | `STRIPE_SECRET_KEY` | Stripe dashboard → Developers → API keys (use a test key locally) |
 | `STRIPE_WEBHOOK_SECRET` | printed by `stripe listen` below, or from Developers → Webhooks once deployed |
+| `CALENDAR_TOKEN_ENCRYPTION_KEY` | base64-encoded 32-byte key used to encrypt calendar OAuth tokens |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe dashboard → Developers → API keys |
 | `RESEND_API_KEY` | Resend dashboard → API Keys |
 | `EMAIL_FROM` | a verified sender on your Resend domain |
@@ -59,11 +63,36 @@ Against a hosted project, apply each file in `supabase/migrations/` in
 order (`supabase db push`, or paste into the SQL editor), then run
 `supabase/seed.sql` once.
 
+For the current launch checklist, make sure these migrations have been
+applied to production:
+
+```bash
+supabase link --project-ref <your-project-ref>
+supabase db push
+```
+
+If you do not have the Supabase CLI installed, open Supabase → SQL Editor
+and run these files in order:
+
+1. `supabase/migrations/0009_add_stripe_connect.sql`
+2. `supabase/migrations/0010_scheduling_reliability.sql`
+3. `supabase/migrations/0011_calendar_writeback.sql`
+4. `supabase/migrations/0012_team_scheduling_foundation.sql`
+
 After any schema change, regenerate `lib/supabase/types.ts`:
 
 ```bash
 supabase gen types typescript --project-id <ref> > lib/supabase/types.ts
 ```
+
+Before deploying, run:
+
+```bash
+npm run check:launch-env
+```
+
+The command checks that the required Supabase, Stripe, Resend, calendar,
+app URL, and cron variables exist without printing secret values.
 
 ### Stripe webhooks locally
 
@@ -94,7 +123,7 @@ automatically before every `npm run build`.
    used in local dev can only deliver to the Resend account owner's own
    address, so it won't work for real customers.
 3. Set `NEXT_PUBLIC_APP_URL` to the real production domain (e.g.
-   `https://booksy.example.com`) — it's used for email links, `.ics`
+   `https://your-korek-booking-domain.com`) — it's used for email links, `.ics`
    files, and hreflang alternates.
 4. Apply `supabase/migrations/` and `supabase/seed.sql` against the
    production Supabase project if it's separate from the one used in dev
@@ -113,9 +142,10 @@ automatically before every `npm run build`.
    no other setup is needed there.
 6. In the Stripe dashboard → Developers → Webhooks, add an endpoint at
    `https://<your-domain>/api/webhooks/stripe` subscribed to
-   `checkout.session.completed`, `checkout.session.expired`, and
-   `charge.refunded` — the three events `app/api/webhooks/stripe/route.ts`
-   actually handles. Copy the endpoint's signing secret into
+   `checkout.session.completed`, `checkout.session.expired`,
+   `charge.refunded`, and `account.updated` — the events
+   `app/api/webhooks/stripe/route.ts` actually handles. Copy the endpoint's
+   signing secret into
    `STRIPE_WEBHOOK_SECRET` in Vercel.
 7. Smoke-test after deploy: complete one free booking and one paid
    booking end-to-end, confirm both a client and host email arrive, then

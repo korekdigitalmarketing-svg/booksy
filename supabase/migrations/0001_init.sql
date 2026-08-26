@@ -1,4 +1,4 @@
--- Booksy — initial schema.
+-- Korek Booking - initial schema.
 -- Built for a single host today, but every host-owned row carries owner_id
 -- so multi-tenant works later without a migration (section 1).
 

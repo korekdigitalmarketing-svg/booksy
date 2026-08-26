@@ -1,6 +1,6 @@
 {
   "common": {
-    "brandName": "Booksy",
+    "brandName": "Korek Booking",
     "loading": "Loading…",
     "save": "Save",
     "cancel": "Cancel",
@@ -9,12 +9,12 @@
     "errorGeneric": "Something went wrong. Please try again."
   },
   "home": {
-    "title": "Booksy",
+    "title": "Korek Booking",
     "tagline": "Book time with confidence.",
     "description": "Trilingual, paid appointment booking — set your hours, share a link, get booked and paid automatically.",
     "hero": {
       "heading": "Scheduling that just works.",
-      "subheading": "Share a link, let clients pick a time, get paid automatically. Booksy handles time zones, reminders, and Stripe payments so you don't have to.",
+      "subheading": "Share a link, let clients pick a time, get paid automatically. Korek Booking handles time zones, reminders, and Stripe payments so you don't have to.",
       "ctaPrimary": "See it in action",
       "ctaSecondary": "How it works"
     },
@@ -46,7 +46,7 @@
     },
     "cta": {
       "heading": "Ready to start taking bookings?",
-      "body": "Set your availability, share your link, and let Booksy handle the rest.",
+      "body": "Set your availability, share your link, and let Korek Booking handle the rest.",
       "button": "View a live booking page"
     }
   },
@@ -104,6 +104,7 @@
       "SLOT_UNAVAILABLE": "That time is no longer available. Please pick another.",
       "OUTSIDE_NOTICE_WINDOW": "That time is too soon to book.",
       "PAYMENT_FAILED": "Payment failed. Please try again.",
+      "REFUND_FAILED": "We couldn't issue the refund. The booking is still active; please try again.",
       "UNAUTHORIZED": "You're not authorized to do that.",
       "INTERNAL_ERROR": "Something went wrong. Please try again."
     },
@@ -143,15 +144,15 @@
   },
   "terms": {
     "title": "Acceptable Use Policy",
-    "intro": "Booksy is a platform for booking legitimate, lawful services. By listing or booking a service, you agree to the terms below.",
+    "intro": "Korek Booking is a platform for booking legitimate, lawful services. By listing or booking a service, you agree to the terms below.",
     "prohibitedHeading": "Prohibited items and services",
-    "prohibitedIntro": "Hosts may not use Booksy to sell, advertise, or arrange access to anything illegal, including but not limited to:",
+    "prohibitedIntro": "Hosts may not use Korek Booking to sell, advertise, or arrange access to anything illegal, including but not limited to:",
     "prohibitedItem1": "Narcotics, controlled substances, or drug paraphernalia",
     "prohibitedItem2": "Firearms, ammunition, explosives, or other weapons",
     "prohibitedItem3": "Any other goods or services that are illegal under applicable law",
     "enforcementHeading": "Enforcement",
-    "enforcementBody": "Any account found offering, promoting, or facilitating the sale of illegal items or services will be suspended and permanently removed, without notice or refund. Booksy may also report such activity to law enforcement where required or appropriate.",
-    "scopeNote": "Booksy is built for booking time-based appointments and services — not for listing or shipping physical goods. Every service must describe a legitimate, bookable offering."
+    "enforcementBody": "Any account found offering, promoting, or facilitating the sale of illegal items or services will be suspended and permanently removed, without notice or refund. Korek Booking may also report such activity to law enforcement where required or appropriate.",
+    "scopeNote": "Korek Booking is built for booking time-based appointments and services — not for listing or shipping physical goods. Every service must describe a legitimate, bookable offering."
   },
   "emails": {
     "common": {
@@ -162,7 +163,7 @@
       "notesLabel": "Notes",
       "confirmationNumberLabel": "Confirmation number",
       "manageLinkText": "Manage or reschedule this booking",
-      "footer": "This is an automated message from Booksy."
+      "footer": "This is an automated message from Korek Booking."
     },
     "confirmation": {
       "subject": "Confirmed: {eventTitle} with {hostName}",
@@ -170,7 +171,7 @@
       "greeting": "Hi {inviteeName},",
       "body": "Your {eventTitle} with {hostName} is confirmed.",
       "icsSummary": "{eventTitle} with {hostName}",
-      "icsDescription": "Booking confirmed via Booksy. Invitee: {inviteeName}."
+      "icsDescription": "Booking confirmed via Korek Booking. Invitee: {inviteeName}."
     },
     "hostNotification": {
       "subject": "New booking: {eventTitle} with {inviteeName}",
@@ -179,7 +180,7 @@
       "body": "{inviteeName} just booked {eventTitle} with you.",
       "contactLabel": "Contact",
       "icsSummary": "{eventTitle} with {inviteeName}",
-      "icsDescription": "Booked via Booksy. Contact: {inviteeEmail}."
+      "icsDescription": "Booked via Korek Booking. Contact: {inviteeEmail}."
     },
     "reminder": {
       "subject": "Reminder: {eventTitle} tomorrow",
@@ -214,7 +215,7 @@
       "previousTimeLabel": "Previous time",
       "newTimeLabel": "New time",
       "icsSummary": "{eventTitle} with {hostName}",
-      "icsDescription": "Booking rescheduled via Booksy. Invitee: {inviteeName}."
+      "icsDescription": "Booking rescheduled via Korek Booking. Invitee: {inviteeName}."
     },
     "rescheduleHost": {
       "subject": "Rescheduled: {eventTitle} with {inviteeName}",
@@ -231,15 +232,31 @@
       "bookings": "Bookings",
       "eventTypes": "Event types",
       "availability": "Availability",
+      "team": "Team",
       "settings": "Settings",
       "signOut": "Sign out"
     },
     "home": {
       "heading": "Today & upcoming",
+      "subheading": "See what needs attention now, review upcoming appointments, and keep your booking link ready to share.",
       "todayHeading": "Today",
       "upcomingHeading": "Upcoming",
       "noBookingsToday": "No bookings today.",
       "noUpcoming": "No upcoming bookings.",
+      "bookingLinkHeading": "Booking link",
+      "bookingLinkDescription": "Share this with clients so they can pick a time from your live availability.",
+      "languageLabel": "Dashboard language",
+      "languageSaved": "Language updated",
+      "languageError": "We couldn't update the language. Please try again.",
+      "calendarHeading": "Schedule calendar",
+      "calendarDescription": "Click a date to view appointments and reschedule from there.",
+      "calendarBookingLabel": "booking",
+      "calendarBookingsLabel": "bookings",
+      "calendarTodayLabel": "Today",
+      "calendarPreviousMonth": "Previous month",
+      "calendarNextMonth": "Next month",
+      "calendarSelectedDateHeading": "Selected date",
+      "calendarNoBookingsForDate": "No active bookings on this date.",
       "cancelButton": "Cancel",
       "keepButton": "Keep booking",
       "cancelDialogTitle": "Cancel this booking?",
@@ -255,7 +272,9 @@
       },
       "copyLinkButton": "Copy my booking link",
       "copyLinkToast": "Booking link copied",
-      "copyLinkError": "Couldn't copy the link. Please copy it manually."
+      "copyLinkError": "Couldn't copy the link. Please copy it manually.",
+      "refundFailed": "We couldn't issue the refund, so the booking is still active. Try again or refund it in Stripe.",
+      "cancelError": "We couldn't cancel this booking. Please try again."
     },
     "reschedule": {
       "dialogTitle": "Reschedule this booking",
@@ -266,10 +285,15 @@
     },
     "bookings": {
       "heading": "Bookings",
+      "pageDescription": "Review every client appointment, payment state, and follow-up action in one place.",
       "filterUpcoming": "Upcoming",
       "filterPast": "Past",
       "filterAll": "All",
       "noBookings": "No bookings here yet.",
+      "emptyDescription": "Confirmed appointments will appear here. Create a service and share its booking link to get started.",
+      "emptyAction": "Review event types",
+      "statShown": "Shown",
+      "statCancelled": "Cancelled",
       "balanceDueBadge": "{amount} due",
       "markNoShow": "Mark as no-show",
       "noShowToast": "Marked as no-show",
@@ -290,8 +314,14 @@
     },
     "eventTypes": {
       "heading": "Event types",
+      "pageDescription": "Manage the services clients can book, from duration and pricing to visibility.",
       "newButton": "New event type",
       "noEventTypes": "No event types yet.",
+      "emptyDescription": "Create a service with its duration, location, price, and booking rules. You will get a link ready to share.",
+      "statTotal": "Total services",
+      "statPaid": "Paid services",
+      "freeLabel": "Free",
+      "groupCapacity": "{count, plural, one {# invitee} other {# invitees}}",
       "editButton": "Edit",
       "activeLabel": "Active",
       "inactiveLabel": "Inactive",
@@ -318,6 +348,10 @@
         "minNoticeLabel": "Minimum notice (minutes)",
         "maxDaysAheadLabel": "Bookable up to (days ahead)",
         "maxPerDayLabel": "Max bookings per day (optional)",
+        "schedulingModeLabel": "Scheduling mode",
+        "schedulingModeHint": "Solo is ready now. Round-robin and collective use the team scheduling tables added for the next engine pass.",
+        "maxInviteesPerSlotLabel": "Invitees per slot",
+        "maxInviteesPerSlotHint": "Use 1 for appointments. Higher capacity is prepared for group booking support.",
         "activeLabel": "Active — visible on your booking page",
         "policyLabel": "I confirm this service is legal and doesn't involve narcotics, firearms, or other prohibited items or services.",
         "policyLinkText": "Read the acceptable use policy",
@@ -330,6 +364,11 @@
           "phone": "Phone call",
           "in_person": "In person",
           "custom": "Custom"
+        },
+        "schedulingModeOptions": {
+          "solo": "Solo host",
+          "round_robin": "Round-robin team",
+          "collective": "Collective team"
         }
       },
       "questions": {
@@ -370,6 +409,18 @@
       "addWindow": "Add a time window",
       "removeWindow": "Remove",
       "closedLabel": "Closed",
+      "calendarHeading": "Calendar visibility",
+      "calendarDescription": "Scan the month and click any date to add different hours or close it for that day.",
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "weeklyShort": "Weekly",
+      "customShort": "Custom",
+      "closedShort": "Closed",
+      "legendWeekly": "Weekly hours",
+      "legendCustom": "Custom date",
+      "legendClosed": "Closed",
+      "selectedDateLabel": "Selected date",
+      "visibleHoursLabel": "Visible hours",
       "overridesHeading": "Date overrides",
       "overridesDescription": "Block a specific date, or set different hours just for that day.",
       "addOverride": "Add date override",
@@ -378,6 +429,7 @@
       "saveButton": "Save availability",
       "savingButton": "Saving…",
       "savedToast": "Availability saved",
+      "overlapError": "Time windows on the same day cannot overlap.",
       "weekdays": {
         "0": "Sunday",
         "1": "Monday",
@@ -386,10 +438,59 @@
         "4": "Thursday",
         "5": "Friday",
         "6": "Saturday"
+      },
+      "weekdayShort": {
+        "0": "Sun",
+        "1": "Mon",
+        "2": "Tue",
+        "3": "Wed",
+        "4": "Thu",
+        "5": "Fri",
+        "6": "Sat"
+      }
+    },
+    "team": {
+      "heading": "Team scheduling",
+      "pageDescription": "Manage the workspace structure behind shared event types, rotating hosts, collective availability, group slots, and routing forms.",
+      "personalWorkspace": "Personal workspace",
+      "statMembers": "Members",
+      "statRoundRobin": "Round-robin",
+      "statCollective": "Collective",
+      "statRouting": "Routing forms",
+      "membersHeading": "Workspace members",
+      "membersDescription": "People who can host shared services in this workspace.",
+      "routingHeading": "Routing forms",
+      "routingDescription": "Ask questions first, then send clients to the right host or service.",
+      "noRoutingForms": "No routing forms yet. The database is ready; the builder is the next product screen to add.",
+      "eventModesHeading": "Shared event modes",
+      "eventModesDescription": "Each service can stay solo, rotate across hosts, require multiple hosts, or accept multiple invitees per slot.",
+      "noTeamEventTypes": "No shared event types yet. Existing solo services can be moved into a workspace after the team editor is added.",
+      "activeLabel": "Active",
+      "inactiveLabel": "Inactive",
+      "singleInvitee": "One invitee per slot",
+      "groupCapacity": "{count, plural, one {# invitee per slot} other {# invitees per slot}}",
+      "roundRobinHeading": "Round-robin",
+      "roundRobinDescription": "Rotate bookings between available hosts so work is distributed fairly.",
+      "collectiveHeading": "Collective events",
+      "collectiveDescription": "Offer times only when every required host is free.",
+      "groupHeading": "Group bookings",
+      "groupDescription": "{count, plural, =0 {Capacity is ready for classes, webinars, and shared slots.} one {# service currently accepts multiple invitees.} other {# services currently accept multiple invitees.}}",
+      "routingNoteHeading": "Routing",
+      "routingNoteDescription": "Qualify clients with questions and route them to the best event type or host.",
+      "roles": {
+        "owner": "Owner",
+        "admin": "Admin",
+        "member": "Member"
+      },
+      "modes": {
+        "solo": "Solo",
+        "round_robin": "Round-robin",
+        "collective": "Collective"
       }
     },
     "settings": {
       "heading": "Settings",
+      "pageDescription": "Manage your public profile, dashboard language, calendar sync, and payment setup.",
       "profileHeading": "Profile",
       "fullNameLabel": "Full name",
       "slugLabel": "Public URL slug",
@@ -402,10 +503,22 @@
       "stripeHeading": "Payments",
       "stripeConfigured": "Stripe is configured — paid event types can accept payment.",
       "stripeNotConfigured": "Stripe isn't configured yet. Paid event types won't be bookable until STRIPE_SECRET_KEY is set.",
+      "stripeConnect": {
+        "heading": "Get paid directly",
+        "description": "Connect your own Stripe account so client payments go straight to you instead of the platform.",
+        "connectButton": "Connect with Stripe",
+        "finishSetupButton": "Finish setup",
+        "manageButton": "Manage on Stripe",
+        "activeBadge": "Payouts active",
+        "pendingBadge": "Setup incomplete",
+        "connectedToast": "Stripe account connected",
+        "pendingToast": "Almost there — Stripe still needs a bit more information before payouts can start.",
+        "errorToast": "Something went wrong connecting Stripe. Please try again."
+      },
       "calendarSync": {
         "google": {
           "heading": "Google Calendar sync",
-          "description": "Connect your Google Calendar so existing events on it block your booking page too.",
+          "description": "Block busy times and add every confirmed Korek Booking appointment to Google Calendar automatically.",
           "connectedAs": "Connected — last synced {date}",
           "connectButton": "Connect Google Calendar",
           "disconnectButton": "Disconnect",
@@ -416,7 +529,7 @@
         },
         "microsoft": {
           "heading": "Outlook Calendar sync",
-          "description": "Connect your Outlook Calendar so existing events on it block your booking page too.",
+          "description": "Block busy times and add every confirmed Korek Booking appointment to Outlook automatically.",
           "connectedAs": "Connected — last synced {date}",
           "connectButton": "Connect Outlook Calendar",
           "disconnectButton": "Disconnect",
@@ -430,6 +543,8 @@
     "onboarding": {
       "heading": "Let's get you set up",
       "subheading": "Three quick steps and your booking page is ready to share.",
+      "guideAlt": "Availability, booking selection, and confirmed appointment shown as a three-step flow",
+      "guideCaption": "Set your hours once. Clients choose an open time, and confirmed appointments are added to your calendar.",
       "skipSetupButton": "Skip setup",
       "continueButton": "Continue",
       "skipStepButton": "Skip this step",

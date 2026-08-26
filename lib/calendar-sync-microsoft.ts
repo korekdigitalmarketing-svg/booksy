@@ -2,9 +2,11 @@ import "server-only";
 import { DateTime } from "luxon";
 import { createServiceClient } from "@/lib/supabase/service";
 import type { CalendarConnectionRow } from "@/lib/calendar-busy-blocks";
+import { decryptCalendarToken, encryptCalendarToken } from "@/lib/calendar-token-crypto";
 
 // Microsoft Graph (Outlook/Microsoft 365) calendar sync, Phase 1:
-// import-only (Calendars.Read), one connection per host — the Microsoft
+// imports busy time and writes confirmed Korek Booking appointments back to the
+// host's calendar, one connection per host.
 // counterpart to lib/calendar-sync.ts. Kept as its own file rather than
 // unified with the Google module: the OAuth endpoints, delta-sync
 // mechanics (a full resumable URL vs. an opaque token), and webhook
@@ -16,7 +18,7 @@ const MS_TOKEN_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/token
 const GRAPH_API = "https://graph.microsoft.com/v1.0";
 
 // Matches the Google side's read-only Phase 1 scope decision.
-const SCOPE = "offline_access Calendars.Read";
+const SCOPE = "offline_access Calendars.ReadWrite";
 
 function requireEnv(name: string): string {
   const value = process.env[name];
@@ -101,20 +103,20 @@ async function refreshAccessToken(
 /** Returns a valid access token for this connection, refreshing and
  * persisting a new one first if the current one is expired or about to
  * be — same 5-minute margin as the Google module. */
-async function ensureFreshAccessToken(connection: CalendarConnectionRow): Promise<string> {
+export async function ensureFreshMicrosoftAccessToken(connection: CalendarConnectionRow): Promise<string> {
   const expiresAt = new Date(connection.token_expires_at).getTime();
   const marginMs = 5 * 60 * 1000;
   if (expiresAt - Date.now() > marginMs) {
-    return connection.access_token;
+    return decryptCalendarToken(connection.access_token);
   }
 
-  const refreshed = await refreshAccessToken(connection.refresh_token);
+  const refreshed = await refreshAccessToken(decryptCalendarToken(connection.refresh_token));
   const newExpiresAt = new Date(Date.now() + refreshed.expires_in * 1000).toISOString();
 
   const supabase = createServiceClient();
   await supabase
     .from("calendar_connections")
-    .update({ access_token: refreshed.access_token, token_expires_at: newExpiresAt })
+    .update({ access_token: encryptCalendarToken(refreshed.access_token), token_expires_at: newExpiresAt })
     .eq("id", connection.id);
 
   return refreshed.access_token;
@@ -279,7 +281,7 @@ function toInstant(
  * Graph's webhook fires. */
 export async function performSync(connection: CalendarConnectionRow): Promise<void> {
   const supabase = createServiceClient();
-  const accessToken = await ensureFreshAccessToken(connection);
+  const accessToken = await ensureFreshMicrosoftAccessToken(connection);
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -336,5 +338,4 @@ export async function performSync(connection: CalendarConnectionRow): Promise<vo
     .eq("id", connection.id);
 }
 
-export { ensureFreshAccessToken };
 export type { MicrosoftEvent };

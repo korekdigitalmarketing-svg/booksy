@@ -41,7 +41,8 @@ export function CancelBookingDialog({
         body: JSON.stringify({ reason: reason || undefined }),
       });
       if (!res.ok) {
-        toast.error("Something went wrong. Please try again.");
+        const data = await res.json().catch(() => null);
+        toast.error(data?.error?.code === "REFUND_FAILED" ? t("refundFailed") : t("cancelError"));
         return;
       }
       toast.success(t("cancelledToast"));

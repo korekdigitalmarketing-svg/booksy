@@ -8,7 +8,7 @@ export default async function AvailabilityPage() {
   const [rules, overrides] = await Promise.all([getAvailabilityRules(), getDateOverrides()]);
 
   return (
-    <div className="flex max-w-2xl flex-col gap-6">
+    <div className="flex max-w-5xl flex-col gap-6">
       <h1 className="text-2xl font-heading font-semibold tracking-tight">{t("heading")}</h1>
       <AvailabilityEditor initialRules={rules} initialOverrides={overrides} />
     </div>

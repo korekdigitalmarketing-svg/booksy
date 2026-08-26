@@ -36,6 +36,8 @@ export const EventTypeSchema = z
     minNoticeMin: z.number().int().min(0).max(10080),
     maxDaysAhead: z.number().int().min(1).max(365),
     maxPerDay: z.number().int().min(1).max(100).nullable().optional(),
+    schedulingMode: z.enum(["solo", "round_robin", "collective"]).default("solo"),
+    maxInviteesPerSlot: z.number().int().min(1).max(250).default(1),
     isActive: z.boolean(),
     // Enforced server-side too, not just a disabled submit button — the
     // acceptable-use commitment from section 11's terms page ("a required

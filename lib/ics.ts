@@ -60,9 +60,9 @@ function foldLine(line: string): string {
 function icsUidDomain(): string {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
   try {
-    return new URL(appUrl).hostname || "booksy.invalid";
+    return new URL(appUrl).hostname || "korek-booking.invalid";
   } catch {
-    return "booksy.invalid";
+    return "korek-booking.invalid";
   }
 }
 
@@ -70,7 +70,7 @@ export function generateIcs(input: IcsEventInput): string {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Booksy//Booking//EN",
+    "PRODID:-//Korek Booking//Booking//EN",
     "CALSCALE:GREGORIAN",
     `METHOD:${input.method}`,
     "BEGIN:VEVENT",

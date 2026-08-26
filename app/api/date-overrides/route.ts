@@ -25,17 +25,12 @@ export async function POST(request: NextRequest) {
   }
   const input = parsed.data;
 
-  const { data, error } = await supabase
-    .from("date_overrides")
-    .insert({
-      owner_id: user.id,
-      the_date: input.theDate,
-      is_closed: input.isClosed,
-      start_time: input.isClosed ? null : (input.startTime ?? null),
-      end_time: input.isClosed ? null : (input.endTime ?? null),
-    })
-    .select("id")
-    .single();
+  const { data, error } = await supabase.rpc("add_date_override", {
+    p_date: input.theDate,
+    p_is_closed: input.isClosed,
+    p_start_time: input.isClosed ? undefined : input.startTime,
+    p_end_time: input.isClosed ? undefined : input.endTime,
+  });
 
   if (error) {
     if (error.code === "23505") {
@@ -44,5 +39,5 @@ export async function POST(request: NextRequest) {
     return apiError("INTERNAL_ERROR", { message: error.message });
   }
 
-  return NextResponse.json({ id: data.id });
+  return NextResponse.json({ id: data });
 }

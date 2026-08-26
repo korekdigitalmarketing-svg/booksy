@@ -2,9 +2,10 @@ import "server-only";
 import { DateTime } from "luxon";
 import { createServiceClient } from "@/lib/supabase/service";
 import type { CalendarConnectionRow } from "@/lib/calendar-busy-blocks";
+import { decryptCalendarToken, encryptCalendarToken } from "@/lib/calendar-token-crypto";
 
-// Google Calendar sync, Phase 1: import-only (calendar.readonly), one
-// connection per host. Talks to Google's plain REST endpoints directly
+// Google Calendar sync: imports busy time and supports appointment
+// writeback, one connection per host. Talks to Google's REST endpoints directly
 // rather than pulling in the `googleapis` SDK — this app only needs four
 // calls (token exchange, token refresh, events.watch, events.list), and
 // the SDK's footprint isn't worth it for that.
@@ -13,10 +14,7 @@ const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 const GOOGLE_CALENDAR_API = "https://www.googleapis.com/calendar/v3";
 
-// Read-only: this phase only imports busy blocks, it never creates or
-// modifies events on the host's calendar. Widening to a write scope is
-// Phase 2's job, not something to request speculatively now.
-const SCOPE = "https://www.googleapis.com/auth/calendar.readonly";
+const SCOPE = "https://www.googleapis.com/auth/calendar.events";
 
 function requireEnv(name: string): string {
   const value = process.env[name];
@@ -101,20 +99,20 @@ async function refreshAccessToken(
  * persisting a new one first if the current one is expired or about to
  * be (a 5-minute margin, since the token is about to be used for a
  * network call that itself takes time). */
-async function ensureFreshAccessToken(connection: CalendarConnectionRow): Promise<string> {
+export async function ensureFreshGoogleAccessToken(connection: CalendarConnectionRow): Promise<string> {
   const expiresAt = new Date(connection.token_expires_at).getTime();
   const marginMs = 5 * 60 * 1000;
   if (expiresAt - Date.now() > marginMs) {
-    return connection.access_token;
+    return decryptCalendarToken(connection.access_token);
   }
 
-  const refreshed = await refreshAccessToken(connection.refresh_token);
+  const refreshed = await refreshAccessToken(decryptCalendarToken(connection.refresh_token));
   const newExpiresAt = new Date(Date.now() + refreshed.expires_in * 1000).toISOString();
 
   const supabase = createServiceClient();
   await supabase
     .from("calendar_connections")
-    .update({ access_token: refreshed.access_token, token_expires_at: newExpiresAt })
+    .update({ access_token: encryptCalendarToken(refreshed.access_token), token_expires_at: newExpiresAt })
     .eq("id", connection.id);
 
   return refreshed.access_token;
@@ -288,7 +286,7 @@ function toInstant(
  * route itself stays a thin trigger. */
 export async function performSync(connection: CalendarConnectionRow): Promise<void> {
   const supabase = createServiceClient();
-  const accessToken = await ensureFreshAccessToken(connection);
+  const accessToken = await ensureFreshGoogleAccessToken(connection);
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -349,5 +347,4 @@ export async function performSync(connection: CalendarConnectionRow): Promise<vo
     .eq("id", connection.id);
 }
 
-export { ensureFreshAccessToken };
 export type { GoogleCalendarEvent };

@@ -5,6 +5,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { getStripe } from "@/lib/stripe";
 import { sendCancellationEmails } from "@/lib/notifications";
 import { apiError } from "@/lib/api-errors";
+import { removeBookingFromCalendars } from "@/lib/calendar-writeback";
 
 export const runtime = "nodejs";
 
@@ -59,7 +60,7 @@ export async function POST(
 
   const { data: booking, error: fetchError } = await db
     .from("bookings")
-    .select("id, status, stripe_payment_intent_id, amount_cents")
+    .select("id, status, stripe_payment_intent_id, amount_cents, stripe_destination_account_id")
     .eq("id", id)
     .maybeSingle();
 
@@ -70,15 +71,24 @@ export async function POST(
     return apiError("VALIDATION_ERROR", { message: "Booking is not in a cancellable state" });
   }
 
-  // Best-effort refund before touching the row — if this fails, the
-  // booking still gets cancelled and the host can refund manually from
-  // the Stripe dashboard; the cancellation itself must not get stuck
-  // behind a payment-provider hiccup.
+  // Refund before changing booking state. A paid booking must never look
+  // successfully cancelled while its automatic refund actually failed.
   if (booking.status === "confirmed" && booking.amount_cents > 0 && booking.stripe_payment_intent_id) {
     try {
-      await getStripe().refunds.create({ payment_intent: booking.stripe_payment_intent_id });
+      await getStripe().refunds.create(
+        {
+          payment_intent: booking.stripe_payment_intent_id,
+          // This booking's charge was a destination charge (funds already
+          // transferred to the host's connected account) — without this,
+          // refunding here would leave the platform account out of pocket
+          // while the host keeps the money.
+          ...(booking.stripe_destination_account_id ? { reverse_transfer: true } : {}),
+        },
+        { idempotencyKey: `booking-cancel-${booking.id}` },
+      );
     } catch (err) {
       console.error("Refund failed during cancellation", err);
+      return apiError("REFUND_FAILED");
     }
   }
 
@@ -96,7 +106,10 @@ export async function POST(
   }
 
   try {
-    await sendCancellationEmails(id, cancelledBy);
+    await Promise.all([
+      sendCancellationEmails(id, cancelledBy),
+      removeBookingFromCalendars(id),
+    ]);
   } catch (err) {
     console.error("Failed to send cancellation emails", err);
   }

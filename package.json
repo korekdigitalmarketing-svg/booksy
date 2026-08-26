@@ -1,13 +1,19 @@
 {
-  "name": "booksy",
+  "name": "korek-booking",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://korek-booking.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/korekdigitalmarketing-svg/korek-booking.git"
+  },
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/check-i18n-keys.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "check:launch-env": "node scripts/check-launch-env.mjs",
     "check:i18n": "node scripts/check-i18n-keys.mjs",
     "test": "vitest run"
   },
@@ -46,6 +52,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.2",
+    "supabase": "^2.115.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.11"

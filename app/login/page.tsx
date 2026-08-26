@@ -14,11 +14,11 @@ export default function LoginPage() {
   return (
     <main className="mx-auto flex w-full max-w-sm flex-1 flex-col items-center justify-center gap-6 px-6 py-16">
       <Image
-        src="/brand/booksy-logo.png"
-        alt="Booksy"
-        width={1699}
-        height={926}
-        className="h-9 w-auto"
+        src="/brand/korek-booking-logo.png"
+        alt="Korek Booking"
+        width={2172}
+        height={724}
+        className="h-12 w-auto max-w-full"
         priority
       />
       <Suspense>
@@ -116,7 +116,7 @@ function LoginForm() {
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1 text-center">
-              <h1 className="text-lg font-semibold">Sign in to Booksy</h1>
+              <h1 className="text-lg font-semibold">Sign in to Korek Booking</h1>
               <p className="text-sm text-muted-foreground">
                 We&apos;ll email you a link — no password needed.
               </p>

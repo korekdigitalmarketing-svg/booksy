@@ -11,7 +11,10 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 const spaceGrotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: ["latin"] });
 
-export const metadata: Metadata = { title: "Dashboard — Booksy" };
+export const metadata: Metadata = {
+  title: "Dashboard | Korek Booking",
+  description: "Manage appointments, availability, event types, and team scheduling.",
+};
 
 // A third independent root layout (own <html>/<body>, alongside
 // app/[locale]/layout.tsx and app/login/layout.tsx) — /dashboard's

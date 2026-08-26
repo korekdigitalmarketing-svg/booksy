@@ -261,6 +261,8 @@ export interface DashboardEventType {
   minNoticeMin: number;
   maxDaysAhead: number;
   maxPerDay: number | null;
+  schedulingMode: "solo" | "round_robin" | "collective";
+  maxInviteesPerSlot: number;
   isActive: boolean;
 }
 
@@ -269,7 +271,7 @@ export async function getEventTypesList(): Promise<DashboardEventType[]> {
   const { data, error } = await supabase
     .from("event_types")
     .select(
-      "id, slug, title, description, duration_min, slot_increment_min, price_cents, deposit_cents, currency, location_kind, location_value, buffer_before_min, buffer_after_min, min_notice_min, max_days_ahead, max_per_day, is_active",
+      "id, slug, title, description, duration_min, slot_increment_min, price_cents, deposit_cents, currency, location_kind, location_value, buffer_before_min, buffer_after_min, min_notice_min, max_days_ahead, max_per_day, scheduling_mode, max_invitees_per_slot, is_active",
     )
     .order("created_at", { ascending: true });
 
@@ -282,7 +284,7 @@ export async function getEventTypeById(id: string): Promise<DashboardEventType |
   const { data, error } = await supabase
     .from("event_types")
     .select(
-      "id, slug, title, description, duration_min, slot_increment_min, price_cents, deposit_cents, currency, location_kind, location_value, buffer_before_min, buffer_after_min, min_notice_min, max_days_ahead, max_per_day, is_active",
+      "id, slug, title, description, duration_min, slot_increment_min, price_cents, deposit_cents, currency, location_kind, location_value, buffer_before_min, buffer_after_min, min_notice_min, max_days_ahead, max_per_day, scheduling_mode, max_invitees_per_slot, is_active",
     )
     .eq("id", id)
     .maybeSingle();
@@ -308,6 +310,8 @@ function mapEventType(et: {
   min_notice_min: number;
   max_days_ahead: number;
   max_per_day: number | null;
+  scheduling_mode?: string | null;
+  max_invitees_per_slot?: number | null;
   is_active: boolean;
 }): DashboardEventType {
   return {
@@ -327,6 +331,8 @@ function mapEventType(et: {
     minNoticeMin: et.min_notice_min,
     maxDaysAhead: et.max_days_ahead,
     maxPerDay: et.max_per_day,
+    schedulingMode: (et.scheduling_mode ?? "solo") as DashboardEventType["schedulingMode"],
+    maxInviteesPerSlot: et.max_invitees_per_slot ?? 1,
     isActive: et.is_active,
   };
 }
@@ -430,5 +436,135 @@ export async function getCalendarConnection(
     provider: data.provider,
     externalCalendarId: data.external_calendar_id,
     updatedAt: data.updated_at,
+  };
+}
+
+export interface StripeConnectStatus {
+  connected: boolean;
+  chargesEnabled: boolean;
+  payoutsEnabled: boolean;
+}
+
+export async function getStripeConnectStatus(): Promise<StripeConnectStatus> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { connected: false, chargesEnabled: false, payoutsEnabled: false };
+
+  const { data } = await supabase
+    .from("profiles")
+    .select("stripe_account_id, stripe_charges_enabled, stripe_payouts_enabled")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  return {
+    connected: Boolean(data?.stripe_account_id),
+    chargesEnabled: data?.stripe_charges_enabled ?? false,
+    payoutsEnabled: data?.stripe_payouts_enabled ?? false,
+  };
+}
+
+export interface DashboardTeamMember {
+  profileId: string;
+  name: string;
+  email: string;
+  role: "owner" | "admin" | "member";
+}
+
+export interface DashboardTeamEventType {
+  id: string;
+  title: Record<string, string>;
+  schedulingMode: "solo" | "round_robin" | "collective";
+  maxInviteesPerSlot: number;
+}
+
+export interface DashboardRoutingForm {
+  id: string;
+  name: string;
+  isActive: boolean;
+}
+
+export interface DashboardTeamOverview {
+  organization: {
+    id: string;
+    name: string;
+    slug: string;
+  } | null;
+  members: DashboardTeamMember[];
+  eventTypes: DashboardTeamEventType[];
+  routingForms: DashboardRoutingForm[];
+}
+
+export async function getTeamOverview(profile: DashboardProfile): Promise<DashboardTeamOverview> {
+  const typedClient = await createClient();
+  const supabase = typedClient as SupabaseClient;
+  const { data: organization } = await supabase
+    .from("organizations")
+    .select("id, name, slug")
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (!organization) {
+    return {
+      organization: null,
+      members: [
+        {
+          profileId: profile.id,
+          name: profile.fullName,
+          email: profile.email,
+          role: "owner",
+        },
+      ],
+      eventTypes: [],
+      routingForms: [],
+    };
+  }
+
+  const [{ data: members }, { data: eventTypes }, { data: routingForms }] = await Promise.all([
+    supabase
+      .from("organization_members")
+      .select("profile_id, role, profiles(full_name, email)")
+      .eq("organization_id", organization.id)
+      .order("created_at", { ascending: true }),
+    supabase
+      .from("event_types")
+      .select("id, title, scheduling_mode, max_invitees_per_slot")
+      .eq("organization_id", organization.id)
+      .order("created_at", { ascending: true }),
+    supabase
+      .from("routing_forms")
+      .select("id, name, is_active")
+      .eq("organization_id", organization.id)
+      .order("created_at", { ascending: true }),
+  ]);
+
+  return {
+    organization: {
+      id: organization.id,
+      name: organization.name,
+      slug: organization.slug,
+    },
+    members: (members ?? []).map((member) => {
+      const embeddedProfile = Array.isArray(member.profiles) ? member.profiles[0] : member.profiles;
+      return {
+        profileId: member.profile_id,
+        name: embeddedProfile?.full_name ?? profile.fullName,
+        email: embeddedProfile?.email ?? profile.email,
+        role: member.role as DashboardTeamMember["role"],
+      };
+    }),
+    eventTypes: (eventTypes ?? []).map((eventType) => ({
+      id: eventType.id,
+      title: (eventType.title ?? {}) as Record<string, string>,
+      schedulingMode: eventType.scheduling_mode as DashboardTeamEventType["schedulingMode"],
+      maxInviteesPerSlot: eventType.max_invitees_per_slot,
+    })),
+    routingForms: (routingForms ?? []).map((routingForm) => ({
+      id: routingForm.id,
+      name: routingForm.name,
+      isActive: routingForm.is_active,
+    })),
   };
 }

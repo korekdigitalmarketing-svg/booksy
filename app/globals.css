@@ -49,7 +49,7 @@
 }
 
 :root {
-  /* "Departure board" system, recolored to the real Booksy brand mark:
+  /* "Departure board" system, recolored to the Korek Booking brand mark:
      deep navy primary (matches the wordmark's "Book"), sky blue accent
      (matches "sy" and the icon's gradient highlight), cool paper ground. */
   --background: oklch(0.985 0.004 95);

@@ -9,7 +9,10 @@ import "../globals.css";
 // pre-authentication screen.
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
-export const metadata: Metadata = { title: "Sign in — Booksy" };
+export const metadata: Metadata = {
+  title: "Sign in | Korek Booking",
+  description: "Sign in to manage your Korek Booking schedule.",
+};
 
 export default function LoginLayout({ children }: { children: React.ReactNode }) {
   return (

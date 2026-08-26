@@ -77,7 +77,7 @@ export function EmailLayout({
       <Preview>{previewText}</Preview>
       <Body style={styles.body}>
         <Container style={styles.container}>
-          <Text style={styles.brand}>Booksy</Text>
+          <Text style={styles.brand}>Korek Booking</Text>
           <Text style={styles.heading}>{heading}</Text>
           {children}
           <Hr style={styles.hr} />

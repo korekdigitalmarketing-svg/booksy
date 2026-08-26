@@ -6,9 +6,7 @@ import { AvailabilityRulesSchema } from "@/lib/schemas/availability";
 export const runtime = "nodejs";
 
 // PUT /api/availability/rules — replaces the host's entire weekly
-// schedule in one call (delete-then-insert). There's no partial-update
-// affordance in the editor UI (it always submits the full week), so a
-// full replace is simpler and avoids reconciling stale rows client-side.
+// schedule inside one database transaction.
 export async function PUT(request: NextRequest) {
   const supabase = await createClient();
   const {
@@ -28,27 +26,14 @@ export async function PUT(request: NextRequest) {
     return apiError("VALIDATION_ERROR", { issues: parsed.error.issues });
   }
 
-  const { error: deleteError } = await supabase
-    .from("availability_rules")
-    .delete()
-    .eq("owner_id", user.id);
-  if (deleteError) {
-    return apiError("INTERNAL_ERROR", { message: deleteError.message });
-  }
-
-  if (parsed.data.rules.length > 0) {
-    const { error: insertError } = await supabase.from("availability_rules").insert(
-      parsed.data.rules.map((r) => ({
-        owner_id: user.id,
-        weekday: r.weekday,
-        start_time: r.startTime,
-        end_time: r.endTime,
-      })),
-    );
-    if (insertError) {
-      return apiError("INTERNAL_ERROR", { message: insertError.message });
-    }
-  }
+  const { error } = await supabase.rpc("replace_availability_rules", {
+    p_rules: parsed.data.rules.map((rule) => ({
+      weekday: rule.weekday,
+      start_time: rule.startTime,
+      end_time: rule.endTime,
+    })),
+  });
+  if (error) return apiError("INTERNAL_ERROR", { message: error.message });
 
   return NextResponse.json({ ok: true });
 }

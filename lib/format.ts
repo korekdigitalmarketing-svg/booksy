@@ -74,6 +74,14 @@ export function confirmationNumber(bookingId: string): string {
   return `${hex.slice(0, 4)}-${hex.slice(4)}`;
 }
 
+/** "YYYY-MM-DD" for `isoInstant` as seen in `timezone` — the same day-key
+ *  convention /api/slots's fromDate/toDate query params use, so a slot
+ *  returned for a multi-day range maps back to exactly the calendar day a
+ *  single-day fetch for that key would return it under. */
+export function dateKeyInZone(isoInstant: string, timezone: string): string {
+  return DateTime.fromISO(isoInstant, { zone: "utc" }).setZone(timezone).toISODate() as string;
+}
+
 /** The visitor's guessed IANA timezone, resolved client-side only. */
 export function guessTimezone(): string {
   try {

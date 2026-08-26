@@ -5,11 +5,9 @@ import { sendReminder } from "@/lib/notifications";
 
 export const runtime = "nodejs";
 
-// Runs hourly (vercel.json). Queries confirmed bookings starting in the
-// next 24–25 hours — a 1-hour-wide window matching the cron's own
-// frequency, so every booking is caught in exactly one run. The
-// notifications_log dedupe insert inside sendReminder is what actually
-// guarantees "at most once" even if this job's window overlaps a retry.
+// Runs daily on Vercel Hobby. A 24–48 hour window catches every booking
+// despite the once-daily cadence; notifications_log still guarantees
+// at-most-once delivery when retries overlap.
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -18,7 +16,7 @@ export async function GET(request: NextRequest) {
 
   const now = DateTime.utc();
   const windowStart = now.plus({ hours: 24 }).toISO() as string;
-  const windowEnd = now.plus({ hours: 25 }).toISO() as string;
+  const windowEnd = now.plus({ hours: 48 }).toISO() as string;
 
   const supabase = createServiceClient();
   const { data: bookings, error } = await supabase

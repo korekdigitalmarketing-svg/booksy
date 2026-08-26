@@ -1,6 +1,6 @@
 {
   "common": {
-    "brandName": "Booksy",
+    "brandName": "Korek Booking",
     "loading": "Chargement…",
     "save": "Enregistrer",
     "cancel": "Annuler",
@@ -9,12 +9,12 @@
     "errorGeneric": "Une erreur est survenue. Veuillez réessayer."
   },
   "home": {
-    "title": "Booksy",
+    "title": "Korek Booking",
     "tagline": "Réservez en toute confiance.",
     "description": "Prise de rendez-vous payante et trilingue — définissez vos horaires, partagez un lien, soyez réservé et payé automatiquement.",
     "hero": {
       "heading": "Une prise de rendez-vous qui fonctionne, tout simplement.",
-      "subheading": "Partagez un lien, laissez vos clients choisir un créneau, soyez payé automatiquement. Booksy gère les fuseaux horaires, les rappels et les paiements Stripe à votre place.",
+      "subheading": "Partagez un lien, laissez vos clients choisir un créneau, soyez payé automatiquement. Korek Booking gère les fuseaux horaires, les rappels et les paiements Stripe à votre place.",
       "ctaPrimary": "Voir la démonstration",
       "ctaSecondary": "Comment ça marche"
     },
@@ -46,7 +46,7 @@
     },
     "cta": {
       "heading": "Prêt à commencer à prendre des rendez-vous ?",
-      "body": "Définissez vos disponibilités, partagez votre lien, et laissez Booksy faire le reste.",
+      "body": "Définissez vos disponibilités, partagez votre lien, et laissez Korek Booking faire le reste.",
       "button": "Voir une page de réservation en direct"
     }
   },
@@ -104,6 +104,7 @@
       "SLOT_UNAVAILABLE": "Ce créneau n'est plus disponible. Veuillez en choisir un autre.",
       "OUTSIDE_NOTICE_WINDOW": "Ce créneau est trop proche pour être réservé.",
       "PAYMENT_FAILED": "Le paiement a échoué. Veuillez réessayer.",
+      "REFUND_FAILED": "Le remboursement a échoué. La réservation reste active ; veuillez réessayer.",
       "UNAUTHORIZED": "Vous n'êtes pas autorisé à effectuer cette action.",
       "INTERNAL_ERROR": "Une erreur est survenue. Veuillez réessayer."
     },
@@ -143,15 +144,15 @@
   },
   "terms": {
     "title": "Politique d'utilisation acceptable",
-    "intro": "Booksy est une plateforme de réservation de prestations légales. En publiant ou en réservant une prestation, vous acceptez les conditions ci-dessous.",
+    "intro": "Korek Booking est une plateforme de réservation de prestations légales. En publiant ou en réservant une prestation, vous acceptez les conditions ci-dessous.",
     "prohibitedHeading": "Articles et prestations interdits",
-    "prohibitedIntro": "Les hôtes ne peuvent pas utiliser Booksy pour vendre, promouvoir ou permettre l'accès à quoi que ce soit d'illégal, y compris, sans s'y limiter :",
+    "prohibitedIntro": "Les hôtes ne peuvent pas utiliser Korek Booking pour vendre, promouvoir ou permettre l'accès à quoi que ce soit d'illégal, y compris, sans s'y limiter :",
     "prohibitedItem1": "Les stupéfiants, substances réglementées ou matériel lié à la drogue",
     "prohibitedItem2": "Les armes à feu, munitions, explosifs ou autres armes",
     "prohibitedItem3": "Tout autre bien ou service illégal au regard du droit applicable",
     "enforcementHeading": "Application de la politique",
-    "enforcementBody": "Tout compte proposant, promouvant ou facilitant la vente d'articles ou de prestations illégaux sera suspendu et définitivement supprimé, sans préavis ni remboursement. Booksy pourra également signaler ces activités aux autorités compétentes lorsque cela est requis ou approprié.",
-    "scopeNote": "Booksy est conçu pour la réservation de rendez-vous et de prestations, et non pour la vente ou l'expédition de biens physiques. Chaque prestation doit correspondre à un service légitime et réservable."
+    "enforcementBody": "Tout compte proposant, promouvant ou facilitant la vente d'articles ou de prestations illégaux sera suspendu et définitivement supprimé, sans préavis ni remboursement. Korek Booking pourra également signaler ces activités aux autorités compétentes lorsque cela est requis ou approprié.",
+    "scopeNote": "Korek Booking est conçu pour la réservation de rendez-vous et de prestations, et non pour la vente ou l'expédition de biens physiques. Chaque prestation doit correspondre à un service légitime et réservable."
   },
   "emails": {
     "common": {
@@ -162,7 +163,7 @@
       "notesLabel": "Notes",
       "confirmationNumberLabel": "Numéro de confirmation",
       "manageLinkText": "Gérer ou reporter cette réservation",
-      "footer": "Ceci est un message automatique de Booksy."
+      "footer": "Ceci est un message automatique de Korek Booking."
     },
     "confirmation": {
       "subject": "Confirmé : {eventTitle} avec {hostName}",
@@ -170,7 +171,7 @@
       "greeting": "Bonjour {inviteeName},",
       "body": "Votre {eventTitle} avec {hostName} est confirmé.",
       "icsSummary": "{eventTitle} avec {hostName}",
-      "icsDescription": "Réservation confirmée via Booksy. Invité(e) : {inviteeName}."
+      "icsDescription": "Réservation confirmée via Korek Booking. Invité(e) : {inviteeName}."
     },
     "hostNotification": {
       "subject": "Nouvelle réservation : {eventTitle} avec {inviteeName}",
@@ -179,7 +180,7 @@
       "body": "{inviteeName} vient de réserver {eventTitle} avec vous.",
       "contactLabel": "Contact",
       "icsSummary": "{eventTitle} avec {inviteeName}",
-      "icsDescription": "Réservé via Booksy. Contact : {inviteeEmail}."
+      "icsDescription": "Réservé via Korek Booking. Contact : {inviteeEmail}."
     },
     "reminder": {
       "subject": "Rappel : {eventTitle} demain",
@@ -214,7 +215,7 @@
       "previousTimeLabel": "Horaire précédent",
       "newTimeLabel": "Nouvel horaire",
       "icsSummary": "{eventTitle} avec {hostName}",
-      "icsDescription": "Réservation reportée via Booksy. Invité : {inviteeName}."
+      "icsDescription": "Réservation reportée via Korek Booking. Invité : {inviteeName}."
     },
     "rescheduleHost": {
       "subject": "Reporté : {eventTitle} avec {inviteeName}",
@@ -231,15 +232,31 @@
       "bookings": "Réservations",
       "eventTypes": "Prestations",
       "availability": "Disponibilités",
+      "team": "Équipe",
       "settings": "Paramètres",
       "signOut": "Se déconnecter"
     },
     "home": {
       "heading": "Aujourd'hui et à venir",
+      "subheading": "Voyez ce qui demande votre attention, consultez les prochains rendez-vous et gardez votre lien de réservation prêt à partager.",
       "todayHeading": "Aujourd'hui",
       "upcomingHeading": "À venir",
       "noBookingsToday": "Aucune réservation aujourd'hui.",
       "noUpcoming": "Aucune réservation à venir.",
+      "bookingLinkHeading": "Lien de réservation",
+      "bookingLinkDescription": "Partagez-le avec vos clients pour qu'ils choisissent un créneau parmi vos disponibilités en direct.",
+      "languageLabel": "Langue du tableau de bord",
+      "languageSaved": "Langue mise à jour",
+      "languageError": "Impossible de mettre à jour la langue. Veuillez réessayer.",
+      "calendarHeading": "Calendrier",
+      "calendarDescription": "Cliquez sur une date pour voir les rendez-vous et les reporter depuis cette vue.",
+      "calendarBookingLabel": "réservation",
+      "calendarBookingsLabel": "réservations",
+      "calendarTodayLabel": "Aujourd'hui",
+      "calendarPreviousMonth": "Mois précédent",
+      "calendarNextMonth": "Mois suivant",
+      "calendarSelectedDateHeading": "Date sélectionnée",
+      "calendarNoBookingsForDate": "Aucune réservation active à cette date.",
       "cancelButton": "Annuler",
       "keepButton": "Conserver la réservation",
       "cancelDialogTitle": "Annuler cette réservation ?",
@@ -255,7 +272,9 @@
       },
       "copyLinkButton": "Copier mon lien de réservation",
       "copyLinkToast": "Lien de réservation copié",
-      "copyLinkError": "Impossible de copier le lien. Veuillez le copier manuellement."
+      "copyLinkError": "Impossible de copier le lien. Veuillez le copier manuellement.",
+      "refundFailed": "Le remboursement a échoué, la réservation reste donc active. Réessayez ou remboursez-la dans Stripe.",
+      "cancelError": "Impossible d'annuler cette réservation. Veuillez réessayer."
     },
     "reschedule": {
       "dialogTitle": "Reporter cette réservation",
@@ -266,10 +285,15 @@
     },
     "bookings": {
       "heading": "Réservations",
+      "pageDescription": "Consultez chaque rendez-vous client, son état de paiement et les actions à suivre.",
       "filterUpcoming": "À venir",
       "filterPast": "Passées",
       "filterAll": "Toutes",
       "noBookings": "Aucune réservation ici pour le moment.",
+      "emptyDescription": "Les rendez-vous confirmés apparaîtront ici. Créez une prestation et partagez son lien pour commencer.",
+      "emptyAction": "Voir les prestations",
+      "statShown": "Affichées",
+      "statCancelled": "Annulées",
       "balanceDueBadge": "{amount} restant dû",
       "markNoShow": "Marquer comme absence",
       "noShowToast": "Marqué comme absence",
@@ -290,8 +314,14 @@
     },
     "eventTypes": {
       "heading": "Prestations",
+      "pageDescription": "Gérez les services que les clients peuvent réserver, de la durée au prix et à la visibilité.",
       "newButton": "Nouvelle prestation",
       "noEventTypes": "Aucune prestation pour le moment.",
+      "emptyDescription": "Créez une prestation avec sa durée, son lieu, son prix et ses règles. Vous obtiendrez un lien prêt à partager.",
+      "statTotal": "Prestations",
+      "statPaid": "Payantes",
+      "freeLabel": "Gratuit",
+      "groupCapacity": "{count, plural, one {# invité} other {# invités}}",
       "editButton": "Modifier",
       "activeLabel": "Active",
       "inactiveLabel": "Inactive",
@@ -318,6 +348,10 @@
         "minNoticeLabel": "Délai minimum (minutes)",
         "maxDaysAheadLabel": "Réservable jusqu'à (jours à l'avance)",
         "maxPerDayLabel": "Nombre maximum de réservations par jour (facultatif)",
+        "schedulingModeLabel": "Mode de planification",
+        "schedulingModeHint": "Le mode solo est prêt. La rotation et le collectif utilisent les tables d'équipe ajoutées pour la prochaine passe moteur.",
+        "maxInviteesPerSlotLabel": "Invités par créneau",
+        "maxInviteesPerSlotHint": "Utilisez 1 pour les rendez-vous. Une capacité plus élevée prépare les réservations de groupe.",
         "activeLabel": "Active — visible sur votre page de réservation",
         "policyLabel": "Je confirme que cette prestation est légale et n'implique ni stupéfiants, ni armes à feu, ni autres articles ou services interdits.",
         "policyLinkText": "Consulter la politique d'utilisation acceptable",
@@ -330,6 +364,11 @@
           "phone": "Appel téléphonique",
           "in_person": "En personne",
           "custom": "Personnalisé"
+        },
+        "schedulingModeOptions": {
+          "solo": "Hôte solo",
+          "round_robin": "Rotation d'équipe",
+          "collective": "Équipe collective"
         }
       },
       "questions": {
@@ -370,6 +409,18 @@
       "addWindow": "Ajouter un créneau horaire",
       "removeWindow": "Supprimer",
       "closedLabel": "Fermé",
+      "calendarHeading": "Visibilité du calendrier",
+      "calendarDescription": "Parcourez le mois et cliquez sur une date pour ajouter des horaires différents ou fermer ce jour-là.",
+      "previousMonth": "Mois précédent",
+      "nextMonth": "Mois suivant",
+      "weeklyShort": "Hebdo",
+      "customShort": "Perso",
+      "closedShort": "Fermé",
+      "legendWeekly": "Horaires hebdomadaires",
+      "legendCustom": "Date personnalisée",
+      "legendClosed": "Fermé",
+      "selectedDateLabel": "Date sélectionnée",
+      "visibleHoursLabel": "Horaires visibles",
       "overridesHeading": "Exceptions par date",
       "overridesDescription": "Bloquez une date précise ou définissez des horaires différents pour ce jour-là.",
       "addOverride": "Ajouter une exception",
@@ -378,6 +429,7 @@
       "saveButton": "Enregistrer les disponibilités",
       "savingButton": "Enregistrement…",
       "savedToast": "Disponibilités enregistrées",
+      "overlapError": "Les créneaux d'une même journée ne peuvent pas se chevaucher.",
       "weekdays": {
         "0": "Dimanche",
         "1": "Lundi",
@@ -386,10 +438,59 @@
         "4": "Jeudi",
         "5": "Vendredi",
         "6": "Samedi"
+      },
+      "weekdayShort": {
+        "0": "Dim",
+        "1": "Lun",
+        "2": "Mar",
+        "3": "Mer",
+        "4": "Jeu",
+        "5": "Ven",
+        "6": "Sam"
+      }
+    },
+    "team": {
+      "heading": "Planification d'équipe",
+      "pageDescription": "Gérez la structure d'espace de travail pour les prestations partagées, la rotation des hôtes, les disponibilités collectives, les créneaux de groupe et les formulaires de routage.",
+      "personalWorkspace": "Espace personnel",
+      "statMembers": "Membres",
+      "statRoundRobin": "Rotation",
+      "statCollective": "Collectif",
+      "statRouting": "Formulaires",
+      "membersHeading": "Membres de l'espace",
+      "membersDescription": "Personnes qui peuvent animer des services partagés dans cet espace.",
+      "routingHeading": "Formulaires de routage",
+      "routingDescription": "Posez d'abord des questions, puis envoyez les clients vers le bon hôte ou service.",
+      "noRoutingForms": "Aucun formulaire de routage pour le moment. La base de données est prête ; le générateur est le prochain écran produit à ajouter.",
+      "eventModesHeading": "Modes de prestations partagées",
+      "eventModesDescription": "Chaque service peut rester solo, tourner entre les hôtes, exiger plusieurs hôtes ou accepter plusieurs invités par créneau.",
+      "noTeamEventTypes": "Aucune prestation partagée pour le moment. Les services solo existants pourront rejoindre un espace lorsque l'éditeur d'équipe sera ajouté.",
+      "activeLabel": "Actif",
+      "inactiveLabel": "Inactif",
+      "singleInvitee": "Un invité par créneau",
+      "groupCapacity": "{count, plural, one {# invité par créneau} other {# invités par créneau}}",
+      "roundRobinHeading": "Rotation",
+      "roundRobinDescription": "Répartissez les réservations entre les hôtes disponibles pour distribuer le travail équitablement.",
+      "collectiveHeading": "Événements collectifs",
+      "collectiveDescription": "Proposez uniquement les horaires où tous les hôtes requis sont libres.",
+      "groupHeading": "Réservations de groupe",
+      "groupDescription": "{count, plural, =0 {La capacité est prête pour les cours, webinaires et créneaux partagés.} one {# service accepte actuellement plusieurs invités.} other {# services acceptent actuellement plusieurs invités.}}",
+      "routingNoteHeading": "Routage",
+      "routingNoteDescription": "Qualifiez les clients avec des questions et orientez-les vers le meilleur type d'événement ou hôte.",
+      "roles": {
+        "owner": "Propriétaire",
+        "admin": "Admin",
+        "member": "Membre"
+      },
+      "modes": {
+        "solo": "Solo",
+        "round_robin": "Rotation",
+        "collective": "Collectif"
       }
     },
     "settings": {
       "heading": "Paramètres",
+      "pageDescription": "Gérez votre profil public, la langue du tableau de bord, la synchronisation calendrier et les paiements.",
       "profileHeading": "Profil",
       "fullNameLabel": "Nom complet",
       "slugLabel": "Identifiant d'URL public",
@@ -402,10 +503,22 @@
       "stripeHeading": "Paiements",
       "stripeConfigured": "Stripe est configuré — les prestations payantes peuvent accepter le paiement.",
       "stripeNotConfigured": "Stripe n'est pas encore configuré. Les prestations payantes ne seront pas réservables tant que STRIPE_SECRET_KEY n'est pas défini.",
+      "stripeConnect": {
+        "heading": "Être payé directement",
+        "description": "Connectez votre propre compte Stripe pour que les paiements des clients vous parviennent directement, au lieu de passer par la plateforme.",
+        "connectButton": "Connecter Stripe",
+        "finishSetupButton": "Terminer la configuration",
+        "manageButton": "Gérer sur Stripe",
+        "activeBadge": "Versements actifs",
+        "pendingBadge": "Configuration incomplète",
+        "connectedToast": "Compte Stripe connecté",
+        "pendingToast": "Presque terminé — Stripe a encore besoin de quelques informations avant que les versements puissent commencer.",
+        "errorToast": "Une erreur est survenue lors de la connexion à Stripe. Veuillez réessayer."
+      },
       "calendarSync": {
         "google": {
           "heading": "Synchronisation Google Agenda",
-          "description": "Connectez votre Google Agenda pour que les événements déjà présents y bloquent aussi votre page de réservation.",
+          "description": "Bloquez les périodes occupées et ajoutez automatiquement chaque rendez-vous Korek Booking confirmé à Google Agenda.",
           "connectedAs": "Connecté — dernière synchronisation {date}",
           "connectButton": "Connecter Google Agenda",
           "disconnectButton": "Déconnecter",
@@ -416,7 +529,7 @@
         },
         "microsoft": {
           "heading": "Synchronisation Outlook",
-          "description": "Connectez votre calendrier Outlook pour que les événements déjà présents y bloquent aussi votre page de réservation.",
+          "description": "Bloquez les périodes occupées et ajoutez automatiquement chaque rendez-vous Korek Booking confirmé à Outlook.",
           "connectedAs": "Connecté — dernière synchronisation {date}",
           "connectButton": "Connecter Outlook",
           "disconnectButton": "Déconnecter",
@@ -430,6 +543,8 @@
     "onboarding": {
       "heading": "Configurons votre compte",
       "subheading": "Trois étapes rapides et votre page de réservation sera prête à partager.",
+      "guideAlt": "Disponibilités, choix du créneau et rendez-vous confirmé présentés en trois étapes",
+      "guideCaption": "Définissez vos horaires une fois. Les clients choisissent un créneau libre et les rendez-vous confirmés sont ajoutés à votre calendrier.",
       "skipSetupButton": "Passer la configuration",
       "continueButton": "Continuer",
       "skipStepButton": "Passer cette étape",

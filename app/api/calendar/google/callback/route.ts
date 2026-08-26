@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { exchangeCodeForTokens, registerWatchChannel, performSync } from "@/lib/calendar-sync";
 import type { CalendarConnectionRow } from "@/lib/calendar-busy-blocks";
+import { encryptCalendarToken } from "@/lib/calendar-token-crypto";
 
 export const runtime = "nodejs";
 
@@ -64,8 +65,8 @@ export async function GET(request: NextRequest) {
         {
           owner_id: user.id,
           provider: "google",
-          access_token: tokens.access_token,
-          refresh_token: tokens.refresh_token,
+          access_token: encryptCalendarToken(tokens.access_token),
+          refresh_token: encryptCalendarToken(tokens.refresh_token),
           token_expires_at: tokenExpiresAt,
           external_calendar_id: "primary",
         },

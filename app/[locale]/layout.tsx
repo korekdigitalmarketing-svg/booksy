@@ -47,8 +47,26 @@ export async function generateMetadata({
   );
 
   return {
-    title: t("title"),
+    title: {
+      default: t("title"),
+      template: "%s | Korek Booking",
+    },
     description: t("description"),
+    applicationName: "Korek Booking",
+    metadataBase: new URL(appUrl),
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      siteName: "Korek Booking",
+      type: "website",
+      images: [{ url: "/brand/korek-booking-og.png", width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+      images: ["/brand/korek-booking-og.png"],
+    },
     alternates: {
       languages: { ...languages, "x-default": `${appUrl}/${routing.defaultLocale}` },
     },

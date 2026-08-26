@@ -14,6 +14,23 @@ export const AvailabilityRulesSchema = z.object({
         .refine((r) => r.endTime > r.startTime, { message: "End time must be after start time" }),
     )
     .max(100),
+}).superRefine(({ rules }, ctx) => {
+  for (let weekday = 0; weekday <= 6; weekday += 1) {
+    const dayRules = rules
+      .filter((rule) => rule.weekday === weekday)
+      .sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+    for (let index = 1; index < dayRules.length; index += 1) {
+      if (dayRules[index].startTime < dayRules[index - 1].endTime) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Availability windows on the same day cannot overlap",
+          path: ["rules"],
+        });
+        return;
+      }
+    }
+  }
 });
 
 export const DateOverrideSchema = z

@@ -234,5 +234,5 @@ export function generateSlots(params: GenerateSlotsParams): string[] {
   }
 
   results.sort((a, b) => a.toMillis() - b.toMillis());
-  return results.map((dt) => dt.toUTC().toISO() as string);
+  return [...new Set(results.map((dt) => dt.toUTC().toISO() as string))];
 }

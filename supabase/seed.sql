@@ -43,7 +43,7 @@ on conflict (id) do nothing;
 insert into public.profiles (id, full_name, email, slug, timezone, locale)
 values (
   '11111111-1111-4111-8111-111111111111',
-  'Alex Booksy', 'host@example.com', 'alex', 'Europe/Paris', 'en'
+  'Alex Korek', 'host@example.com', 'alex', 'Europe/Paris', 'en'
 )
 on conflict (id) do update set
   full_name = excluded.full_name,

@@ -43,3 +43,6 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# local pre-rebrand asset backups
+/Images & Logo/legacy-*

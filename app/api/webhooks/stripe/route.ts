@@ -3,6 +3,7 @@ import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { createServiceClient } from "@/lib/supabase/service";
 import { sendClientConfirmation, sendHostNotification, sendCancellationEmails } from "@/lib/notifications";
+import { syncBookingToCalendars, removeBookingFromCalendars } from "@/lib/calendar-writeback";
 
 // Route Handlers don't auto-parse the body, so request.text() below is the
 // exact raw bytes Stripe signed — verifying against anything else (e.g. a
@@ -77,7 +78,11 @@ export async function POST(request: NextRequest) {
       // updates 0 rows, and must not trigger a second email.
       if (updated && updated.length > 0) {
         try {
-          await Promise.all([sendClientConfirmation(bookingId), sendHostNotification(bookingId)]);
+          await Promise.all([
+            sendClientConfirmation(bookingId),
+            sendHostNotification(bookingId),
+            syncBookingToCalendars(bookingId),
+          ]);
         } catch (err) {
           console.error("Failed to send booking confirmation emails", err);
         }
@@ -117,11 +122,26 @@ export async function POST(request: NextRequest) {
 
       if (refunded && refunded.length > 0) {
         try {
-          await sendCancellationEmails(refunded[0].id, "host");
+          await Promise.all([
+            sendCancellationEmails(refunded[0].id, "host"),
+            removeBookingFromCalendars(refunded[0].id),
+          ]);
         } catch (err) {
           console.error("Failed to send cancellation emails", err);
         }
       }
+      break;
+    }
+
+    case "account.updated": {
+      const account = event.data.object as Stripe.Account;
+      await supabase
+        .from("profiles")
+        .update({
+          stripe_charges_enabled: account.charges_enabled,
+          stripe_payouts_enabled: account.payouts_enabled,
+        })
+        .eq("stripe_account_id", account.id);
       break;
     }
 

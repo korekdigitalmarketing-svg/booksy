@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/service";
-import { ensureFreshAccessToken as ensureFreshGoogleToken, registerWatchChannel } from "@/lib/calendar-sync";
+import { ensureFreshGoogleAccessToken as ensureFreshGoogleToken, registerWatchChannel } from "@/lib/calendar-sync";
 import {
-  ensureFreshAccessToken as ensureFreshMicrosoftToken,
+  ensureFreshMicrosoftAccessToken as ensureFreshMicrosoftToken,
   registerSubscription,
 } from "@/lib/calendar-sync-microsoft";
 import type { CalendarConnectionRow } from "@/lib/calendar-busy-blocks";

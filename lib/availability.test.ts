@@ -337,6 +337,28 @@ describe("generateSlots — external busy blocks", () => {
 });
 
 describe("generateSlots — date overrides", () => {
+  it("deduplicates slots from legacy overlapping availability windows", () => {
+    const zone = "Europe/Paris";
+    const hostDate = "2026-06-01";
+    const weekday = weekdayOf(hostDate, zone);
+    const slots = generateSlots({
+      eventType: baseEventType({ durationMin: 30, slotIncrementMin: 30 }),
+      hostTimezone: zone,
+      availabilityRules: [
+        { weekday, startTime: "09:00", endTime: "11:00" },
+        { weekday, startTime: "10:00", endTime: "12:00" },
+      ],
+      dateOverrides: [],
+      existingBookings: [],
+      visitorTimezone: zone,
+      fromDate: hostDate,
+      toDate: hostDate,
+      now: DateTime.fromISO(hostDate, { zone }).minus({ days: 1 }),
+    });
+
+    expect(new Set(slots).size).toBe(slots.length);
+  });
+
   it("a closed override removes every slot even though the weekly rule would allow them", () => {
     const zone = "Europe/Paris";
     const hostDate = "2026-06-01";

@@ -23,6 +23,7 @@ import type { DashboardEventType } from "@/lib/dashboard-data";
 
 const LOCALES = ["en", "fr", "es"] as const;
 const LOCATION_KINDS = ["video", "phone", "in_person", "custom"] as const;
+const SCHEDULING_MODES = ["solo", "round_robin", "collective"] as const;
 
 interface EventTypeFormProps {
   hostSlug: string;
@@ -64,6 +65,10 @@ export function EventTypeForm({
   const [maxPerDay, setMaxPerDay] = useState<string>(
     initial?.maxPerDay != null ? String(initial.maxPerDay) : "",
   );
+  const [schedulingMode, setSchedulingMode] = useState<(typeof SCHEDULING_MODES)[number]>(
+    initial?.schedulingMode ?? "solo",
+  );
+  const [maxInviteesPerSlot, setMaxInviteesPerSlot] = useState(initial?.maxInviteesPerSlot ?? 1);
   const [isActive, setIsActive] = useState(initial?.isActive ?? true);
   const [policyAccepted, setPolicyAccepted] = useState(isEditing);
   const [submitting, setSubmitting] = useState(false);
@@ -102,6 +107,8 @@ export function EventTypeForm({
         minNoticeMin,
         maxDaysAhead,
         maxPerDay: maxPerDay ? Number(maxPerDay) : null,
+        schedulingMode,
+        maxInviteesPerSlot,
         isActive,
         policyAccepted,
       };
@@ -315,6 +322,34 @@ export function EventTypeForm({
               value={maxPerDay}
               onChange={(e) => setMaxPerDay(e.target.value)}
             />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label>{t("schedulingModeLabel")}</Label>
+            <Select value={schedulingMode} onValueChange={(v) => setSchedulingMode(v as typeof schedulingMode)}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {SCHEDULING_MODES.map((mode) => (
+                  <SelectItem key={mode} value={mode}>
+                    {t(`schedulingModeOptions.${mode}`)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">{t("schedulingModeHint")}</p>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="maxInviteesPerSlot">{t("maxInviteesPerSlotLabel")}</Label>
+            <Input
+              id="maxInviteesPerSlot"
+              type="number"
+              min={1}
+              max={250}
+              value={maxInviteesPerSlot}
+              onChange={(e) => setMaxInviteesPerSlot(Number(e.target.value))}
+            />
+            <p className="text-xs text-muted-foreground">{t("maxInviteesPerSlotHint")}</p>
           </div>
         </CardContent>
       </Card>

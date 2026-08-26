@@ -32,6 +32,7 @@ import {
 import { toast } from "sonner";
 import { getLocalized } from "@/lib/i18n-content";
 import {
+  dateKeyInZone,
   formatCurrency,
   formatSlotTime,
   formatSlotWeekdayDate,
@@ -78,9 +79,15 @@ export function BookingFlow({ locale, hostSlug, host, eventType, questions }: Bo
 
   const [timezone, setTimezone] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [month, setMonth] = useState<Date | undefined>(undefined);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [slots, setSlots] = useState<string[]>([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
+  // null = "haven't checked this month yet" — kept distinct from an empty
+  // Set (checked, genuinely nothing available) so the calendar doesn't
+  // flash every day as unavailable while the fetch for a newly-navigated
+  // month is still in flight.
+  const [availableDays, setAvailableDays] = useState<Set<string> | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
   const [confirmed, setConfirmed] = useState<ConfirmedBooking | null>(null);
@@ -95,8 +102,10 @@ export function BookingFlow({ locale, hostSlug, host, eventType, questions }: Bo
   // render-blocking update.
   useEffect(() => {
     startTransition(() => {
+      const now = new Date();
       setTimezone(guessTimezone());
-      setSelectedDate(new Date());
+      setSelectedDate(now);
+      setMonth(now);
     });
   }, []);
 
@@ -146,6 +155,64 @@ export function BookingFlow({ locale, hostSlug, host, eventType, questions }: Bo
     d.setDate(d.getDate() + eventType.maxDaysAhead);
     return d;
   }, [today, eventType.maxDaysAhead]);
+
+  // Powers the calendar's own day-by-day available/unavailable styling
+  // below, so a visitor sees at a glance which days are worth clicking
+  // instead of having to click through each one to find out.
+  const fetchMonthAvailability = useCallback(
+    async (monthDate: Date, tz: string) => {
+      const monthStart = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1);
+      const monthEnd = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0);
+      const rangeStart = monthStart < today ? today : monthStart;
+      const rangeEnd = monthEnd > maxDate ? maxDate : monthEnd;
+
+      // The visible month falls entirely outside the bookable window
+      // (e.g. navigated past maxDaysAhead) — nothing to query.
+      if (rangeStart > rangeEnd) {
+        setAvailableDays(new Set());
+        return;
+      }
+
+      setAvailableDays(null);
+      try {
+        const from = toDateKey(rangeStart);
+        const to = toDateKey(rangeEnd);
+        const res = await fetch(
+          `/api/slots?eventTypeId=${eventType.id}&from=${from}&to=${to}&timezone=${encodeURIComponent(tz)}`,
+        );
+        const data = await res.json();
+        if (!res.ok) {
+          setAvailableDays(new Set());
+          return;
+        }
+        // Bucketed by each slot's calendar day IN `tz` — matching how
+        // /api/slots itself interprets fromDate/toDate as visitor-local
+        // calendar days, not the browser's own timezone.
+        const days = new Set<string>(
+          ((data.slots ?? []) as string[]).map((iso) => dateKeyInZone(iso, tz)),
+        );
+        setAvailableDays(days);
+      } catch {
+        setAvailableDays(new Set());
+      }
+    },
+    [eventType.id, today, maxDate],
+  );
+
+  useEffect(() => {
+    if (!timezone || !month) return;
+    startTransition(() => {
+      fetchMonthAvailability(month, timezone);
+    });
+  }, [timezone, month, fetchMonthAvailability]);
+
+  const isDayUnavailable = useCallback(
+    (date: Date) => {
+      if (!availableDays) return false; // not yet known — don't disable pre-emptively
+      return !availableDays.has(toDateKey(date));
+    },
+    [availableDays],
+  );
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -266,9 +333,14 @@ export function BookingFlow({ locale, hostSlug, host, eventType, questions }: Bo
               locale={dateFnsLocale}
               selected={selectedDate}
               onSelect={setSelectedDate}
-              disabled={{ before: today, after: maxDate }}
+              month={month}
+              onMonthChange={setMonth}
+              disabled={[{ before: today, after: maxDate }, isDayUnavailable]}
               className="rounded-lg border"
             />
+            {availableDays === null ? (
+              <p className="text-xs text-muted-foreground">{t("loadingSlots")}</p>
+            ) : null}
           </div>
 
           <div className="flex flex-col gap-1.5">

@@ -165,7 +165,7 @@ async function logThenSend(
   return "sent";
 }
 
-const emailFrom = () => process.env.EMAIL_FROM ?? "Booksy <onboarding@resend.dev>";
+const emailFrom = () => process.env.EMAIL_FROM ?? "Korek Booking <onboarding@resend.dev>";
 
 export async function sendClientConfirmation(bookingId: string): Promise<"sent" | "skipped"> {
   return logThenSend(bookingId, "client_confirmation", async () => {
